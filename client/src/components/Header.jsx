@@ -1,11 +1,9 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom/cjs/react-router-dom.min";
 
 class Header extends Component {
   renderContent() {
@@ -15,18 +13,22 @@ class Header extends Component {
       case false:
         return (
           <>
-            <NavDropdown.Item href="/auth/google">登入</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.1">註冊</NavDropdown.Item>
+            <Nav.Link href="/login">登入</Nav.Link>
+            <Nav.Link href="/register">註冊</Nav.Link>
           </>
         );
       default:
-        return <NavDropdown.Item href="/api/logout">登出</NavDropdown.Item>;
+        return <Nav.Link href="/api/logout">登出</Nav.Link>;
     }
   }
 
   render() {
     return (
-      <Navbar expand="lg" className="sticky-top bg-warning  bg-opacity-75">
+      <Navbar
+        collapseOnSelect
+        expand="lg"
+        style={{ backgroundColor: "var(--bs-success-border-subtle)" }}
+      >
         <Container>
           <Navbar.Brand>
             <Link
@@ -36,18 +38,12 @@ class Header extends Component {
               Helix
             </Link>
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="/home">首頁</Nav.Link>
-              <Nav.Link href="#link">所有採樣記錄</Nav.Link>
-              <Nav.Link href="#link">新增品系</Nav.Link>
+              <Nav.Link href="/">Features</Nav.Link>
             </Nav>
-            <Nav className="ms-auto">
-              <NavDropdown title="會員" id="basic-nav-dropdown">
-                {this.renderContent()}
-              </NavDropdown>
-            </Nav>
+            <Nav className="ms-auto">{this.renderContent()}</Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>

@@ -3,11 +3,12 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 
-import Header from "./Header";
-const Dashboard = () => <h2>Dashboard</h2>;
+import AppLayout from "./AppLayout";
+import Dashboard from "./Dashboard";
+import LoginPage from "../pages/LoginPage";
 const SurveyNew = () => <h2>SurveyNew</h2>;
 import Landing from "./Landing";
-const Footer = () => <h2>Footer</h2>;
+import RegisterPage from "../pages/RegisterPage";
 
 class App extends Component {
   componentDidMount() {
@@ -17,13 +18,13 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div>
-          <Header />
+        <AppLayout>
           <Route exact path="/" component={Landing} />
+          <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/surveys" component={Dashboard} />
           <Route path="/surveys/new" component={SurveyNew} />
-          <Footer />
-        </div>
+        </AppLayout>
       </BrowserRouter>
     );
   }
