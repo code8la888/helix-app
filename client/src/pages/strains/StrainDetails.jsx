@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "../../actions/index";
 
@@ -10,6 +10,7 @@ export default function StrainDetails() {
   const [strain, setStrain] = useState(null);
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -19,13 +20,27 @@ export default function StrainDetails() {
         const res = await axios.get(`/api/strains/${id}`);
         const strainData = res.data;
         setStrain(strainData);
-        console.log(strainData);
+        // console.log(strainData);
       } catch (error) {
         console.error("Error fetching strains data:", error);
       }
     }
     fetchData();
   }, [dispatch]);
+
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    try {
+      const res = await axios.delete(`/api/strains/${id}`);
+      // console.log(res.data);
+      if (res.data.redirect) {
+        navigate(res.data.redirect);
+      }
+    } catch (error) {
+      console.error("刪除失敗：", error);
+    }
+  };
+
   return (
     <div>
       <h1>NTUMC-LAC 基因改造小鼠採樣記錄</h1>
@@ -35,15 +50,13 @@ export default function StrainDetails() {
       strain?.strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
         <>
-          <button className="btn btn-warning text-white">
-            <a href="/strains/${strainId}/edit">編輯品系資料</a>
+          <button className="btn btn-warning text-white me-2">
+            <Link to={`/strains/${id}/edit`}>編輯品系資料</Link>
           </button>
-          <form
-            className="d-inline"
-            action="/strains/{ strainId }?_method=DELETE"
-            method="POST"
-          >
-            <button className="btn btn-danger">刪除品系</button>
+          <form className="d-inline">
+            <button className="btn btn-danger" onClick={handleDelete}>
+              刪除品系
+            </button>
           </form>
         </>
       ) : (

@@ -2,6 +2,7 @@ import Table from "react-bootstrap/Table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+
 function Index() {
   const [strains, setStrains] = useState([]);
   useEffect(() => {

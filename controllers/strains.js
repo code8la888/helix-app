@@ -91,6 +91,5 @@ module.exports.updateStrain = async (req, res) => {
 module.exports.deleteStrain = async (req, res) => {
   const { strainId } = req.params;
   await Strain.findByIdAndDelete(strainId);
-  req.flash("success", "成功刪除品系");
-  res.redirect("/strains");
+  res.status(200).json({ message: "成功刪除品系", redirect: "/index" });
 };
