@@ -5,22 +5,26 @@ const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const passport = require("passport");
 const keys = require("./config/keys");
-require("./models/User");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+require("./models/user");
+require("./models/strain");
 require("./services/passport");
 
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(methodOverride("_method"));
+app.use(bodyParser.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(methodOverride("_method"));
 app.use(
   cookieSession({
-    maxAge: 15 * 60 * 1000,
+    maxAge: 3 * 60 * 60 * 1000,
     keys: [keys.cookieKey],
   })
 );
+
 app.use(flash());
 
 app.use(passport.initialize());
@@ -33,12 +37,21 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/strains", require("./routes/strains"));
-app.use("/strains/:strainId/mice", require("./routes/mice"));
 app.use(
-  "/strains/:strainId/breedingRecord",
+  cors({
+    origin: "http://localhost:3000", // 前端地址
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.use("/api/strains", require("./routes/strains"));
+app.use("/api/strains/:strainId/mice", require("./routes/mice"));
+app.use(
+  "/api/strains/:strainId/breedingRecord",
   require("./routes/breedingRecords")
 );
+app.use("/", require("./routes/flashRoutes"));
 app.use("/", require("./routes/googleAuthRoutes"));
 app.use("/", require("./routes/localAuthRoutes"));
 

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 
@@ -8,8 +8,8 @@ import LoginPage from "../pages/LoginPage";
 import Landing from "./Landing";
 import RegisterPage from "../pages/RegisterPage";
 import Index from "../pages/strains";
-import NewStrain from "../pages/strains/New";
-
+import NewStrain from "../pages/strains/NewStrain";
+import StrainDetails from "../pages/strains/StrainDetails";
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
@@ -19,11 +19,14 @@ class App extends Component {
     return (
       <BrowserRouter>
         <AppLayout>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/index" component={Index} />
-          <Route exact path="/newStrain" component={NewStrain} />
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/index" element={<Index />} />
+            <Route path="/strain/new" element={<NewStrain />} />
+            <Route path="/strains/:id" element={<StrainDetails />} />
+          </Routes>
         </AppLayout>
       </BrowserRouter>
     );

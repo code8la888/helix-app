@@ -13,17 +13,20 @@ router.get(
   "/auth/google/callback",
   passport.authenticate("google"),
   (req, res) => {
-    res.redirect("/surveys");
+    req.flash("success", "歡迎回來");
+    res.redirect("/index");
   }
 );
 
 router.get("/api/logout", (req, res) => {
   req.logout();
+  req.flash("success", "再見");
   res.redirect("/");
 });
 
 router.get("/api/current_user", (req, res) => {
   res.send(req.user);
+  console.log(req.user);
 });
 
 module.exports = router;

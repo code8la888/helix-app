@@ -1,6 +1,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import Container from "react-bootstrap/Container";
+
 function AppLayout({ children }) {
   return (
     <div className="d-flex flex-column vh-100">

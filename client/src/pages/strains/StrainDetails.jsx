@@ -1,0 +1,261 @@
+import axios from "axios";
+import React from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUser } from "../../actions/index";
+
+export default function StrainDetails() {
+  const { id } = useParams();
+  const [strain, setStrain] = useState(null);
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(fetchUser());
+    // console.log(currentUser);
+    async function fetchData() {
+      try {
+        const res = await axios.get(`/api/strains/${id}`);
+        const strainData = res.data;
+        setStrain(strainData);
+        console.log(strainData);
+      } catch (error) {
+        console.error("Error fetching strains data:", error);
+      }
+    }
+    fetchData();
+  }, [dispatch]);
+  return (
+    <div>
+      <h1>NTUMC-LAC 基因改造小鼠採樣記錄</h1>
+      <br />
+      <h3>品系資訊:</h3>
+      {currentUser &&
+      strain?.strain?.users?.includes(currentUser.username) &&
+      currentUser.role === "品系管理人" ? (
+        <>
+          <button className="btn btn-warning text-white">
+            <a href="/strains/${strainId}/edit">編輯品系資料</a>
+          </button>
+          <form
+            className="d-inline"
+            action="/strains/{ strainId }?_method=DELETE"
+            method="POST"
+          >
+            <button className="btn btn-danger">刪除品系</button>
+          </form>
+        </>
+      ) : (
+        "no"
+      )}
+      {strain ? (
+        <div className="row g-3 mouse.-2">
+          <div className="col-mouse.-3">品系名稱: {strain.strain.strain}</div>
+          <div className="col-mouse.-2">品系簡稱: {strain.strain.abbr}</div>
+          <div className="col-mouse.-2">單位: {strain.strain.dept}</div>
+          <div className="col-mouse.-2">
+            IACUC編號: {strain.strain.iacuc_no}
+          </div>
+          <div className="col-mouse.-2">
+            計畫期限: {new Date(strain.strain.EXP).toLocaleDateString("zh-TW")}
+          </div>
+        </div>
+      ) : (
+        "loading"
+      )}
+      <br />
+      <h3>使用者資訊:</h3>
+      <table className="table table-striped mouse.-2">
+        <thead>
+          <tr>
+            <th scope="col">姓名:</th>
+            <th scope="col">職稱:</th>
+            <th scope="col">聯絡信箱:</th>
+            <th scope="col">聯絡電話:</th>
+          </tr>
+        </thead>
+        <tbody>
+          {strain
+            ? strain.users
+                .filter((user) => user.role !== "獸醫")
+                .map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.username}</td>
+                    <td>{user.role}</td>
+                    <td>{user.email}</td>
+                    <td>{user.tel}</td>
+                  </tr>
+                ))
+            : "loading"}
+        </tbody>
+      </table>
+      <br />
+      <h3>小鼠採樣記錄:</h3>
+      {currentUser &&
+      strain?.strain?.users?.includes(currentUser.username) &&
+      currentUser.role === "品系管理人" ? (
+        <a href="/strains/{ strainId }/mice/new">新增採樣記錄</a>
+      ) : (
+        ""
+      )}
+      <table className="table table-striped mouse.-2">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">父母</th>
+            <th scope="col">胎次</th>
+            <th scope="col">性別</th>
+            <th scope="col">出生日期</th>
+            <th scope="col">採樣日期</th>
+            <th scope="col">趾號</th>
+            {strain
+              ? strain.strain.genes.map((gene, index) => (
+                  <th scope="col" key={index}>
+                    {gene}
+                  </th>
+                ))
+              : "loading"}
+            <th scope="col">狀態</th>
+            <th scope="col">備註</th>
+            {currentUser &&
+            strain?.strain?.users?.includes(currentUser.username) &&
+            currentUser.role === "品系管理人" ? (
+              <>
+                <th scope="col">編輯</th>
+                <th scope="col">刪除</th>
+              </>
+            ) : (
+              ""
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {strain
+            ? strain.strain.mice.map((mouse) => {
+                <tr key={mouse._id}>
+                  <td scope="row">{mouse.no}</td>
+                  <td>
+                    {mouse.parents.father} x {mouse.parents.mother}
+                  </td>
+                  <td>{mouse.litter}</td>
+                  <td>{mouse.gender}</td>
+                  <td>
+                    {new Date(mouse.birth_date).toLocaleDateString("zh-TW")}
+                  </td>
+                  <td>
+                    {new Date(mouse.sampling_date).toLocaleDateString("zh-TW")}
+                  </td>
+                  <td>{mouse.toeNumber}</td>
+                  {mouse.sampling_results.map((result, index) => (
+                    <td key={index}>{result}</td>
+                  ))}
+                  <td>{mouse.on_shelf}</td>
+                  <td>{mouse.note ? mouse.note : "-"}</td>
+                  {currentUser &&
+                  strain?.strain?.users?.includes(currentUser.username) &&
+                  currentUser.role === "品系管理人" ? (
+                    <>
+                      <td>
+                        <form
+                          className="d-inline"
+                          action="/strains/{mouse.strain }/mice/{ mouse._id }/edit"
+                          method="GET"
+                        >
+                          <button className="btn btn-warning">編輯</button>
+                        </form>
+                      </td>
+                      <td>
+                        <form
+                          className="d-inline"
+                          action="/strains/{mouse.strain }/mice/{ mouse._id }?_method=DELETE"
+                          method="POST"
+                        >
+                          <button className="btn btn-danger">刪除</button>
+                        </form>
+                      </td>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </tr>;
+              })
+            : "loading"}
+        </tbody>
+      </table>
+      <br />
+      <h3>繁殖記錄表:</h3>
+      {currentUser &&
+      strain?.strain?.users.includes(currentUser.username) &&
+      currentUser.role === "品系管理人" ? (
+        <a href="/strains/{ strainId }/breedingRecord/new">新增繁殖資料</a>
+      ) : (
+        ""
+      )}
+      <table className="table table-striped mouse.-2">
+        <thead>
+          <tr>
+            <th scope="col">繁殖籠編號</th>
+            <th scope="col">父母</th>
+            <th scope="col">配種日期</th>
+            <th scope="col">繁殖籠狀態</th>
+            {currentUser &&
+            strain?.strain?.users?.includes(currentUser.username) &&
+            currentUser.role === "品系管理人" ? (
+              <>
+                <th scope="col">編輯</th>
+                <th scope="col">刪除</th>
+              </>
+            ) : (
+              ""
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {strain
+            ? strain.breedingRecord.map((b) => (
+                <>
+                  <tr key={b._id}>
+                    <th scope="row">{b.cage_no}</th>
+                    <td>
+                      {b.parents.father} 配 {b.parents.mother}
+                    </td>
+                    <td>
+                      {new Date(b.pairing_date).toLocaleDateString("zh-TW")}
+                    </td>
+                    <td>{b.on_shelf}</td>
+                    {currentUser &&
+                    strain?.strain?.users?.includes(currentUser.username) &&
+                    currentUser.role === "品系管理人" ? (
+                      <>
+                        <td>
+                          <form
+                            className="d-inline"
+                            action="/strains/{ b.strain}/breedingRecord/{ b._id}/edit"
+                            method="GET"
+                          >
+                            <button className="btn btn-warning">編輯</button>
+                          </form>
+                        </td>
+                        <td>
+                          <form
+                            className="d-inline"
+                            action="/strains/{ b.strain}/breedingRecord/{ b._id}?_method=DELETE"
+                            method="POST"
+                          >
+                            <button className="btn btn-danger">刪除</button>
+                          </form>
+                        </td>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </tr>
+                </>
+              ))
+            : ""}
+        </tbody>
+      </table>
+    </div>
+  );
+}

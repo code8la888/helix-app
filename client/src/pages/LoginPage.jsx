@@ -7,7 +7,7 @@ export default function LoginPage() {
       <div className="col-md-4 offset-md-4">
         <form action="/api/login" method="POST">
           <div className="mb-3">
-            <label className="form-label" for="username">
+            <label className="form-label" htmlFor="username">
               使用者信箱:
             </label>
             <input
@@ -21,7 +21,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-4">
-            <label className="form-label" for="password">
+            <label className="form-label" htmlFor="password">
               密碼:
             </label>
             <input

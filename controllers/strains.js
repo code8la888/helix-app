@@ -15,12 +15,12 @@ module.exports.index = async (req, res) => {
       };
     })
   );
-  res.render("strains/index", { strains: strainsWithUsers });
+  res.status(200).json({ strains: strainsWithUsers });
 };
 
-module.exports.renderNewForm = (req, res) => {
-  res.render("strains/new");
-};
+// module.exports.renderNewForm = (req, res) => {
+//   res.render("strains/new");
+// };
 
 module.exports.createNewStrain = async (req, res) => {
   if (!req.body.strain) throw new ExpressError("無效的表單或不完整的表單", 400);
@@ -44,7 +44,8 @@ module.exports.createNewStrain = async (req, res) => {
   }
   await newStrain.save();
   req.flash("success", "成功新增品系");
-  res.redirect("/strains");
+  console.log("品系新增成功", newStrain);
+  res.status(201).json({ message: "品系成功新增", redirect: "/index" });
 };
 
 module.exports.showStrain = async (req, res) => {
@@ -53,13 +54,7 @@ module.exports.showStrain = async (req, res) => {
   const mice = await Mouse.find({ strain: strainId });
   const users = await User.find({ username: { $in: strain.users } });
   const breedingRecord = await BreedingRecord.find({ strain: strainId });
-  res.render("strains/show", {
-    strain,
-    mice,
-    users,
-    strainId,
-    breedingRecord,
-  });
+  res.status(200).json({ strain, mice, users, strainId, breedingRecord });
 };
 
 module.exports.renderEditForm = async (req, res) => {

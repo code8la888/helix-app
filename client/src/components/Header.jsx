@@ -41,7 +41,7 @@ class Header extends Component {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="/">Features</Nav.Link>
+              <Nav.Link href="/strain/new">新增品系</Nav.Link>
             </Nav>
             <Nav className="ms-auto">{this.renderContent()}</Nav>
           </Navbar.Collapse>

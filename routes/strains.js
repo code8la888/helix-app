@@ -11,15 +11,19 @@ const {
 const strains = require("../controllers/strains");
 
 //查詢所有品系
-router.get("/", isLoggedIn, catchAsync(strains.index));
+router.get(
+  "/",
+  // isLoggedIn,
+  catchAsync(strains.index)
+);
 
 // 新增品系表單頁面
-router.get("/new", isLoggedIn, verifyAdmin, strains.renderNewForm);
+// router.get("/new", isLoggedIn, verifyAdmin, strains.renderNewForm);
 
 //新增品系
 router.post(
   "/",
-  isLoggedIn,
+  // isLoggedIn,
   verifyAdmin,
   validStrain,
   catchAsync(strains.createNewStrain)
@@ -28,7 +32,7 @@ router.post(
 // 查詢單一品系及該品系所有小鼠
 router.get(
   "/:strainId",
-  isLoggedIn,
+  // isLoggedIn,
   verifyBrowsePermission,
   catchAsync(strains.showStrain)
 );

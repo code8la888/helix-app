@@ -1,6 +1,23 @@
 import Table from "react-bootstrap/Table";
-
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 function Index() {
+  const [strains, setStrains] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/strains");
+        const { strains } = res.data;
+        setStrains(strains);
+      } catch (error) {
+        console.error("Error fetching strains data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div>
       <h1 className="text-center mb-5">所有品系</h1>
@@ -17,21 +34,29 @@ function Index() {
           </tr>
         </thead>
         <tbody>
-          {/* <% for(let s of strains){ %>
-      <tr>
-        <td><a href="/strains/<%= s._id %>"><%= s.strain %></a></td>
-        <td><%= s.abbr %></td>
-        <td><%= s.dept %></td>
-        <td><%= s.iacuc_no %></td>
-        <td><%= new Date(s.EXP).toLocaleDateString('zh-TW') %></td>
-        <% s.users.forEach(function(user) { %> <%if(user.role === "計畫主持人"){%>
-        <td><%= user.username%></td>
-        <% } %> <% }); %> <% s.users.forEach(function(user) { %> <%if(user.role
-        === "品系管理人"){%>
-        <td><%= user.username%></td>
-        <% } %> <% }); %>
-      </tr>
-      <% } %> */}
+          {strains.map((strain) => (
+            <tr key={strain._id}>
+              <td>
+                <Link to={`/strains/${strain._id}`}>{strain.strain}</Link>
+              </td>
+              <td>{strain.abbr}</td>
+              <td>{strain.dept}</td>
+              <td>{strain.iacuc_no}</td>
+              <td>{new Date(strain.EXP).toLocaleDateString("zh-TW")}</td>
+              <td>
+                {strain.users
+                  .filter((user) => user.role === "計畫主持人")
+                  .map((user) => user.username)
+                  .join(", ")}
+              </td>
+              <td>
+                {strain.users
+                  .filter((user) => user.role === "品系管理人")
+                  .map((user) => user.username)
+                  .join(", ")}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>

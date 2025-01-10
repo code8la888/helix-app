@@ -16,16 +16,21 @@ module.exports.register = async (req, res) => {
     });
     const registeredUser = await User.register(user, password);
     await registeredUser.save();
+
     req.login(registeredUser, (err) => {
       if (err) {
         return next(err);
       }
       req.flash("success", "歡迎來到LIMS");
-      res.redirect("/strains");
+      res.status(201).json({
+        message: "成功新增使用者",
+        data: registeredUser,
+        redirect: "/index",
+      });
     });
   } catch (error) {
     req.flash("error", error);
-    res.redirect("/register");
+    res.status(400).json({ error: error.message, redirect: "/register" });
   }
 };
 
@@ -35,7 +40,7 @@ module.exports.renderLogin = (req, res) => {
 
 module.exports.login = (req, res) => {
   console.log(req.user);
-  // req.flash("success", "歡迎回來");
+  req.flash("success", "歡迎回來");
   // const redirectUrl = res.locals.returnTo || "/strains";
   // res.redirect(redirectUrl);
   res.redirect("/");

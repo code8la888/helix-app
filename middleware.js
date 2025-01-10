@@ -6,7 +6,13 @@ const { breedingRecordSchema } = require("./schema");
 const ExpressError = require("./utils/ExpressError");
 
 module.exports.isLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
+  // if (!req.isAuthenticated()) {
+  //   req.session.returnTo = req.originalUrl;
+  //   req.flash("error", "請先登入");
+  //   return res.redirect("/login");
+  // }
+  // next();
+  if (!req.user) {
     req.session.returnTo = req.originalUrl;
     req.flash("error", "請先登入");
     return res.redirect("/login");
@@ -101,11 +107,13 @@ module.exports.verifyEditPermission = async (req, res, next) => {
 
 module.exports.verifyAdmin = async (req, res, next) => {
   const user = req.user;
+  console.log(req.user);
+
   try {
-    const dbUser = User.findById(user._id);
+    const dbUser = await User.findById(user._id);
     if (!dbUser) {
       req.flash("error", "不存在此使用者!");
-      res.redirect("/strains");
+      return res.redirect("/strains");
     }
 
     if (user.role === "品系管理人") {

@@ -10,29 +10,26 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:5000",
         secure: false,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "/api"),
       },
       "/auth/google": {
         target: "http://localhost:5000",
         secure: false,
       },
-      "/strains": {
-        target: "http://localhost:5000",
-        changeOrigin: true,
-        secure: false,
-      },
       "/api/register": {
         target: "http://localhost:5000",
-        changeOrigin: true,
+
         secure: false,
       },
       "/api/login": {
         target: "http://localhost:5000",
-        changeOrigin: true,
+
         secure: false,
       },
       "/api/logOut": {
         target: "http://localhost:5000",
-        changeOrigin: true,
+
         secure: false,
       },
     },
