@@ -70,22 +70,25 @@ module.exports.updateStrain = async (req, res) => {
 
   const strain = await Strain.findById(strainId);
 
-  if (req.body.deleteUsers && req.body.deleteUsers.length > 0) {
-    strain.users = strain.users.filter(
-      (user) => !req.body.deleteUsers.includes(user)
-    );
-  }
+  // if (req.body.deleteUsers && req.body.deleteUsers.length > 0) {
+  //   strain.users = strain.users.filter(
+  //     (user) => !req.body.deleteUsers.includes(user)
+  //   );
+  // }
 
-  if (req.body.newUsers && req.body.newUsers.length > 0) {
-    const addNew = req.body.newUsers.filter(
-      (newUser) => !strain.users.includes(newUser)
-    );
-    strain.users.push(...addNew);
-  }
+  // if (req.body.newUsers && req.body.newUsers.length > 0) {
+  //   const addNew = req.body.newUsers.filter(
+  //     (newUser) => !strain.users.includes(newUser)
+  //   );
+  //   strain.users.push(...addNew);
+  // }
   await strain.save();
 
-  req.flash("success", "成功修改品系資訊");
-  res.redirect(`/strains/${strainId}`);
+  // req.flash("success", "成功修改品系資訊");
+  // res.redirect(`/strains/${strainId}`);
+  res
+    .status(200)
+    .json({ message: "成功修改品系資訊", redirect: `/strains/${strainId}` });
 };
 
 module.exports.deleteStrain = async (req, res) => {

@@ -42,6 +42,7 @@ class Header extends Component {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/strain/new">新增品系</Nav.Link>
+              <Nav.Link href="/index">查看所有品系</Nav.Link>
             </Nav>
             <Nav className="ms-auto">{this.renderContent()}</Nav>
           </Navbar.Collapse>

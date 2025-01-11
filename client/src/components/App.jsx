@@ -10,6 +10,7 @@ import RegisterPage from "../pages/RegisterPage";
 import Index from "../pages/strains";
 import NewStrain from "../pages/strains/NewStrain";
 import StrainDetails from "../pages/strains/StrainDetails";
+import EditStrain from "../pages/strains/EditStrain";
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
@@ -26,6 +27,7 @@ class App extends Component {
             <Route path="/index" element={<Index />} />
             <Route path="/strain/new" element={<NewStrain />} />
             <Route path="/strains/:id" element={<StrainDetails />} />
+            <Route path="/strains/:id/edit" element={<EditStrain />} />
           </Routes>
         </AppLayout>
       </BrowserRouter>
