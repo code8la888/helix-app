@@ -70,18 +70,6 @@ module.exports.updateStrain = async (req, res) => {
 
   const strain = await Strain.findById(strainId);
 
-  // if (req.body.deleteUsers && req.body.deleteUsers.length > 0) {
-  //   strain.users = strain.users.filter(
-  //     (user) => !req.body.deleteUsers.includes(user)
-  //   );
-  // }
-
-  // if (req.body.newUsers && req.body.newUsers.length > 0) {
-  //   const addNew = req.body.newUsers.filter(
-  //     (newUser) => !strain.users.includes(newUser)
-  //   );
-  //   strain.users.push(...addNew);
-  // }
   await strain.save();
 
   // req.flash("success", "成功修改品系資訊");

@@ -21,6 +21,26 @@ export default function EditStrain() {
     fetchData();
   }, []);
 
+  const addUserField = () => {
+    setStrain((prev) => ({ ...prev, users: [...prev.users, ""] }));
+  };
+
+  const handleDeleteUser = (index) => {
+    setStrain((prev) => ({
+      ...prev,
+      users: prev?.users.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateUsername = (index, newUser) => {
+    setStrain((prev) => ({
+      ...prev,
+      users: prev.users.map((username, i) =>
+        i === index ? newUser : username
+      ),
+    }));
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setStrain({
@@ -43,9 +63,8 @@ export default function EditStrain() {
     const { _id, mice, breedingRecords, __v, ...rest } = strain;
 
     const updatedData = {
-      strain: { ...rest }, // 重建的 strain 不包含 _id
+      strain: { ...rest },
     };
-    console.log(updatedData);
 
     try {
       const res = await axios.put(`/api/strains/${id}`, updatedData, {
@@ -59,14 +78,11 @@ export default function EditStrain() {
       }
     } catch (error) {
       if (error.response) {
-        // 如果伺服器返回錯誤響應
         console.error("伺服器返回錯誤:", error.response.data);
         console.error("HTTP 狀態碼:", error.response.status);
       } else if (error.request) {
-        // 請求已發送但沒有收到回應
         console.error("沒有收到伺服器回應:", error.request);
       } else {
-        // 請求設置錯誤
         console.error("發送失敗:", error.message);
       }
     }
@@ -75,7 +91,7 @@ export default function EditStrain() {
   return (
     <>
       <div className="row">
-        <h2 className="text-center">修改{strain?.strain || ""}小鼠品系資訊:</h2>
+        <h2 className="text-center">編輯{strain?.strain || ""}小鼠品系資訊:</h2>
         <div className="col-md-8 offset-md-2">
           <form
             noValidate
@@ -164,40 +180,44 @@ export default function EditStrain() {
               </div>
             </div>
             <hr />
-            <h2 className="text-center mt-3">修改使用者資訊:</h2>
-            {/* {users
-              .filter((user) => user.role !== "獸醫" || "")
-              .map((user) => {
-                return (
-                  <div className="mb-3" key={user._id}>
-                    <div className="mb-3">
-                      <input
-                        className="form-control"
-                        type="text"
-                        id={user._id}
-                        name={user.username}
-                        value={user.username || ""}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <button
-                      className="btn btn-danger"
-                      onClick={handleDeleteField}
-                    >
-                      刪除使用者
-                    </button>
+            <h2 className="text-center mt-3">編輯使用者資訊:</h2>
+            {strain?.users.map((username, index) => {
+              return (
+                <div className="mb-3" key={index}>
+                  <div className="mb-3">
+                    <input
+                      className="form-control"
+                      type="text"
+                      value={username || ""}
+                      onChange={(event) =>
+                        updateUsername(index, event.target.value)
+                      }
+                      required
+                    />
                   </div>
-                );
-              })} */}
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => {
+                      handleDeleteUser(index);
+                    }}
+                  >
+                    刪除使用者
+                  </button>
+                </div>
+              );
+            })}
             <div className="mb-3">
               <div id="user-fields"></div>
-              <button type="button" className="btn btn-outline-primary">
+              <button
+                type="button"
+                className="btn btn-info"
+                onClick={addUserField}
+              >
                 新增使用者
               </button>
             </div>
             <div className="mb-3">
-              <button className="btn btn-success">更新</button>
+              <button className="btn btn-success">提交更新</button>
             </div>
           </form>
         </div>
