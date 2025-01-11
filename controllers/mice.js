@@ -20,8 +20,10 @@ module.exports.createNewMouse = async (req, res) => {
   strain.mice.push(mouse);
   await strain.save();
   await mouse.save();
-  req.flash("success", "成功新增採樣記錄");
-  res.redirect(`/strains/${strainId}`);
+  // req.flash("success", "成功新增採樣記錄");
+  res
+    .status(200)
+    .json({ message: "成功新增採樣記錄", redirect: `/strains/${strainId}` });
 };
 
 module.exports.renderEditForm = async (req, res) => {

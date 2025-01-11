@@ -11,6 +11,9 @@ import Index from "../pages/strains";
 import NewStrain from "../pages/strains/NewStrain";
 import StrainDetails from "../pages/strains/StrainDetails";
 import EditStrain from "../pages/strains/EditStrain";
+import NewMice from "../pages/mice/NewMice";
+import NewBreedingRecord from "../pages/breedingRecords/NewBreedingRecord";
+
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
@@ -28,6 +31,11 @@ class App extends Component {
             <Route path="/strain/new" element={<NewStrain />} />
             <Route path="/strains/:id" element={<StrainDetails />} />
             <Route path="/strains/:id/edit" element={<EditStrain />} />
+            <Route path="/strains/:id/mice/new" element={<NewMice />} />
+            <Route
+              path="/strains/:id/breedingRecord/new"
+              element={<NewBreedingRecord />}
+            />
           </Routes>
         </AppLayout>
       </BrowserRouter>

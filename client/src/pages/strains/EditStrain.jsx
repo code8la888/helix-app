@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 export default function EditStrain() {
   const { id } = useParams();
@@ -222,7 +222,7 @@ export default function EditStrain() {
           </form>
         </div>
       </div>
-      <a href={`/strains/${id}`}>返回小鼠品系資訊</a>
+      <Link to={`/strains/${id}`}>返回小鼠品系資訊</Link>
     </>
   );
 }

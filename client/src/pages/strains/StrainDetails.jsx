@@ -45,22 +45,27 @@ export default function StrainDetails() {
     <div>
       <h1>NTUMC-LAC 基因改造小鼠採樣記錄</h1>
       <br />
-      <h3>品系資訊:</h3>
       {currentUser &&
       strain?.strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <>
-          <button className="btn btn-warning text-white me-2">
-            <Link to={`/strains/${id}/edit`}>編輯品系資料</Link>
+        <div className="mb-3 d-flex">
+          <h3>品系資訊:</h3>
+          <button className="btn btn-warning text-white mx-2">
+            <Link
+              to={`/strains/${id}/edit`}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              編輯品系資料
+            </Link>
           </button>
           <form className="d-inline">
             <button className="btn btn-danger" onClick={handleDelete}>
               刪除品系
             </button>
           </form>
-        </>
+        </div>
       ) : (
-        "no"
+        ""
       )}
       {strain ? (
         <div className="row g-3 mouse.-2">
@@ -108,7 +113,7 @@ export default function StrainDetails() {
       {currentUser &&
       strain?.strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <a href="/strains/{ strainId }/mice/new">新增採樣記錄</a>
+        <Link to={`/strains/${id}/mice/new`}>新增採樣記錄</Link>
       ) : (
         ""
       )}
@@ -149,7 +154,7 @@ export default function StrainDetails() {
                 <tr key={mouse._id}>
                   <td scope="row">{mouse.no}</td>
                   <td>
-                    {mouse.parents.father} x {mouse.parents.mother}
+                    {/* {mouse.parents.father} x {mouse.parents.mother} */}
                   </td>
                   <td>{mouse.litter}</td>
                   <td>{mouse.gender}</td>
@@ -160,9 +165,9 @@ export default function StrainDetails() {
                     {new Date(mouse.sampling_date).toLocaleDateString("zh-TW")}
                   </td>
                   <td>{mouse.toeNumber}</td>
-                  {mouse.sampling_results.map((result, index) => (
+                  {/* {mouse.sampling_results.map((result, index) => (
                     <td key={index}>{result}</td>
-                  ))}
+                  ))} */}
                   <td>{mouse.on_shelf}</td>
                   <td>{mouse.note ? mouse.note : "-"}</td>
                   {currentUser &&
@@ -201,7 +206,7 @@ export default function StrainDetails() {
       {currentUser &&
       strain?.strain?.users.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <a href="/strains/{ strainId }/breedingRecord/new">新增繁殖資料</a>
+        <Link to={`/strains/${id}/breedingRecord/new`}>新增繁殖資料</Link>
       ) : (
         ""
       )}
