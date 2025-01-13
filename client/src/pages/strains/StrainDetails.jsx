@@ -11,30 +11,54 @@ export default function StrainDetails() {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const fetchStrainData = async () => {
+    try {
+      const res = await axios.get(`/api/strains/${id}`);
+      setStrain(res.data);
+    } catch (error) {
+      console.error("Error fetching strain data:", error);
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchUser());
+    fetchStrainData();
     // console.log(currentUser);
-    async function fetchData() {
-      try {
-        const res = await axios.get(`/api/strains/${id}`);
-        const strainData = res.data;
-        setStrain(strainData);
-        // console.log(strainData);
-      } catch (error) {
-        console.error("Error fetching strains data:", error);
-      }
-    }
-    fetchData();
   }, [dispatch]);
 
-  const handleDelete = async (event) => {
+  const handleDeleteStrain = async (event) => {
     event.preventDefault();
     try {
       const res = await axios.delete(`/api/strains/${id}`);
       // console.log(res.data);
       if (res.data.redirect) {
         navigate(res.data.redirect);
+      }
+    } catch (error) {
+      console.error("刪除失敗：", error);
+    }
+  };
+
+  const handleDeleteMice = async (miceId, event) => {
+    event.preventDefault();
+    try {
+      const res = await axios.delete(`/api/strains/${id}/mice/${miceId}`);
+      if (res.status === 200) {
+        await fetchStrainData(); // 刪除成功後重新加載數據
+      }
+    } catch (error) {
+      console.error("刪除失敗：", error);
+    }
+  };
+
+  const handleDeleteBreedingRecord = async (breedingRecordId, event) => {
+    event.preventDefault();
+    try {
+      const res = await axios.delete(
+        `/api/strains/${id}/breedingRecord/${breedingRecordId}`
+      );
+      if (res.status === 200) {
+        await fetchStrainData(); // 刪除成功後重新加載數據
       }
     } catch (error) {
       console.error("刪除失敗：", error);
@@ -61,7 +85,7 @@ export default function StrainDetails() {
             </Link>
           </button>
           <form className="d-inline">
-            <button className="btn btn-danger" onClick={handleDelete}>
+            <button className="btn btn-danger" onClick={handleDeleteStrain}>
               刪除品系
             </button>
           </form>
@@ -178,22 +202,24 @@ export default function StrainDetails() {
               currentUser.role === "品系管理人" ? (
                 <>
                   <td>
-                    <form
-                      className="d-inline"
-                      action="/strains/{mouse.strain }/mice/{ mouse._id }/edit"
-                      method="GET"
-                    >
-                      <button className="btn btn-warning">編輯</button>
-                    </form>
+                    <button className="btn btn-warning">
+                      <Link
+                        to={`/strains/${id}/mice/${mouse._id}/edit`}
+                        style={{ textDecoration: "none", color: "black" }}
+                      >
+                        編輯
+                      </Link>
+                    </button>
                   </td>
                   <td>
-                    <form
-                      className="d-inline"
-                      action="/strains/{mouse.strain }/mice/{ mouse._id }?_method=DELETE"
-                      method="POST"
+                    <button
+                      className="btn btn-danger"
+                      onClick={(event) => {
+                        handleDeleteMice(mouse._id, event);
+                      }}
                     >
-                      <button className="btn btn-danger">刪除</button>
-                    </form>
+                      刪除
+                    </button>
                   </td>
                 </>
               ) : (
@@ -234,44 +260,44 @@ export default function StrainDetails() {
         <tbody>
           {strain
             ? strain.breedingRecord.map((b) => (
-                <>
-                  <tr key={b._id}>
-                    <th scope="row">{b.cage_no}</th>
-                    <td>
-                      {b.parents.father} 配 {b.parents.mother}
-                    </td>
-                    <td>
-                      {new Date(b.pairing_date).toLocaleDateString("zh-TW")}
-                    </td>
-                    <td>{b.on_shelf}</td>
-                    {currentUser &&
-                    strain?.strain?.users?.includes(currentUser.username) &&
-                    currentUser.role === "品系管理人" ? (
-                      <>
-                        <td>
-                          <form
-                            className="d-inline"
-                            action="/strains/{ b.strain}/breedingRecord/{ b._id}/edit"
-                            method="GET"
+                <tr key={b._id}>
+                  <th scope="row">{b.cage_no}</th>
+                  <td>
+                    {b.parents.father} 配 {b.parents.mother}
+                  </td>
+                  <td>
+                    {new Date(b.pairing_date).toLocaleDateString("zh-TW")}
+                  </td>
+                  <td>{b.on_shelf}</td>
+                  {currentUser &&
+                  strain?.strain?.users?.includes(currentUser.username) &&
+                  currentUser.role === "品系管理人" ? (
+                    <>
+                      <td>
+                        <button className="btn btn-warning">
+                          <Link
+                            to={`/strains/${id}/breedingRecord/${b._id}/edit`}
+                            style={{ textDecoration: "none", color: "black" }}
                           >
-                            <button className="btn btn-warning">編輯</button>
-                          </form>
-                        </td>
-                        <td>
-                          <form
-                            className="d-inline"
-                            action="/strains/{ b.strain}/breedingRecord/{ b._id}?_method=DELETE"
-                            method="POST"
-                          >
-                            <button className="btn btn-danger">刪除</button>
-                          </form>
-                        </td>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </tr>
-                </>
+                            編輯
+                          </Link>
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-danger"
+                          onClick={(event) => {
+                            handleDeleteBreedingRecord(b._id, event);
+                          }}
+                        >
+                          刪除
+                        </button>
+                      </td>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </tr>
               ))
             : ""}
         </tbody>

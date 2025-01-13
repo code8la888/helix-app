@@ -51,6 +51,9 @@ module.exports.deleteMouse = async (req, res) => {
   const { strainId, mouseId } = req.params;
   await Strain.findByIdAndUpdate(strainId, { $pull: { mice: mouseId } });
   await Mouse.findByIdAndDelete(mouseId);
-  req.flash("success", "成功刪除採樣記錄");
-  res.redirect(`/strains/${strainId}`);
+  // req.flash("success", "成功刪除採樣記錄");
+  // res.redirect(`/strains/${strainId}`);
+  res
+    .status(200)
+    .json({ message: "成功刪除採樣記錄", redirect: `/strains/${strainId}` });
 };

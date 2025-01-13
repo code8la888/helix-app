@@ -13,6 +13,8 @@ import StrainDetails from "../pages/strains/StrainDetails";
 import EditStrain from "../pages/strains/EditStrain";
 import NewMice from "../pages/mice/NewMice";
 import NewBreedingRecord from "../pages/breedingRecords/NewBreedingRecord";
+import EditBreedingRecord from "../pages/breedingRecords/EditBreedingRecord";
+import EditMice from "../pages/mice/EditMice";
 
 class App extends Component {
   componentDidMount() {
@@ -32,6 +34,14 @@ class App extends Component {
             <Route path="/strains/:id" element={<StrainDetails />} />
             <Route path="/strains/:id/edit" element={<EditStrain />} />
             <Route path="/strains/:id/mice/new" element={<NewMice />} />
+            <Route
+              path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
+              element={<EditBreedingRecord />}
+            />
+            <Route
+              path="/strains/:id/mice/:miceId/edit"
+              element={<EditMice />}
+            />
             <Route
               path="/strains/:id/breedingRecord/new"
               element={<NewBreedingRecord />}
