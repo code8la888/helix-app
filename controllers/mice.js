@@ -1,8 +1,5 @@
 const Strain = require("../models/strain");
 const Mouse = require("../models/mouse");
-const genders = ["F", "M"];
-const result = ["WT", "HT", "KO", "檢測中"];
-const state = ["在架上", "已移出", "已犧牲", "自然死亡"];
 
 module.exports.renderNewForm = async (req, res) => {
   const { strainId } = req.params;
@@ -30,21 +27,21 @@ module.exports.renderEditForm = async (req, res) => {
   const { strainId, mouseId } = req.params;
   const mouse = await Mouse.findById(mouseId);
   const strain = await Strain.findById(strainId);
-  res.render("mice/edit", {
-    mouse,
-    strainId,
-    strain,
-    genders,
-    state,
-    result,
-  });
+  // res.render("mice/edit", {
+  //   mouse,
+  //   strain,
+  // });
+  res.status(200).json({ mouse, strain });
 };
 
 module.exports.updateMouse = async (req, res) => {
   const { strainId, mouseId } = req.params;
   await Mouse.findByIdAndUpdate(mouseId, req.body.mouse);
-  req.flash("success", "成功修改採樣記錄");
-  res.redirect(`/strains/${strainId}`);
+  // req.flash("success", "成功修改採樣記錄");
+  // res.redirect(`/strains/${strainId}`);
+  res
+    .status(200)
+    .json({ message: "成功修改採樣記錄", redirect: `/strains/${strainId}` });
 };
 
 module.exports.deleteMouse = async (req, res) => {

@@ -40,10 +40,10 @@ module.exports.renderLogin = (req, res) => {
 
 module.exports.login = (req, res) => {
   console.log(req.user);
-  req.flash("success", "歡迎回來");
-  // const redirectUrl = res.locals.returnTo || "/strains";
+  // req.flash("success", "歡迎回來");
+  const redirectUrl = res.locals.returnTo || "/";
   // res.redirect(redirectUrl);
-  res.redirect("/");
+  res.status(200).json({ message: "歡迎回來", redirect: redirectUrl });
 };
 
 module.exports.logout = (req, res) => {

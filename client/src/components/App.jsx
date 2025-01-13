@@ -39,7 +39,7 @@ class App extends Component {
               element={<EditBreedingRecord />}
             />
             <Route
-              path="/strains/:id/mice/:miceId/edit"
+              path="/strains/:strainId/mice/:mouseId/edit"
               element={<EditMice />}
             />
             <Route

@@ -84,11 +84,10 @@ export default function StrainDetails() {
               編輯品系資料
             </Link>
           </button>
-          <form className="d-inline">
-            <button className="btn btn-danger" onClick={handleDeleteStrain}>
-              刪除品系
-            </button>
-          </form>
+
+          <button className="btn btn-danger" onClick={handleDeleteStrain}>
+            刪除品系資料
+          </button>
         </div>
       ) : (
         ""
