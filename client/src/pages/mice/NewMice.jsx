@@ -30,13 +30,19 @@ export default function NewMice() {
       try {
         const res = await axios.get(`/api/strains/${id}`);
         setSamplingGeneList(res.data.strain.genes);
-        console.log(samplingGeneList);
+
+        setMouseData((prevData) => ({
+          ...prevData,
+          sampling_results: samplingGeneList.map(
+            (_, index) => prevData.sampling_results[index] || "檢測中"
+          ),
+        }));
       } catch (error) {
         console.error("Error fetching strains data:", error);
       }
     }
     FetchData();
-  }, []);
+  }, [samplingGeneList]);
 
   const navigate = useNavigate();
   const handleChange = (event) => {
@@ -71,7 +77,6 @@ export default function NewMice() {
     const updatedFormData = {
       mouse: {
         ...mouseData,
-        sampling_results: samplingResults,
       },
     };
     console.log(updatedFormData);
@@ -238,29 +243,35 @@ export default function NewMice() {
                       required
                     />
                   </td>
-                  {samplingGeneList?.map((gene, index) => (
-                    <td className="col-1" key={gene}>
-                      <select
-                        className="form-control"
-                        name="sampling_results"
-                        id={`sampling_results_${index}`}
-                        onChange={(event) => {
-                          const newResults = [...mouseData.sampling_results];
-                          newResults[index] = event.target.value;
-                          setMouseData({
-                            ...mouseData,
-                            sampling_results: newResults,
-                          });
-                        }}
-                        value={mouseData.sampling_results[index] || "檢測中"}
-                      >
-                        <option value="WT">WT</option>
-                        <option value="HT">HT</option>
-                        <option value="KO">KO</option>
-                        <option value="檢測中">檢測中</option>
-                      </select>
-                    </td>
-                  ))}
+                  {samplingGeneList?.length > 0 ? (
+                    samplingGeneList.map((gene, index) => (
+                      <td className="col-1" key={gene}>
+                        <select
+                          className="form-control"
+                          name="sampling_results"
+                          id={`sampling_results_${index}`}
+                          onChange={(event) => {
+                            const newResults = [
+                              ...(mouseData.sampling_results || []),
+                            ];
+                            newResults[index] = event.target.value;
+                            setMouseData({
+                              ...mouseData,
+                              sampling_results: newResults,
+                            });
+                          }}
+                          value={mouseData.sampling_results[index]}
+                        >
+                          <option value="WT">WT</option>
+                          <option value="HT">HT</option>
+                          <option value="KO">KO</option>
+                          <option value="檢測中">檢測中</option>
+                        </select>
+                      </td>
+                    ))
+                  ) : (
+                    <td value="檢測中">檢測中</td>
+                  )}
                   <td className="col-1">
                     <select
                       className="form-control"

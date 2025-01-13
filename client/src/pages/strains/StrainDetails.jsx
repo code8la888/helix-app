@@ -41,6 +41,8 @@ export default function StrainDetails() {
     }
   };
 
+  console.log(strain || "");
+
   return (
     <div>
       <h1>NTUMC-LAC 基因改造小鼠採樣記錄</h1>
@@ -149,56 +151,56 @@ export default function StrainDetails() {
           </tr>
         </thead>
         <tbody>
-          {strain
-            ? strain.strain.mice.map((mouse) => {
-                <tr key={mouse._id}>
-                  <td scope="row">{mouse.no}</td>
+          {strain?.mice.map((mouse) => (
+            <tr key={mouse._id}>
+              <td scope="row">{mouse.no}</td>
+              <td>
+                {mouse.parents.father} x {mouse.parents.mother}
+              </td>
+              <td>{mouse.litter}</td>
+              <td>{mouse.gender}</td>
+              <td>{new Date(mouse.birth_date).toLocaleDateString("zh-TW")}</td>
+              <td>
+                {new Date(mouse.sampling_date).toLocaleDateString("zh-TW")}
+              </td>
+              <td>{mouse.toeNumber}</td>
+              {mouse?.sampling_results?.length > 0 ? (
+                mouse.sampling_results.map((result, index) => (
+                  <td key={index}>{result}</td>
+                ))
+              ) : (
+                <td value="檢測中">檢測中</td>
+              )}
+              <td>{mouse.on_shelf}</td>
+              <td>{mouse.note ? mouse.note : "-"}</td>
+              {currentUser &&
+              strain?.strain?.users?.includes(currentUser.username) &&
+              currentUser.role === "品系管理人" ? (
+                <>
                   <td>
-                    {/* {mouse.parents.father} x {mouse.parents.mother} */}
+                    <form
+                      className="d-inline"
+                      action="/strains/{mouse.strain }/mice/{ mouse._id }/edit"
+                      method="GET"
+                    >
+                      <button className="btn btn-warning">編輯</button>
+                    </form>
                   </td>
-                  <td>{mouse.litter}</td>
-                  <td>{mouse.gender}</td>
                   <td>
-                    {new Date(mouse.birth_date).toLocaleDateString("zh-TW")}
+                    <form
+                      className="d-inline"
+                      action="/strains/{mouse.strain }/mice/{ mouse._id }?_method=DELETE"
+                      method="POST"
+                    >
+                      <button className="btn btn-danger">刪除</button>
+                    </form>
                   </td>
-                  <td>
-                    {new Date(mouse.sampling_date).toLocaleDateString("zh-TW")}
-                  </td>
-                  <td>{mouse.toeNumber}</td>
-                  {/* {mouse.sampling_results.map((result, index) => (
-                    <td key={index}>{result}</td>
-                  ))} */}
-                  <td>{mouse.on_shelf}</td>
-                  <td>{mouse.note ? mouse.note : "-"}</td>
-                  {currentUser &&
-                  strain?.strain?.users?.includes(currentUser.username) &&
-                  currentUser.role === "品系管理人" ? (
-                    <>
-                      <td>
-                        <form
-                          className="d-inline"
-                          action="/strains/{mouse.strain }/mice/{ mouse._id }/edit"
-                          method="GET"
-                        >
-                          <button className="btn btn-warning">編輯</button>
-                        </form>
-                      </td>
-                      <td>
-                        <form
-                          className="d-inline"
-                          action="/strains/{mouse.strain }/mice/{ mouse._id }?_method=DELETE"
-                          method="POST"
-                        >
-                          <button className="btn btn-danger">刪除</button>
-                        </form>
-                      </td>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </tr>;
-              })
-            : "loading"}
+                </>
+              ) : (
+                ""
+              )}
+            </tr>
+          ))}
         </tbody>
       </table>
       <br />

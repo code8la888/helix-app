@@ -17,8 +17,11 @@ module.exports.createBreedingRecord = async (req, res) => {
   strain.breedingRecords.push(breedingRecord);
   await breedingRecord.save();
   await strain.save();
-  req.flash("success", "成功新增繁殖記錄");
-  res.redirect(`/strains/${strainId}`);
+  // req.flash("success", "成功新增繁殖記錄");
+  // res.redirect(`/strains/${strainId}`);
+  res
+    .status(200)
+    .json({ message: "成功新增繁殖記錄", redirect: `/strains/${strainId}` });
 };
 
 module.exports.renderEditForm = async (req, res) => {
