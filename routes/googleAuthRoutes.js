@@ -9,18 +9,29 @@ router.get(
   })
 );
 
-router.get(
-  "/auth/google/callback",
-  passport.authenticate("google"),
-  (req, res) => {
-    req.flash("success", "歡迎回來");
-    res.redirect("/index");
-  }
-);
+router.get("/auth/google/callback", (req, res, next) => {
+  passport.authenticate("google", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Google 登入失敗，請重試！",
+        redirect: "/login",
+      });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/index");
+    });
+  })(req, res, next);
+});
 
 router.get("/api/logout", (req, res) => {
   req.logout();
-  req.flash("success", "再見");
   res.redirect("/");
 });
 

@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const keys = require("../config/keys");
 
 const User = mongoose.model("users");
+require("dotenv").config();
+const isDevelopment = process.env.NODE_ENV === "development";
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -43,22 +45,5 @@ passport.use(
 );
 
 passport.use(new localStrategy(User.authenticate()));
-// passport.use(
-//   new LocalStrategy(async (username, password, done) => {
-//     try {
-//       const user = await User.findOne({ username });
-//       if (!user) {
-//         return done(null, false, { message: "用戶名或密碼錯誤" });
-//       }
-
-//       // 假設 User 模型有驗證密碼的方法
-//       const isMatch = await user.verifyPassword(password);
-//       if (!isMatch) {
-//         return done(null, false, { message: "用戶名或密碼錯誤" });
-//       }
-
-//       return done(null, user);
-//     } catch (err) {
-//       return done(err);
-//     }
-//   })
+console.log("Environment:", process.env.NODE_ENV);
+console.log("Is Development:", isDevelopment);

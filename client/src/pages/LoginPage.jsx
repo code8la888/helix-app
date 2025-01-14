@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function LoginPage() {
   const [userinfo, setUserInfo] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
-  const navigate = useNavigate();
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
@@ -13,6 +15,7 @@ export default function LoginPage() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.stopPropagation();
@@ -21,6 +24,9 @@ export default function LoginPage() {
     }
 
     setValidated(true);
+    setError("");
+    setSuccess("");
+    setLoading(true);
 
     try {
       const res = await axios.post(`/api/login`, userinfo, {
@@ -29,24 +35,51 @@ export default function LoginPage() {
         },
       });
 
-      if (res.data.redirect) {
-        navigate(res.data.redirect);
-      } else {
-        console.log("資料送出成功:", res.data);
+      // 處理成功訊息
+      if (res.data.success) {
+        setSuccess(res.data.message || "登入成功！");
+        setTimeout(() => {
+          window.location.href = res.data.redirect || "/";
+        }, 1000);
       }
     } catch (error) {
+      // 處理錯誤訊息
       if (error.response) {
-        console.error("伺服器返回錯誤:", error.response.data);
-        console.error("HTTP 狀態碼:", error.response.status);
-      } else if (error.request) {
-        console.error("沒有收到伺服器回應:", error.request);
+        setError(error.response.data.message || "登入失敗，請稍後再試！");
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1000);
       } else {
-        console.error("發送失敗:", error.message);
+        setError("伺服器無回應或發生錯誤，請稍後再試。");
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1000);
       }
+    } finally {
+      setLoading(false);
     }
   };
+
+  const handleGoogleAuth = (event) => {
+    event.preventDefault();
+    setLoading(true);
+    window.location.href = "/auth/google";
+  };
+
   return (
     <div className="row">
+      {success && (
+        <div className="alert alert-success" role="alert">
+          {success}
+        </div>
+      )}
+
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+
       <h1 className="text-center">登入</h1>
       <div className="col-md-4 offset-md-4">
         <form
@@ -85,13 +118,17 @@ export default function LoginPage() {
             <div className="valid-feedback">looks good</div>
           </div>
           <div className="d-grid gap-2">
-            <button className="btn btn-success btn-block">登入</button>
+            <button className="btn btn-success btn-block" disabled={loading}>
+              登入
+            </button>
           </div>
         </form>
         <hr />
-        <form action="/auth/google">
+        <form onSubmit={handleGoogleAuth}>
           <div className="d-grid gap-2 mt-3">
-            <button className="btn btn-danger btn-block">使用google登入</button>
+            <button className="btn btn-danger btn-block" disabled={loading}>
+              使用 Google 登入
+            </button>
           </div>
         </form>
       </div>

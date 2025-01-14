@@ -1,9 +1,5 @@
 const User = require("../models/user");
 
-module.exports.renderRegister = (req, res) => {
-  res.render("users/register");
-};
-
 module.exports.register = async (req, res) => {
   try {
     const { username, email, tel, dept, role, password } = req.body;
@@ -21,29 +17,31 @@ module.exports.register = async (req, res) => {
       if (err) {
         return next(err);
       }
-      req.flash("success", "歡迎來到LIMS");
-      res.status(201).json({
-        message: "成功新增使用者",
+      res.status(200).json({
+        success: true,
+        message: "註冊成功!歡迎來到LIMS",
         data: registeredUser,
         redirect: "/index",
       });
     });
   } catch (error) {
-    req.flash("error", error);
-    res.status(400).json({ error: error.message, redirect: "/register" });
+    res
+      .status(400)
+      .json({ success: false, error: error.message, redirect: "/register" });
   }
 };
 
-module.exports.renderLogin = (req, res) => {
-  res.render("users/login");
-};
-
 module.exports.login = (req, res) => {
-  console.log(req.user);
-  // req.flash("success", "歡迎回來");
-  const redirectUrl = res.locals.returnTo || "/";
-  // res.redirect(redirectUrl);
-  res.status(200).json({ message: "歡迎回來", redirect: redirectUrl });
+  try {
+    const redirectUrl = res.locals.returnTo || "/";
+    res.status(200).json({
+      success: true,
+      message: "成功登入，歡迎回來!",
+      redirect: redirectUrl,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports.logout = (req, res) => {
