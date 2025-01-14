@@ -6,9 +6,6 @@ const passport = require("passport");
 const keys = require("./config/keys");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const User = require("./models/user");
-const Strain = require("./models/strain");
-const passportService = require("./services/passport");
 
 mongoose.connect(keys.mongoURI);
 
