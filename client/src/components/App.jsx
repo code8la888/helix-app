@@ -7,7 +7,7 @@ import AppLayout from "./AppLayout";
 import LoginPage from "../pages/LoginPage";
 import Landing from "./Landing";
 import RegisterPage from "../pages/RegisterPage";
-import Index from "../pages/strains";
+import Index from "../pages/strains/Index";
 import NewStrain from "../pages/strains/NewStrain";
 import StrainDetails from "../pages/strains/StrainDetails";
 import EditStrain from "../pages/strains/EditStrain";
