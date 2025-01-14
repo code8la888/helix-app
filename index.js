@@ -6,9 +6,9 @@ const passport = require("passport");
 const keys = require("./config/keys");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-require("./models/user");
-require("./models/strain");
-require("./services/passport");
+const User = require("./models/user");
+const Strain = require("./models/strain");
+const passportService = require("./services/passport");
 
 mongoose.connect(keys.mongoURI);
 
@@ -74,3 +74,14 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
+
+const fs = require("fs");
+const path = "./models/user.js";
+
+if (fs.existsSync(path)) {
+  console.log("user.js file exists.");
+  const user = require(path);
+  console.log("Module loaded:", user);
+} else {
+  console.error("user.js file does not exist at:", path);
+}
