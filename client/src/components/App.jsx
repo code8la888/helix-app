@@ -15,6 +15,7 @@ import NewMice from "../pages/mice/NewMice";
 import NewBreedingRecord from "../pages/breedingRecords/NewBreedingRecord";
 import EditBreedingRecord from "../pages/breedingRecords/EditBreedingRecord";
 import EditMice from "../pages/mice/EditMice";
+import ErrorPage from "../pages/ErrorPage";
 
 class App extends Component {
   componentDidMount() {
@@ -46,6 +47,7 @@ class App extends Component {
               path="/strains/:id/breedingRecord/new"
               element={<NewBreedingRecord />}
             />
+            <Route path="/error" element={<ErrorPage />} />
           </Routes>
         </AppLayout>
       </BrowserRouter>

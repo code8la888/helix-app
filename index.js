@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
-const methodOverride = require("method-override");
 const passport = require("passport");
 const keys = require("./config/keys");
 const cors = require("cors");
@@ -54,6 +53,16 @@ app.use(
 app.use("/", require("./routes/flashRoutes"));
 app.use("/", require("./routes/googleAuthRoutes"));
 app.use("/", require("./routes/localAuthRoutes"));
+
+app.use((err, req, res, next) => {
+  // const isDevelopment = process.env.NODE_ENV === "development";
+  const isDevelopment = true;
+  res.status(err.status || 500).json({
+    message: err.message,
+    stack: isDevelopment ? err.stack : "error", // 僅在開發環境返回堆疊
+  });
+  console.error(err.stack);
+});
 
 if (process.env.NODE_ENV === "production") {
   const path = require("path");

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function NewStrain() {
@@ -15,6 +16,7 @@ function NewStrain() {
   const [geneFields, setGeneField] = useState([]);
   const [userFields, setUserField] = useState([]);
   const [validated, setValidated] = useState(false);
+  const navigate = useNavigate();
 
   const addGeneField = () => {
     setGeneField((prev) => [...prev, { id: `gene-${prev.length}`, name: "" }]);
@@ -70,22 +72,26 @@ function NewStrain() {
       });
 
       if (res.data.redirect) {
-        window.location.href = res.data.redirect; // 導航到伺服器指定的頁面
+        window.location.href = res.data.redirect;
       } else {
         console.log("資料送出成功:", res.data);
       }
     } catch (error) {
+      let errorMessage = "提交失敗，請稍後再試。";
+      let errorStack = "";
+      console.log(error.response);
+
       if (error.response) {
-        // 如果伺服器返回錯誤響應
-        console.error("伺服器返回錯誤:", error.response.data);
-        console.error("HTTP 狀態碼:", error.response.status);
+        errorMessage = error.response.data.message || "伺服器錯誤。";
+        errorStack = error.response.data.stack || "無堆疊資訊"; // 從後端返回堆疊
       } else if (error.request) {
-        // 請求已發送但沒有收到回應
-        console.error("沒有收到伺服器回應:", error.request);
+        errorMessage = "伺服器未響應，請稍後再試。";
       } else {
-        // 請求設置錯誤
-        console.error("發送失敗:", error.message);
+        errorMessage = error.message;
+        errorStack = error.stack;
       }
+
+      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
     }
   };
 
