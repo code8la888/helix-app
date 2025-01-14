@@ -5,8 +5,6 @@ const mongoose = require("mongoose");
 const keys = require("../config/keys");
 
 const User = mongoose.model("users");
-require("dotenv").config();
-const isDevelopment = process.env.NODE_ENV === "development";
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -45,5 +43,3 @@ passport.use(
 );
 
 passport.use(new localStrategy(User.authenticate()));
-console.log("Environment:", process.env.NODE_ENV);
-console.log("Is Development:", isDevelopment);
