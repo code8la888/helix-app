@@ -15,6 +15,9 @@ mongoose.connect(keys.mongoURI);
 const app = express();
 app.use(bodyParser.json());
 
+const path = require("path");
+require(path.resolve(__dirname, "./models/user"));
+
 app.use(
   cookieSession({
     maxAge: 3 * 60 * 60 * 1000,
@@ -72,4 +75,4 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
-console.log("Registered models:", mongoose.modelNames());
+console.log("Current working directory:", process.cwd());
