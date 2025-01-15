@@ -28,86 +28,38 @@ class App extends Component {
 
     return (
       <BrowserRouter>
-        <AppLayout>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-            <Route
-              path="/index"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Index />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/strain/new"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <NewStrain />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/strains/:id"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <StrainDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/strains/:id/edit"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <EditStrain />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/strains/:id/mice/new"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <NewMice />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/" element={<Landing />} />
+            <Route path="/index" element={<Index />} />
+            <Route path="/strain/new" element={<NewStrain />} />
+            <Route path="/strains/:id" element={<StrainDetails />} />
+            <Route path="/strains/:id/edit" element={<EditStrain />} />
+            <Route path="/strains/:id/mice/new" element={<NewMice />} />
             <Route
               path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <EditBreedingRecord />
-                </ProtectedRoute>
-              }
+              element={<EditBreedingRecord />}
             />
             <Route
               path="/strains/:strainId/mice/:mouseId/edit"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <EditMice />
-                </ProtectedRoute>
-              }
+              element={<EditMice />}
             />
             <Route
               path="/strains/:id/breedingRecord/new"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <NewBreedingRecord />
-                </ProtectedRoute>
-              }
+              element={<NewBreedingRecord />}
             />
-            <Route
-              path="/error"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <ErrorPage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </AppLayout>
+            <Route path="/error" element={<ErrorPage />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     );
   }
