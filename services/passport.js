@@ -4,7 +4,7 @@ const localStrategy = require("passport-local");
 const mongoose = require("mongoose");
 const keys = require("../config/keys");
 require("../models/user");
-const User = mongoose.model("users");
+const User = mongoose.model("User");
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
