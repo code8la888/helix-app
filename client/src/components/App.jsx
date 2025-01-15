@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 
+import ProtectedRoute from "./ProtectedRoute";
 import AppLayout from "./AppLayout";
 import LoginPage from "../pages/LoginPage";
 import Landing from "./Landing";
@@ -23,6 +24,8 @@ class App extends Component {
   }
 
   render() {
+    const isLoggedIn = !!this.props.auth;
+
     return (
       <BrowserRouter>
         <AppLayout>
@@ -30,24 +33,79 @@ class App extends Component {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/index" element={<Index />} />
-            <Route path="/strain/new" element={<NewStrain />} />
-            <Route path="/strains/:id" element={<StrainDetails />} />
-            <Route path="/strains/:id/edit" element={<EditStrain />} />
-            <Route path="/strains/:id/mice/new" element={<NewMice />} />
+
+            <Route
+              path="/index"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <Index />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/strain/new"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <NewStrain />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/strains/:id"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <StrainDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/strains/:id/edit"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <EditStrain />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/strains/:id/mice/new"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <NewMice />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
-              element={<EditBreedingRecord />}
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <EditBreedingRecord />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/strains/:strainId/mice/:mouseId/edit"
-              element={<EditMice />}
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <EditMice />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/strains/:id/breedingRecord/new"
-              element={<NewBreedingRecord />}
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <NewBreedingRecord />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/error" element={<ErrorPage />} />
+            <Route
+              path="/error"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <ErrorPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </AppLayout>
       </BrowserRouter>
@@ -55,4 +113,8 @@ class App extends Component {
   }
 }
 
-export default connect(null, actions)(App);
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, actions)(App);

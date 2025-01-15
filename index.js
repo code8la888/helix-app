@@ -6,14 +6,15 @@ const passport = require("passport");
 const keys = require("./config/keys");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+require("./models/user");
+require("./models/strain");
+require("./services/passport");
 
 mongoose.connect(keys.mongoURI);
 
 const app = express();
 app.use(bodyParser.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-// app.use(methodOverride("_method"));
+
 app.use(
   cookieSession({
     maxAge: 3 * 60 * 60 * 1000,
@@ -71,14 +72,4 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
-
-const fs = require("fs");
-const path = "./models/user.js";
-
-if (fs.existsSync(path)) {
-  console.log("user.js file exists.");
-  const user = require(path);
-  console.log("Module loaded:", user);
-} else {
-  console.error("user.js file does not exist at:", path);
-}
+console.log("Registered models:", mongoose.modelNames());

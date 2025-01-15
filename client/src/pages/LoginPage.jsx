@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchUser } from "../actions/index";
 import axios from "axios";
 
 export default function LoginPage() {
@@ -7,6 +10,13 @@ export default function LoginPage() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const [validated, setValidated] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/index";
+  console.log(from);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,15 +45,14 @@ export default function LoginPage() {
         },
       });
 
-      // 處理成功訊息
       if (res.data.success) {
+        dispatch(fetchUser());
         setSuccess(res.data.message || "登入成功！");
         setTimeout(() => {
-          window.location.href = res.data.redirect || "/";
+          navigate(from, { replace: true });
         }, 1000);
       }
     } catch (error) {
-      // 處理錯誤訊息
       if (error.response) {
         setError(error.response.data.message || "登入失敗，請稍後再試！");
         setTimeout(() => {

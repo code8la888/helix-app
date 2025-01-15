@@ -1,4 +1,4 @@
-const User = require("./models/User");
+const User = require("./models/user");
 const Strain = require("./models/strain");
 const { strainSchema } = require("./schema.js");
 const { mouseSchema } = require("./schema.js");
@@ -8,8 +8,10 @@ const ExpressError = require("./utils/ExpressError");
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.user) {
     req.session.returnTo = req.originalUrl;
-    req.flash("error", "請先登入");
-    return res.redirect("/login");
+    return res.status(401).json({
+      error: "Unauthorized",
+      returnTo: req.originalUrl,
+    });
   }
   next();
 };
