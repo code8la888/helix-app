@@ -33,32 +33,35 @@ class App extends Component {
           <Route path="/register" element={<RegisterPage />} />
 
           <Route
+            path="*"
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <AppLayout />
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/strains/index" element={<Index />} />
+                    <Route path="/strain/new" element={<NewStrain />} />
+                    <Route path="/strains/:id" element={<StrainDetails />} />
+                    <Route path="/strains/:id/edit" element={<EditStrain />} />
+                    <Route path="/strains/:id/mice/new" element={<NewMice />} />
+                    <Route
+                      path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
+                      element={<EditBreedingRecord />}
+                    />
+                    <Route
+                      path="/strains/:strainId/mice/:mouseId/edit"
+                      element={<EditMice />}
+                    />
+                    <Route
+                      path="/strains/:id/breedingRecord/new"
+                      element={<NewBreedingRecord />}
+                    />
+                    <Route path="/error" element={<ErrorPage />} />
+                  </Routes>
+                </AppLayout>
               </ProtectedRoute>
             }
-          >
-            <Route path="/" element={<Landing />} />
-            <Route path="/index" element={<Index />} />
-            <Route path="/strain/new" element={<NewStrain />} />
-            <Route path="/strains/:id" element={<StrainDetails />} />
-            <Route path="/strains/:id/edit" element={<EditStrain />} />
-            <Route path="/strains/:id/mice/new" element={<NewMice />} />
-            <Route
-              path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
-              element={<EditBreedingRecord />}
-            />
-            <Route
-              path="/strains/:strainId/mice/:mouseId/edit"
-              element={<EditMice />}
-            />
-            <Route
-              path="/strains/:id/breedingRecord/new"
-              element={<NewBreedingRecord />}
-            />
-            <Route path="/error" element={<ErrorPage />} />
-          </Route>
+          />
         </Routes>
       </BrowserRouter>
     );

@@ -35,7 +35,21 @@ export default function StrainDetails() {
         navigate(res.data.redirect);
       }
     } catch (error) {
-      console.error("刪除失敗：", error);
+      let errorMessage = "提交失敗，請稍後再試。";
+      let errorStack = "";
+      console.log(error.response);
+
+      if (error.response) {
+        errorMessage = error.response.data.message || "伺服器錯誤。";
+        errorStack = error.response.data.stack || "無堆疊資訊";
+      } else if (error.request) {
+        errorMessage = "伺服器未響應，請稍後再試。";
+      } else {
+        errorMessage = error.message;
+        errorStack = error.stack;
+      }
+
+      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
     }
   };
 
@@ -47,7 +61,21 @@ export default function StrainDetails() {
         await fetchStrainData(); // 刪除成功後重新加載數據
       }
     } catch (error) {
-      console.error("刪除失敗：", error);
+      let errorMessage = "提交失敗，請稍後再試。";
+      let errorStack = "";
+      console.log(error.response);
+
+      if (error.response) {
+        errorMessage = error.response.data.message || "伺服器錯誤。";
+        errorStack = error.response.data.stack || "無堆疊資訊";
+      } else if (error.request) {
+        errorMessage = "伺服器未響應，請稍後再試。";
+      } else {
+        errorMessage = error.message;
+        errorStack = error.stack;
+      }
+
+      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
     }
   };
 

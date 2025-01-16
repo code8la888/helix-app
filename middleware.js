@@ -8,10 +8,7 @@ const ExpressError = require("./utils/ExpressError");
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.user) {
     req.session.returnTo = req.originalUrl;
-    return res.status(401).json({
-      error: "Unauthorized",
-      returnTo: req.originalUrl,
-    });
+    return next(new ExpressError("請先登入以訪問此頁面", 401));
   }
   next();
 };
@@ -29,14 +26,12 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
   try {
     const strain = await Strain.findById(strainId);
     if (!strain) {
-      req.flash("error", "找不到該品系相關資料!");
-      return res.redirect("/strains");
+      return next(new ExpressError("找不到該品系相關資料!", 404));
     }
 
     const dbUser = await User.findOne({ username: user.username });
     if (!dbUser) {
-      req.flash("error", "使用者資料不存在");
-      return res.redirect("/strains");
+      return next(new ExpressError("使用者資料不存在!", 400));
     }
 
     if (
@@ -46,14 +41,12 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
       if (req.method === "GET") {
         return next();
       } else {
-        req.flash("error", "您沒有權限修改或刪除該品系資料!");
-        return res.redirect(`/strains/${strainId}`);
+        return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
       }
     }
 
     if (!strain.users.includes(user.username)) {
-      req.flash("error", "您不屬於該計畫的使用者");
-      return res.redirect("/strains");
+      return next(new ExpressError("您不屬於該計畫的使用者!", 403));
     }
 
     if (dbUser.role === "品系管理人") {
@@ -62,14 +55,12 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
 
     if (["計畫主持人", "學生", "研究助理"].includes(dbUser.role)) {
       if (req.method !== "GET") {
-        req.flash("error", "您沒有權限修改或刪除該品系資料");
-        return res.redirect(`/strains/${strainId}`);
+        return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
       }
-      return next(); // 允許檢視資料
+      return next();
     }
 
-    req.flash("error", "您沒有權限修改或刪除該品系資料!");
-    return res.redirect("/strains");
+    return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
   } catch (error) {
     next(error);
   }
@@ -78,24 +69,23 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
 module.exports.verifyEditPermission = async (req, res, next) => {
   const { strainId } = req.params;
   const user = req.user;
+  console.log(user);
+
   try {
     const strain = await Strain.findById(strainId);
     if (!strain) {
-      req.flash("error", "找不到該品系相關資料!");
-      return res.redirect("/strains");
+      return next(new ExpressError("找不到該品系相關資料!", 404));
     }
 
     const dbUser = await User.findOne({ username: user.username });
     if (!dbUser) {
-      req.flash("error", "使用者資料不存在");
-      return res.redirect("/strains");
+      return next(new ExpressError("使用者資料不存在!", 400));
     }
 
     if (strain.users.includes(user.username) && user.role === "品系管理人") {
       return next();
     }
-    req.flash("error", "您沒有權限修改或刪除該品系資料!");
-    return res.redirect(`/strains/${strainId}`);
+    return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
   } catch (error) {
     next(error);
   }
@@ -108,16 +98,14 @@ module.exports.verifyAdmin = async (req, res, next) => {
   try {
     const dbUser = await User.findById(user._id);
     if (!dbUser) {
-      req.flash("error", "不存在此使用者!");
-      return res.redirect("/strains");
+      return next(new ExpressError("不存在此使用者!", 404));
     }
 
     if (user.role === "品系管理人") {
       return next();
     }
 
-    req.flash("error", "你不具有此編輯權限!");
-    res.redirect("/strains");
+    return next(new ExpressError("你不具有此編輯權限!", 403));
   } catch (error) {
     next(error);
   }
@@ -128,7 +116,7 @@ module.exports.validStrain = (req, res, next) => {
   console.log(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
+    return next(new ExpressError(msg, 400));
   } else {
     next();
   }
@@ -140,7 +128,7 @@ module.exports.validateMouse = (req, res, next) => {
   console.log(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
+    return next(new ExpressError(msg, 400));
   } else {
     next();
   }
@@ -152,7 +140,7 @@ module.exports.validBreedingRecord = (req, res, next) => {
   console.log(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(msg, 400);
+    return next(new ExpressError(msg, 400));
   } else {
     next();
   }

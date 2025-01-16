@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function NewStrain() {
@@ -83,7 +83,7 @@ function NewStrain() {
 
       if (error.response) {
         errorMessage = error.response.data.message || "伺服器錯誤。";
-        errorStack = error.response.data.stack || "無堆疊資訊"; // 從後端返回堆疊
+        errorStack = error.response.data.stack || "XXX";
       } else if (error.request) {
         errorMessage = "伺服器未響應，請稍後再試。";
       } else {
@@ -277,7 +277,7 @@ function NewStrain() {
           </form>
         </div>
       </div>
-      <a href="/strains">返回所有品系資訊</a>
+      <Link to="/strains/index">返回所有品系資訊</Link>
     </>
   );
 }

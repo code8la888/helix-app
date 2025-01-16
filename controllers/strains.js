@@ -18,10 +18,6 @@ module.exports.index = async (req, res) => {
   res.status(200).json({ strains: strainsWithUsers });
 };
 
-// module.exports.renderNewForm = (req, res) => {
-//   res.render("strains/new");
-// };
-
 module.exports.createNewStrain = async (req, res) => {
   if (!req.body.strain) throw new ExpressError("無效的表單或不完整的表單", 400);
   const { strain } = req.body;
@@ -43,9 +39,7 @@ module.exports.createNewStrain = async (req, res) => {
     }
   }
   await newStrain.save();
-  req.flash("success", "成功新增品系");
-  console.log("品系新增成功", newStrain);
-  res.status(201).json({ message: "品系成功新增", redirect: "/index" });
+  res.status(200).json({ message: "品系成功新增", redirect: "/strains/index" });
 };
 
 module.exports.showStrain = async (req, res) => {
@@ -72,8 +66,6 @@ module.exports.updateStrain = async (req, res) => {
 
   await strain.save();
 
-  // req.flash("success", "成功修改品系資訊");
-  // res.redirect(`/strains/${strainId}`);
   res
     .status(200)
     .json({ message: "成功修改品系資訊", redirect: `/strains/${strainId}` });

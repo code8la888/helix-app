@@ -6,9 +6,25 @@ export default function EditStrain() {
   const { id } = useParams();
   const [strain, setStrain] = useState();
   const [validated, setValidated] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    async function checkPermission() {
+      try {
+        await axios.get(`/api/strains/${id}/check-permission`);
+        setIsAuthorized(true);
+      } catch (error) {
+        setIsAuthorized(false);
+        navigate("/error", {
+          state: {
+            error: error.response?.data?.message || "您沒有權限訪問此頁面。",
+            stack: error.response?.data?.stack || "XXX",
+          },
+        });
+      }
+    }
+
     async function fetchData() {
       try {
         const res = await axios.get(`/api/strains/${id}`);
@@ -18,8 +34,9 @@ export default function EditStrain() {
         console.error("Error fetching strains data:", error);
       }
     }
+    checkPermission();
     fetchData();
-  }, []);
+  }, [id, navigate]);
 
   const addUserField = () => {
     setStrain((prev) => ({ ...prev, users: [...prev.users, ""] }));
@@ -77,16 +94,31 @@ export default function EditStrain() {
         navigate(res.data.redirect);
       }
     } catch (error) {
+      let errorMessage = "提交失敗，請稍後再試。";
+      let errorStack = "";
+      console.log(error.response);
+
       if (error.response) {
-        console.error("伺服器返回錯誤:", error.response.data);
-        console.error("HTTP 狀態碼:", error.response.status);
+        errorMessage = error.response.data.message || "伺服器錯誤。";
+        errorStack = error.response.data.stack || "無堆疊資訊";
       } else if (error.request) {
-        console.error("沒有收到伺服器回應:", error.request);
+        errorMessage = "伺服器未響應，請稍後再試。";
       } else {
-        console.error("發送失敗:", error.message);
+        errorMessage = error.message;
+        errorStack = error.stack;
       }
+
+      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
     }
   };
+
+  if (isAuthorized === null) {
+    return <div>正在檢查權限...</div>;
+  }
+
+  if (!isAuthorized) {
+    return null;
+  }
 
   return (
     <>

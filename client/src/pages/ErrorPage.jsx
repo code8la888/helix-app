@@ -1,14 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 function ErrorPage() {
-  const location = useLocation(); // 獲取傳遞的狀態
+  const location = useLocation();
   const navigate = useNavigate();
 
   const errorMessage = location.state?.error || "未知錯誤，請稍後再試。";
-  const errorStack = location.state?.stack || ""; // 錯誤堆疊
+  const errorStack = location.state?.stack || "";
   //   console.log(errorStack);
 
-  const isDevelopment = process.env.NODE_ENV === "development"; // 判斷是否為開發環境
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   return (
     <div>
@@ -28,7 +28,7 @@ function ErrorPage() {
             <button
               className="btn"
               style={{ backgroundColor: "var(--bs-danger-bg-subtle)" }}
-              onClick={() => navigate(-1)} // 返回上一頁
+              onClick={() => navigate("/strains/index")}
             >
               返回
             </button>

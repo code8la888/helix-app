@@ -15,7 +15,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || "/index";
+  const from = location.state?.from?.pathname || "/strains/index";
   console.log(from);
 
   const handleChange = (event) => {
@@ -98,7 +98,7 @@ export default function LoginPage() {
       )}
 
       <div
-        className="d-flex justify-content-center align-items-center vh-100"
+        className="d-flex justify-content-center align-items-center"
         style={{
           backgroundImage: "linear-gradient(60deg, #64b3f4 0%, #c2e59c 100%)",
         }}

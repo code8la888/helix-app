@@ -7,25 +7,42 @@ export default function EditMice() {
   const navigate = useNavigate();
   const [mouseData, setMouseData] = useState({});
   const [validated, setValidated] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(null);
   const fetchStrainData = async () => {
     try {
       const res = await axios.get(
         `/api/strains/${strainId}/mice/${mouseId}/edit`
       );
 
-      mouse = res.data.mouse;
+      let mouse = res.data.mouse;
       setMouseData(mouse);
-      strain = res.data.strain;
+      let strain = res.data.strain;
     } catch (error) {
       console.error("Error fetching strain data:", error);
     }
   };
-  let strain;
-  let mouse;
+  // let strain;
+  // let mouse;
 
   useEffect(() => {
+    async function checkPermission() {
+      try {
+        await axios.get(`/api/strains/${strainId}/check-permission`);
+        setIsAuthorized(true);
+      } catch (error) {
+        setIsAuthorized(false);
+        navigate("/error", {
+          state: {
+            error: error.response?.data?.message || "您沒有權限訪問此頁面。",
+            stack: error.response?.data?.stack || "XXX",
+          },
+        });
+      }
+    }
+
+    checkPermission();
     fetchStrainData();
-  }, []);
+  }, [strainId, navigate]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -85,16 +102,32 @@ export default function EditMice() {
         console.log("資料送出成功:", res.data);
       }
     } catch (error) {
+      let errorMessage = "提交失敗，請稍後再試。";
+      let errorStack = "";
+      console.log(error.response);
+
       if (error.response) {
-        console.error("伺服器返回錯誤:", error.response.data);
-        console.error("HTTP 狀態碼:", error.response.status);
+        errorMessage = error.response.data.message || "伺服器錯誤。";
+        errorStack = error.response.data.stack || "XXX";
       } else if (error.request) {
-        console.error("沒有收到伺服器回應:", error.request);
+        errorMessage = "伺服器未響應，請稍後再試。";
       } else {
-        console.error("發送失敗:", error.message);
+        errorMessage = error.message;
+        errorStack = error.stack;
       }
+
+      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
     }
   };
+
+  if (isAuthorized === null) {
+    return <div>正在檢查權限...</div>;
+  }
+
+  if (!isAuthorized) {
+    return null;
+  }
+
   return (
     <>
       <h1 className="text-center">修改小鼠資料</h1>
@@ -245,7 +278,7 @@ export default function EditMice() {
                     className="form-control"
                     name={`sampling_results_${index}`}
                     id={`sampling_results_${index}`}
-                    value={mouseData.sampling_results[index]}
+                    value={mouseData.sampling_results?.[index]}
                   >
                     <option value="WT">WT</option>
                     <option value="HT">HT</option>

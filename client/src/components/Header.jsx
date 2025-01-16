@@ -13,41 +13,70 @@ class Header extends Component {
       case false:
         return (
           <>
-            <Nav.Link href="/login">登入</Nav.Link>
-            <Nav.Link href="/register">註冊</Nav.Link>
+            <li className="nav-item">
+              <Link className="nav-link" to="/login">
+                登入
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/register">
+                註冊
+              </Link>
+            </li>
           </>
         );
       default:
-        return <Nav.Link href="/api/logout">登出</Nav.Link>;
+        return (
+          <li className="nav-item">
+            <a className="nav-link" href="/api/logout">
+              登出
+            </a>
+          </li>
+        );
     }
   }
 
   render() {
     return (
-      <Navbar
-        collapseOnSelect
-        expand="lg"
+      <nav
+        className="navbar navbar-expand-lg"
         style={{ backgroundColor: "var(--bs-success-border-subtle)" }}
       >
-        <Container>
-          <Navbar.Brand>
-            <Link
-              to={this.props.user ? "/surveys" : "/"}
-              className="navbar-brand"
-            >
-              Helix
-            </Link>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="/strain/new">新增品系</Nav.Link>
-              <Nav.Link href="/index">查看所有品系</Nav.Link>
-            </Nav>
-            <Nav className="ms-auto">{this.renderContent()}</Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+        <div className="container">
+          <Link
+            className="navbar-brand"
+            to={this.props.user ? "/surveys" : "/"}
+          >
+            Helix
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav me-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/strain/new">
+                  新增品系
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/strains/index">
+                  查看所有品系
+                </Link>
+              </li>
+            </ul>
+            <ul className="navbar-nav ms-auto">{this.renderContent()}</ul>
+          </div>
+        </div>
+      </nav>
     );
   }
 }
