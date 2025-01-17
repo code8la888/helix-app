@@ -4,6 +4,7 @@ import axios from "axios";
 import { useForm } from "../../hooks/useForm";
 import InputField from "../../components/InputField";
 import FieldList from "../../components/FieldList";
+import { useFormValidation } from "../../hooks/useFormValidation";
 
 function NewStrain() {
   const [formData, handleChange] = useForm({
@@ -18,7 +19,7 @@ function NewStrain() {
 
   const [geneFields, setGeneField] = useState([{ id: 1, name: "" }]);
   const [userFields, setUserField] = useState([{ id: 1, name: "" }]);
-  const [validated, setValidated] = useState(false);
+  const { validated, validateForm } = useFormValidation();
   const navigate = useNavigate();
 
   const handleFieldInputChange = (fieldType, updatedFields) => {
@@ -34,14 +35,7 @@ function NewStrain() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-      return;
-    }
-
-    setValidated(true);
+    if (!validateForm(event)) return;
 
     const updatedFormData = {
       strain: {

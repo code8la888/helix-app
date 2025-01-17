@@ -22,7 +22,7 @@ export default function FieldList({
     onFieldChange?.(updatedFields);
   };
 
-  // 更新欄位值
+  // 更新欄位的值
   const handleFieldInputChange = (index, event) => {
     const { value } = event.target;
     const updatedFields = [...fieldsList];
