@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useForm } from "../../hooks/useForm";
+import InputField from "../../components/InputField";
+import FieldList from "../../components/FieldList";
 
 function NewStrain() {
-  const [formData, setFormData] = useState({
+  const [formData, handleChange] = useForm({
     strain: "",
     dept: "",
     abbr: "",
@@ -13,38 +16,22 @@ function NewStrain() {
     users: [],
   });
 
-  const [geneFields, setGeneField] = useState([]);
-  const [userFields, setUserField] = useState([]);
+  const [geneFields, setGeneField] = useState([{ id: 1, name: "" }]);
+  const [userFields, setUserField] = useState([{ id: 1, name: "" }]);
   const [validated, setValidated] = useState(false);
   const navigate = useNavigate();
 
-  const addGeneField = () => {
-    setGeneField((prev) => [...prev, { id: `gene-${prev.length}`, name: "" }]);
+  const handleFieldInputChange = (fieldType, updatedFields) => {
+    if (fieldType === "genes") {
+      setGeneField(updatedFields);
+    } else if (fieldType === "users") {
+      setUserField(updatedFields);
+    }
+    console.log(fieldType, updatedFields);
   };
-  const addUserField = () => {
-    setUserField((prev) => [...prev, { id: `user-${prev.length}`, name: "" }]);
-  };
-  const removeGeneField = (id) => {
-    setGeneField(
-      geneFields.filter((filed) => {
-        return filed.id !== id;
-      })
-    );
-  };
-  const removeUserField = (id) => {
-    setUserField(
-      userFields.filter((filed) => {
-        return filed.id !== id;
-      })
-    );
-  };
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+
+  console.log(formData);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -55,6 +42,7 @@ function NewStrain() {
     }
 
     setValidated(true);
+
     const updatedFormData = {
       strain: {
         ...formData,
@@ -62,7 +50,7 @@ function NewStrain() {
         users: userFields.map((field) => field.name),
       },
     };
-    // console.log(updatedFormData);
+    console.log(updatedFormData);
 
     try {
       const res = await axios.post("/api/strains", updatedFormData, {
@@ -105,172 +93,58 @@ function NewStrain() {
             onSubmit={handleSubmit}
             className={`validated-form ${validated ? "was-validated" : ""}`}
           >
-            <div className="mb-3">
-              <label className="form-label" htmlFor="dept">
-                單位:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="dept"
-                name="dept"
-                value={formData.dept}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">看起來不錯</div>
-              <div className="invalid-feedback">請輸入單位名稱</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="strain">
-                品系名稱:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="strain"
-                name="strain"
-                value={formData.strain}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">看起來不錯</div>
-              <div className="invalid-feedback">請輸入品系名稱</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="abbr">
-                品系縮寫:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="abbr"
-                name="abbr"
-                value={formData.abbr}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">看起來不錯</div>
-              <div className="invalid-feedback">請輸入品系縮寫</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="iacuc_no">
-                IACUC編號:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="iacuc_no"
-                name="iacuc_no"
-                value={formData.iacuc_no}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">看起來不錯</div>
-              <div className="invalid-feedback">請輸入IACUC編號</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="EXP">
-                計畫期限:
-              </label>
-              <input
-                className="form-control"
-                type="date"
-                id="EXP"
-                name="EXP"
-                value={formData.EXP}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">看起來不錯</div>
-              <div className="invalid-feedback">請選擇計畫期限</div>
-            </div>
-            <div className="mb-3">
-              <h5 className="form-label">採樣基因列表:</h5>
-              <div id="gene-fields">
-                {geneFields.map((field, index) => (
-                  <div key={field.id} className="mb-3">
-                    <label className="form-label" htmlFor={field.id}>
-                      採樣基因
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id={field.id}
-                      name={`genes[${index}]`}
-                      value={field.name}
-                      onChange={(e) => {
-                        const newGeneFields = [...geneFields];
-                        newGeneFields[index].name = e.target.value;
-                        console.log(newGeneFields);
-                        setGeneField(newGeneFields);
-                      }}
-                      required
-                    />
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => removeGeneField(field.id)}
-                    >
-                      刪除
-                    </button>
-                    <div className="valid-feedback">看起來不錯</div>
-                    <div className="invalid-feedback">請輸入採樣基因名稱</div>
-                  </div>
-                ))}
-              </div>
-              <button
-                id="add-gene-btn"
-                type="button"
-                className="btn btn-outline-primary"
-                onClick={addGeneField}
-              >
-                新增採樣基因
-              </button>
-            </div>
-            <div className="mb-3">
-              <label className="form-label">使用者列表:</label>
-              <div id="user-fields">
-                {userFields.map((field, index) => (
-                  <div key={field.id} className="mb-3">
-                    <label className="form-label" htmlFor={field.id}>
-                      使用者
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id={field.id}
-                      name={`users[${index}]`}
-                      value={field.name}
-                      onChange={(e) => {
-                        const newUserFields = [...userFields];
-                        newUserFields[index].name = e.target.value;
-                        console.log(newUserFields);
-                        setUserField(newUserFields);
-                      }}
-                      required
-                    />
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() => removeUserField(field.id)}
-                    >
-                      刪除
-                    </button>
-                    <div className="valid-feedback">看起來不錯</div>
-                    <div className="invalid-feedback">請輸入使用者名稱</div>
-                  </div>
-                ))}
-              </div>
-              <button
-                id="add-user-btn"
-                type="button"
-                className="btn btn-outline-primary"
-                onClick={addUserField}
-              >
-                新增使用者
-              </button>
-            </div>
+            <InputField
+              label="計畫單位"
+              id="dept"
+              name="dept"
+              value={formData.dept}
+              onChange={handleChange}
+            />
+            <InputField
+              label="品系名稱"
+              id="strain"
+              name="strain"
+              value={formData.strain}
+              onChange={handleChange}
+            />
+            <InputField
+              label="品系縮寫"
+              id="abbr"
+              name="abbr"
+              value={formData.abbr}
+              onChange={handleChange}
+            />
+            <InputField
+              label="IACUC編號"
+              id="iacuc_no"
+              name="iacuc_no"
+              value={formData.iacuc_no}
+              onChange={handleChange}
+            />
+            <InputField
+              type="date"
+              label="計畫期限"
+              id="EXP"
+              name="EXP"
+              value={formData.EXP}
+              onChange={handleChange}
+            />
+
+            <FieldList
+              FieldListName="採樣基因"
+              initialField={geneFields}
+              onFieldChange={(updatedFields) =>
+                handleFieldInputChange("genes", updatedFields)
+              }
+            />
+
+            <FieldList
+              FieldListName="計畫相關人員"
+              initialField={userFields}
+              onFieldChange={(updatedFields) =>
+                handleFieldInputChange("users", updatedFields)
+              }
+            />
             <div className="mb-3">
               <button className="btn btn-success">新增小鼠品系</button>
             </div>
