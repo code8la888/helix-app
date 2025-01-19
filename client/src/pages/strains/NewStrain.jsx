@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useForm } from "../../hooks/useForm";
 import InputField from "../../components/InputField";
 import FieldList from "../../components/FieldList";
 import { useFormValidation } from "../../hooks/useFormValidation";
+import { sendFormData } from "../../utils/sendFormData";
 
 function NewStrain() {
   const [formData, handleChange] = useForm({
@@ -46,35 +46,7 @@ function NewStrain() {
     };
     console.log(updatedFormData);
 
-    try {
-      const res = await axios.post("/api/strains", updatedFormData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (res.data.redirect) {
-        window.location.href = res.data.redirect;
-      } else {
-        console.log("資料送出成功:", res.data);
-      }
-    } catch (error) {
-      let errorMessage = "提交失敗，請稍後再試。";
-      let errorStack = "";
-      console.log(error.response);
-
-      if (error.response) {
-        errorMessage = error.response.data.message || "伺服器錯誤。";
-        errorStack = error.response.data.stack || "XXX";
-      } else if (error.request) {
-        errorMessage = "伺服器未響應，請稍後再試。";
-      } else {
-        errorMessage = error.message;
-        errorStack = error.stack;
-      }
-
-      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
-    }
+    sendFormData("/api/strains", updatedFormData, navigate);
   };
 
   return (
