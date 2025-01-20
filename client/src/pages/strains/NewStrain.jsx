@@ -98,7 +98,7 @@ function NewStrain() {
 
             <FieldList
               FieldListName="採樣基因"
-              initialField={geneFields}
+              fields={geneFields}
               onFieldChange={(updatedFields) =>
                 handleFieldInputChange("genes", updatedFields)
               }
@@ -106,7 +106,7 @@ function NewStrain() {
 
             <FieldList
               FieldListName="計畫相關人員"
-              initialField={userFields}
+              fields={userFields}
               onFieldChange={(updatedFields) =>
                 handleFieldInputChange("users", updatedFields)
               }

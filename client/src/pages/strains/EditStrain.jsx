@@ -1,115 +1,61 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useCheckPermission } from "../../hooks/useCheckPermission";
+import InputField from "../../components/InputField";
+import FieldList from "../../components/FieldList";
+import { fetchData } from "../../utils/fetchData";
+import { useForm } from "../../hooks/useForm";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import { sendFormData } from "../../utils/sendFormData";
 
 export default function EditStrain() {
   const { id } = useParams();
-  const [strain, setStrain] = useState();
-  const [validated, setValidated] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(null);
+  const isAuthorized = useCheckPermission(id);
+  const [formData, handleChange, setFormData] = useForm({
+    strain: "",
+    dept: "",
+    abbr: "",
+    iacuc_no: "",
+    EXP: "",
+    genes: [],
+    users: [],
+  });
+  const { validated, validateForm } = useFormValidation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function checkPermission() {
+    const loadData = async () => {
       try {
-        await axios.get(`/api/strains/${id}/check-permission`);
-        setIsAuthorized(true);
-      } catch (error) {
-        setIsAuthorized(false);
-        navigate("/error", {
-          state: {
-            error: error.response?.data?.message || "您沒有權限訪問此頁面。",
-            stack: error.response?.data?.stack || "XXX",
-          },
-        });
-      }
-    }
-
-    async function fetchData() {
-      try {
-        const res = await axios.get(`/api/strains/${id}`);
-        const strainData = res.data.strain;
-        setStrain(strainData);
+        const res = await fetchData(id);
+        setFormData((prevData) => ({
+          ...prevData,
+          ...res.strain,
+        }));
       } catch (error) {
         console.error("Error fetching strains data:", error);
       }
+    };
+
+    if (isAuthorized) {
+      loadData();
     }
-    checkPermission();
-    fetchData();
-  }, [id, navigate]);
+  }, [id]);
 
-  const addUserField = () => {
-    setStrain((prev) => ({ ...prev, users: [...prev.users, ""] }));
-  };
-
-  const handleDeleteUser = (index) => {
-    setStrain((prev) => ({
-      ...prev,
-      users: prev?.users.filter((_, i) => i !== index),
-    }));
-  };
-
-  const updateUsername = (index, newUser) => {
-    setStrain((prev) => ({
-      ...prev,
-      users: prev.users.map((username, i) =>
-        i === index ? newUser : username
-      ),
-    }));
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setStrain({
-      ...strain,
-      [name]: name === "EXP" ? new Date(value).toISOString() : value,
-    });
-  };
+  console.log(formData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-      return;
-    }
+    if (!validateForm(event)) return;
 
-    setValidated(true);
+    const { _id, mice, breedingRecords, __v, ...rest } = formData;
 
-    const { _id, mice, breedingRecords, __v, ...rest } = strain;
-
-    const updatedData = {
-      strain: { ...rest },
+    const updatedFormData = {
+      strain: {
+        ...rest,
+      },
     };
-
-    try {
-      const res = await axios.put(`/api/strains/${id}`, updatedData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (res.data.redirect) {
-        navigate(res.data.redirect);
-      }
-    } catch (error) {
-      let errorMessage = "提交失敗，請稍後再試。";
-      let errorStack = "";
-      console.log(error.response);
-
-      if (error.response) {
-        errorMessage = error.response.data.message || "伺服器錯誤。";
-        errorStack = error.response.data.stack || "無堆疊資訊";
-      } else if (error.request) {
-        errorMessage = "伺服器未響應，請稍後再試。";
-      } else {
-        errorMessage = error.message;
-        errorStack = error.stack;
-      }
-
-      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
-    }
+    console.log(updatedFormData);
+    sendFormData(`/api/strains/${id}`, updatedFormData, navigate, "PUT");
   };
 
   if (isAuthorized === null) {
@@ -123,133 +69,89 @@ export default function EditStrain() {
   return (
     <>
       <div className="row">
-        <h2 className="text-center">編輯{strain?.strain || ""}小鼠品系資訊:</h2>
-        <div className="col-md-8 offset-md-2">
+        <h1 className="text-center">編輯小鼠品系:</h1>
+        <div className="col-md-6 offset-md-3">
           <form
             noValidate
-            className={`validated-form ${validated ? "was-validated" : ""}`}
             onSubmit={handleSubmit}
+            className={`validated-form ${validated ? "was-validated" : ""}`}
           >
-            <div className="row g-3 rounded-2 my-5">
-              <div className="col-md-4">
-                <label className="form-label" htmlFor="strain">
-                  品系名稱:
-                </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  id="strain"
-                  name="strain"
-                  value={strain?.strain || ""}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="valid-feedback">looks good!</div>
-              </div>
-              <div className="col-md-4 mb-3">
-                <label className="form-label" htmlFor="abbr">
-                  品系縮寫:
-                </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  id="abbr"
-                  name="abbr"
-                  value={strain?.abbr || ""}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="valid-feedback">looks good!</div>
-              </div>
-              <div className="col-md-4 mb-3">
-                <label className="form-label" htmlFor="dept">
-                  單位:
-                </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  id="dept"
-                  name="dept"
-                  value={strain?.dept || ""}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="valid-feedback">looks good!</div>
-              </div>
-              <div className="col-md-6 mb-3">
-                <label className="form-label" htmlFor="iacuc_no">
-                  IACUC編號:
-                </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  id="iacuc_no"
-                  name="iacuc_no"
-                  value={strain?.iacuc_no || ""}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="valid-feedback">looks good!</div>
-              </div>
-              <div className="col-md-6 mb-3">
-                <label className="form-label" htmlFor="EXP">
-                  計畫期限:
-                </label>
-                <input
-                  className="form-control"
-                  type="date"
-                  id="EXP"
-                  name="EXP"
-                  value={
-                    strain?.EXP
-                      ? new Date(strain.EXP).toISOString().split("T")[0]
-                      : ""
-                  }
-                  onChange={handleChange}
-                  required
-                />
-                <div className="valid-feedback">looks good!</div>
-              </div>
-            </div>
-            <hr />
-            <h2 className="text-center mt-3">編輯使用者資訊:</h2>
-            {strain?.users.map((username, index) => {
-              return (
-                <div className="mb-3" key={index}>
-                  <div className="mb-3">
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={username || ""}
-                      onChange={(event) =>
-                        updateUsername(index, event.target.value)
-                      }
-                      required
-                    />
-                  </div>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => {
-                      handleDeleteUser(index);
-                    }}
-                  >
-                    刪除使用者
-                  </button>
-                </div>
-              );
-            })}
+            <InputField
+              label="計畫單位"
+              id="dept"
+              name="dept"
+              value={formData?.dept}
+              onChange={handleChange}
+            />
+            <InputField
+              label="品系名稱"
+              id="strain"
+              name="strain"
+              value={formData?.strain}
+              onChange={handleChange}
+            />
+            <InputField
+              label="品系縮寫"
+              id="abbr"
+              name="abbr"
+              value={formData?.abbr}
+              onChange={handleChange}
+            />
+            <InputField
+              label="IACUC編號"
+              id="iacuc_no"
+              name="iacuc_no"
+              value={formData?.iacuc_no}
+              onChange={handleChange}
+            />
+            <InputField
+              type="date"
+              label="計畫期限"
+              id="EXP"
+              name="EXP"
+              value={
+                formData?.EXP
+                  ? new Date(formData.EXP).toISOString().split("T")[0]
+                  : ""
+              }
+              onChange={handleChange}
+            />
+
+            <FieldList
+              FieldListName="採樣基因"
+              fields={
+                formData.genes?.map((gene, index) => ({
+                  id: index,
+                  name: gene,
+                })) || []
+              }
+              onFieldChange={(updatedFields) => {
+                const updatedGenes = updatedFields.map((field) => field.name);
+                setFormData((prev) => ({
+                  ...prev,
+                  genes: updatedGenes,
+                }));
+              }}
+            />
+
+            <FieldList
+              FieldListName="計畫相關人員"
+              fields={
+                formData.users?.map((user, index) => ({
+                  id: index,
+                  name: user,
+                })) || []
+              }
+              onFieldChange={(updatedFields) => {
+                const updatedUsers = updatedFields.map((field) => field.name);
+                setFormData((prev) => ({
+                  ...prev,
+                  users: updatedUsers,
+                }));
+              }}
+            />
             <div className="mb-3">
-              <div id="user-fields"></div>
-              <button
-                type="button"
-                className="btn btn-info"
-                onClick={addUserField}
-              >
-                新增使用者
-              </button>
-            </div>
-            <div className="mb-3">
-              <button className="btn btn-success">提交更新</button>
+              <button className="btn btn-success">更新小鼠品系</button>
             </div>
           </form>
         </div>

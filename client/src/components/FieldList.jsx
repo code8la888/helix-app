@@ -3,31 +3,28 @@ import InputField from "./InputField";
 
 export default function FieldList({
   FieldListName = "欄位列表",
-  initialField = [],
+  fields = [],
   onFieldChange,
 }) {
-  const [fieldsList, setFeildsList] = useState(initialField);
+  // const [fieldsList, setFeildsList] = useState(initialField);
 
   // 新增欄位
   const addField = () => {
     const newField = { id: Date.now(), name: "" };
-    const updatedFields = [...fieldsList, newField];
-    setFeildsList(updatedFields);
+    const updatedFields = [...fields, newField];
     onFieldChange?.(updatedFields);
   };
   // 刪除欄位
   const deleteField = (id) => {
-    const updatedFields = fieldsList.filter((field) => field.id !== id);
-    setFeildsList(updatedFields);
+    const updatedFields = fields.filter((field) => field.id !== id);
     onFieldChange?.(updatedFields);
   };
 
   // 更新欄位的值
   const handleFieldInputChange = (index, event) => {
     const { value } = event.target;
-    const updatedFields = [...fieldsList];
+    const updatedFields = [...fields];
     updatedFields[index].name = value;
-    setFeildsList(updatedFields);
     onFieldChange?.(updatedFields);
   };
 
@@ -35,7 +32,7 @@ export default function FieldList({
     <div className="my-3">
       <h5>{FieldListName}</h5>
       <div>
-        {fieldsList.map((field, index) => (
+        {fields.map((field, index) => (
           <div key={field.id} className="d-flex align-items-center">
             <InputField
               id={field.id}

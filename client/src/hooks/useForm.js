@@ -22,5 +22,5 @@ export const useForm = (initialState) => {
     }
   };
 
-  return [formdata, handleChange];
+  return [formdata, handleChange, setFormData];
 };
