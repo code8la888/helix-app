@@ -1,13 +1,10 @@
-import React, { useState } from "react";
 import InputField from "./InputField";
 
 export default function FieldList({
-  FieldListName = "欄位列表",
-  fields = [],
+  FieldListName = "請填寫欄位列表名稱",
+  fields = [{ id: Date.now(), name: "" }],
   onFieldChange,
 }) {
-  // const [fieldsList, setFeildsList] = useState(initialField);
-
   // 新增欄位
   const addField = () => {
     const newField = { id: Date.now(), name: "" };
@@ -23,8 +20,9 @@ export default function FieldList({
   // 更新欄位的值
   const handleFieldInputChange = (index, event) => {
     const { value } = event.target;
-    const updatedFields = [...fields];
-    updatedFields[index].name = value;
+    const updatedFields = fields.map((field, idx) =>
+      idx === index ? { ...field, name: value } : field
+    );
     onFieldChange?.(updatedFields);
   };
 
