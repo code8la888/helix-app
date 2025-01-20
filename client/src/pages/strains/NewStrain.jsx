@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import InputField from "../../components/InputField";
@@ -7,7 +6,7 @@ import { useFormValidation } from "../../hooks/useFormValidation";
 import { sendFormData } from "../../utils/sendFormData";
 
 function NewStrain() {
-  const [formData, handleChange] = useForm({
+  const [formData, handleChange, setFormData] = useForm({
     strain: "",
     dept: "",
     abbr: "",
@@ -17,19 +16,8 @@ function NewStrain() {
     users: [],
   });
 
-  const [geneFields, setGeneField] = useState([{ id: 1, name: "" }]);
-  const [userFields, setUserField] = useState([{ id: 1, name: "" }]);
   const { validated, validateForm } = useFormValidation();
   const navigate = useNavigate();
-
-  const handleFieldInputChange = (fieldType, updatedFields) => {
-    if (fieldType === "genes") {
-      setGeneField(updatedFields);
-    } else if (fieldType === "users") {
-      setUserField(updatedFields);
-    }
-    console.log(fieldType, updatedFields);
-  };
 
   console.log(formData);
 
@@ -40,8 +28,8 @@ function NewStrain() {
     const updatedFormData = {
       strain: {
         ...formData,
-        genes: geneFields.map((field) => field.name),
-        users: userFields.map((field) => field.name),
+        genes: formData.genes.map((field) => field.name),
+        users: formData.users.map((field) => field.name),
       },
     };
     console.log(updatedFormData);
@@ -98,17 +86,23 @@ function NewStrain() {
 
             <FieldList
               FieldListName="採樣基因"
-              fields={geneFields}
+              fields={formData.genes || []}
               onFieldChange={(updatedFields) =>
-                handleFieldInputChange("genes", updatedFields)
+                setFormData((prev) => ({
+                  ...prev,
+                  genes: updatedFields,
+                }))
               }
             />
 
             <FieldList
               FieldListName="計畫相關人員"
-              fields={userFields}
+              fields={formData.users || []}
               onFieldChange={(updatedFields) =>
-                handleFieldInputChange("users", updatedFields)
+                setFormData((prev) => ({
+                  ...prev,
+                  users: updatedFields,
+                }))
               }
             />
             <div className="mb-3">
