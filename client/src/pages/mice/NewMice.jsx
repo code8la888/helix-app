@@ -11,7 +11,28 @@ import { sendFormData } from "../../utils/sendFormData";
 export default function NewMice() {
   const { id } = useParams();
   const isAuthorized = useCheckPermission(id);
-  const [formData, handleChange] = useForm({
+  const [samplingGeneList, setSamplingGeneList] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const res = await fetchData(`/api/strains/${id}`);
+        setSamplingGeneList(res.strain.genes);
+        setFormData((prev) => ({
+          ...prev,
+          sampling_results: new Array(samplingGeneList.length).fill("檢測中"),
+        }));
+      } catch (error) {
+        console.error("Error fetching strains data:", error);
+      }
+    };
+
+    if (isAuthorized) {
+      loadData();
+    }
+  }, [id, samplingGeneList]);
+
+  const [formData, handleChange, setFormData] = useForm({
     no: "",
     strain: `${id}`,
     toeNumber: "",
@@ -22,29 +43,13 @@ export default function NewMice() {
       mother: "",
     },
     sampling_date: "",
-    sampling_results: [],
+    sampling_results: new Array(samplingGeneList.length).fill("檢測中"),
     litter: "",
     on_shelf: "在架上",
     note: "",
   });
 
   const { validated, validateForm } = useFormValidation();
-  const [samplingGeneList, setSamplingGeneList] = useState([]);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetchData(id);
-        setSamplingGeneList(res.strain.genes);
-      } catch (error) {
-        console.error("Error fetching strains data:", error);
-      }
-    };
-
-    if (isAuthorized) {
-      loadData();
-    }
-  }, [id]);
 
   const navigate = useNavigate();
 
@@ -136,6 +141,7 @@ export default function NewMice() {
                   <td className="col-1">
                     <InputField
                       type="date"
+                      id="birth_date"
                       name="birth_date"
                       onChange={handleChange}
                       value={formData.birth_date}
@@ -144,6 +150,7 @@ export default function NewMice() {
                   <td className="col-1">
                     <InputField
                       type="date"
+                      id="sampling_date"
                       name="sampling_date"
                       onChange={handleChange}
                       value={formData.sampling_date}
@@ -164,16 +171,14 @@ export default function NewMice() {
                           name="sampling_results"
                           id={`sampling_results_${index}`}
                           onChange={(event) => {
-                            const newResults = [
-                              ...(formData.sampling_results || []),
-                            ];
-                            newResults[index] = event.target.value;
-                            setMouseData({
+                            const newResults = [...formData.sampling_results];
+                            newResults[index] = event.target.value || "檢測中";
+                            setFormData({
                               ...formData,
                               sampling_results: newResults,
                             });
                           }}
-                          value={formData.sampling_results[index]}
+                          value={formData.sampling_results[index] || "檢測中"}
                         >
                           <option value="WT">WT</option>
                           <option value="HT">HT</option>
@@ -198,11 +203,11 @@ export default function NewMice() {
                       <option value="自然死亡">自然死亡</option>
                     </select>
                   </td>
-                  <td className="col-">
+                  <td className="col-1">
                     <InputField
                       name="note"
                       onChange={handleChange}
-                      value={FormData.note}
+                      value={formData.note}
                       required={false}
                     />
                   </td>
