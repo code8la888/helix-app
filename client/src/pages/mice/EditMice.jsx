@@ -1,69 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import { useForm } from "../../hooks/useForm";
+import { fetchData } from "../../utils/fetchData";
+import { useCheckPermission } from "../../hooks/useCheckPermission";
 
 export default function EditMice() {
   const { strainId, mouseId } = useParams();
   const navigate = useNavigate();
-  const [mouseData, setMouseData] = useState({});
-  const [validated, setValidated] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(null);
-  const fetchStrainData = async () => {
-    try {
-      const res = await axios.get(
-        `/api/strains/${strainId}/mice/${mouseId}/edit`
-      );
-
-      let mouse = res.data.mouse;
-      setMouseData(mouse);
-      let strain = res.data.strain;
-    } catch (error) {
-      console.error("Error fetching strain data:", error);
-    }
-  };
-  // let strain;
-  // let mouse;
+  const [FormData, handleChange, setFormData] = useForm({});
+  const { validated, setValidated } = useFormValidation();
+  const isAuthorized = useCheckPermission(strainId);
 
   useEffect(() => {
-    async function checkPermission() {
+    const loadData = async () => {
       try {
-        await axios.get(`/api/strains/${strainId}/check-permission`);
-        setIsAuthorized(true);
+        const res = await fetchData(strainId);
+        // setFormData((prevData) => ({
+        //   ...prevData,
+        //   ...res.strain,
+        // }));
+        console.log(res);
       } catch (error) {
-        setIsAuthorized(false);
-        navigate("/error", {
-          state: {
-            error: error.response?.data?.message || "您沒有權限訪問此頁面。",
-            stack: error.response?.data?.stack || "XXX",
-          },
-        });
+        console.error("Error fetching strains data:", error);
       }
+    };
+    if (isAuthorized) {
+      loadData();
     }
+  }, []);
 
-    checkPermission();
-    fetchStrainData();
-  }, [strainId, navigate]);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name.includes(".")) {
-      const [parentKey, childKey] = name.split(".");
-      setMouseData((prev) => ({
-        ...prev,
-        [parentKey]: {
-          ...prev[parentKey],
-          [childKey]: value,
-        },
-      }));
-    } else {
-      setMouseData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
-  console.log(mouseData);
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   if (name.includes(".")) {
+  //     const [parentKey, childKey] = name.split(".");
+  //     setMouseData((prev) => ({
+  //       ...prev,
+  //       [parentKey]: {
+  //         ...prev[parentKey],
+  //         [childKey]: value,
+  //       },
+  //     }));
+  //   } else {
+  //     setMouseData((prev) => ({
+  //       ...prev,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -131,7 +116,7 @@ export default function EditMice() {
   return (
     <>
       <h1 className="text-center">修改小鼠資料</h1>
-      <form
+      {/* <form
         onSubmit={handleSubmit}
         noValidate
         className={`validated-form ${validated ? "was-validated" : ""}`}
@@ -314,7 +299,7 @@ export default function EditMice() {
           </tbody>
         </table>
         <button className="btn btn-success">修改小鼠資料</button>
-      </form>
+      </form> */}
       <Link to={`/strains/${strainId}`}>返回小鼠品系資訊</Link>
     </>
   );

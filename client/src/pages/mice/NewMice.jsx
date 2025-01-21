@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useForm } from "../../hooks/useForm";
+import { fetchData } from "../../utils/fetchData";
+import { useCheckPermission } from "../../hooks/useCheckPermission";
+import TableHeaderItem from "../../components/TableHeaderItem";
+import InputField from "../../components/InputField";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import { sendFormData } from "../../utils/sendFormData";
 
 export default function NewMice() {
   const { id } = useParams();
-  const [mouseData, setMouseData] = useState({
+  const isAuthorized = useCheckPermission(id);
+  const [formData, handleChange] = useForm({
     no: "",
     strain: `${id}`,
     toeNumber: "",
@@ -21,98 +28,43 @@ export default function NewMice() {
     note: "",
   });
 
-  const [samplingResults, setSamplingResults] = useState([]);
-  const [validated, setValidated] = useState(false);
+  const { validated, validateForm } = useFormValidation();
   const [samplingGeneList, setSamplingGeneList] = useState([]);
 
   useEffect(() => {
-    async function FetchData() {
+    const loadData = async () => {
       try {
-        const res = await axios.get(`/api/strains/${id}`);
-        setSamplingGeneList(res.data.strain.genes);
-
-        setMouseData((prevData) => ({
-          ...prevData,
-          sampling_results: samplingGeneList.map(
-            (_, index) => prevData.sampling_results[index] || "檢測中"
-          ),
-        }));
+        const res = await fetchData(id);
+        setSamplingGeneList(res.strain.genes);
       } catch (error) {
         console.error("Error fetching strains data:", error);
       }
+    };
+
+    if (isAuthorized) {
+      loadData();
     }
-    FetchData();
-  }, [samplingGeneList]);
+  }, [id]);
 
   const navigate = useNavigate();
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name === "father" || name === "mother") {
-      setMouseData((prev) => ({
-        ...prev,
-        parents: {
-          ...prev.parents,
-          [name]: value,
-        },
-      }));
-    } else {
-      setMouseData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-    console.log(mouseData);
-  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-      return;
-    }
-
-    setValidated(true);
+    if (!validateForm(event)) return;
 
     const updatedFormData = {
       mouse: {
-        ...mouseData,
+        ...formData,
       },
     };
-    console.log(updatedFormData);
 
-    try {
-      const res = await axios.post(
-        `/api/strains/${id}/mice/new`,
-        updatedFormData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (res.data.redirect) {
-        navigate(res.data.redirect);
-      } else {
-        console.log("資料送出成功:", res.data);
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error("伺服器返回錯誤:", error.response.data);
-        console.error("HTTP 狀態碼:", error.response.status);
-      } else if (error.request) {
-        console.error("沒有收到伺服器回應:", error.request);
-      } else {
-        console.error("發送失敗:", error.message);
-      }
-    }
+    sendFormData(`/api/strains/${id}/mice/new`, updatedFormData, navigate);
   };
 
   return (
     <>
       <h1>新增小鼠資料</h1>
-      <div className="row">
+      <div className="row mb-3">
         <div className="col-12">
           <form
             onSubmit={handleSubmit}
@@ -122,84 +74,52 @@ export default function NewMice() {
             <table className="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col" className="col-1">
-                    No
-                  </th>
-                  <th scope="col" className="col-1">
-                    父
-                  </th>
-                  <th scope="col" className="col-1">
-                    母
-                  </th>
-                  <th scope="col" className="col-1">
-                    胎次
-                  </th>
-                  <th scope="col" className="col-1">
-                    性別
-                  </th>
-                  <th scope="col" className="col-1">
-                    出生日期
-                  </th>
-                  <th scope="col" className="col-1">
-                    採樣日期
-                  </th>
-                  <th scope="col" className="col-1">
-                    趾號
-                  </th>
+                  <TableHeaderItem title="編號" />
+                  <TableHeaderItem title="父" />
+                  <TableHeaderItem title="母" />
+                  <TableHeaderItem title="胎次" />
+                  <TableHeaderItem title="性別" />
+                  <TableHeaderItem title="出生日期" />
+                  <TableHeaderItem title="採樣日期" />
+                  <TableHeaderItem title="趾號" />
                   {samplingGeneList?.map((gene) => (
-                    <th scope="col" className="col-1" key={gene}>
-                      {gene}
-                    </th>
+                    <TableHeaderItem key={gene} title={gene} />
                   ))}
-                  <th scope="col" className="col-1">
-                    狀態
-                  </th>
-                  <th scope="col" className="col-1">
-                    備註
-                  </th>
+                  <TableHeaderItem title="狀態" />
+                  <TableHeaderItem title="備註" />
                 </tr>
               </thead>
 
               <tbody>
                 <tr>
                   <td className="col-1">
-                    <input
-                      className="form-control"
+                    <InputField
                       type="number"
                       name="no"
-                      value={mouseData.no}
                       onChange={handleChange}
-                      required
+                      value={formData.no}
                     />
                   </td>
                   <td className="col-1">
-                    <input
-                      className="form-control"
-                      type="text"
-                      name="father"
+                    <InputField
+                      name="parents.father"
                       onChange={handleChange}
-                      value={mouseData.parents.father}
-                      required
+                      value={formData.parents.father}
                     />
                   </td>
                   <td className="col-1">
-                    <input
-                      className="form-control"
-                      type="text"
-                      name="mother"
+                    <InputField
+                      name="parents.mother"
                       onChange={handleChange}
-                      value={mouseData.parents.mother}
-                      required
+                      value={formData.parents.mother}
                     />
                   </td>
                   <td className="col-1">
-                    <input
-                      className="form-control"
+                    <InputField
                       type="number"
                       name="litter"
                       onChange={handleChange}
-                      value={mouseData.litter}
-                      required
+                      value={formData.litter}
                     />
                   </td>
                   <td className="col-1">
@@ -207,40 +127,33 @@ export default function NewMice() {
                       className="form-control"
                       name="gender"
                       onChange={handleChange}
-                      value={mouseData.gender}
+                      value={formData.gender}
                     >
                       <option value="M">M</option>
                       <option value="F">F</option>
                     </select>
                   </td>
                   <td className="col-1">
-                    <input
-                      className="form-control"
+                    <InputField
                       type="date"
                       name="birth_date"
                       onChange={handleChange}
-                      value={mouseData.birth_date}
-                      required
+                      value={formData.birth_date}
                     />
                   </td>
                   <td className="col-1">
-                    <input
-                      className="form-control"
+                    <InputField
                       type="date"
                       name="sampling_date"
                       onChange={handleChange}
-                      value={mouseData.sampling_date}
-                      required
+                      value={formData.sampling_date}
                     />
                   </td>
                   <td className="col-1">
-                    <input
-                      className="form-control"
-                      type="text"
+                    <InputField
                       name="toeNumber"
                       onChange={handleChange}
-                      value={mouseData.toeNumber}
-                      required
+                      value={formData.toeNumber}
                     />
                   </td>
                   {samplingGeneList?.length > 0 ? (
@@ -252,15 +165,15 @@ export default function NewMice() {
                           id={`sampling_results_${index}`}
                           onChange={(event) => {
                             const newResults = [
-                              ...(mouseData.sampling_results || []),
+                              ...(formData.sampling_results || []),
                             ];
                             newResults[index] = event.target.value;
                             setMouseData({
-                              ...mouseData,
+                              ...formData,
                               sampling_results: newResults,
                             });
                           }}
-                          value={mouseData.sampling_results[index]}
+                          value={formData.sampling_results[index]}
                         >
                           <option value="WT">WT</option>
                           <option value="HT">HT</option>
@@ -277,7 +190,7 @@ export default function NewMice() {
                       className="form-control"
                       name="on_shelf"
                       onChange={handleChange}
-                      value={mouseData.on_shelf}
+                      value={formData.on_shelf}
                     >
                       <option value="在架上">在架上</option>
                       <option value="已移出">已移出</option>
@@ -285,13 +198,12 @@ export default function NewMice() {
                       <option value="自然死亡">自然死亡</option>
                     </select>
                   </td>
-                  <td className="col-1">
-                    <input
-                      className="form-control"
-                      type="text"
+                  <td className="col-">
+                    <InputField
                       name="note"
                       onChange={handleChange}
-                      value={mouseData.note}
+                      value={FormData.note}
+                      required={false}
                     />
                   </td>
                 </tr>
