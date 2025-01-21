@@ -26,7 +26,7 @@ export default function EditStrain() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await fetchData(id);
+        const res = await fetchData(`/api/strains/${id}`);
         setFormData((prevData) => ({
           ...prevData,
           ...res.strain,
