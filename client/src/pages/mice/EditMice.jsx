@@ -1,65 +1,94 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useFormValidation } from "../../hooks/useFormValidation";
-import { useForm } from "../../hooks/useForm";
 import { fetchData } from "../../utils/fetchData";
 import { useCheckPermission } from "../../hooks/useCheckPermission";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import { sendFormData } from "../../utils/sendFormData";
 
 export default function EditMice() {
   const { strainId, mouseId } = useParams();
   const navigate = useNavigate();
-  const [FormData, handleChange, setFormData] = useForm({});
-  const { validated, setValidated } = useFormValidation();
+  const [mouseData, setMouseData] = useState({});
+  const [genes, setGenes] = useState([]);
+  const { validated, validateForm } = useFormValidation();
+  // const [isAuthorized, setIsAuthorized] = useState(null);
   const isAuthorized = useCheckPermission(strainId);
 
+  // const fetchStrainData = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `/api/strains/${strainId}/mice/${mouseId}/edit`
+  //     );
+
+  //     mouse = res.data.mouse;
+  //     setMouseData(mouse);
+  //     strain = res.data.strain;
+  //   } catch (error) {
+  //     console.error("Error fetching strain data:", error);
+  //   }
+  // };
+
   useEffect(() => {
+    // async function checkPermission() {
+    //   try {
+    //     await axios.get(`/api/strains/${strainId}/check-permission`);
+    //     setIsAuthorized(true);
+    //   } catch (error) {
+    //     setIsAuthorized(false);
+    //     navigate("/error", {
+    //       state: {
+    //         error: error.response?.data?.message || "您沒有權限訪問此頁面。",
+    //         stack: error.response?.data?.stack || "XXX",
+    //       },
+    //     });
+    //   }
+    // }
+    // checkPermission();
     const loadData = async () => {
       try {
-        const res = await fetchData(strainId);
-        // setFormData((prevData) => ({
-        //   ...prevData,
-        //   ...res.strain,
-        // }));
+        const res = await fetchData(
+          `/api/strains/${strainId}/mice/${mouseId}/edit`
+        );
         console.log(res);
+        setMouseData(res.mouse);
+        setGenes(res.strain.genes);
       } catch (error) {
         console.error("Error fetching strains data:", error);
       }
     };
+
     if (isAuthorized) {
       loadData();
     }
-  }, []);
 
-  // const handleChange = (event) => {
-  //   const { name, value } = event.target;
-  //   if (name.includes(".")) {
-  //     const [parentKey, childKey] = name.split(".");
-  //     setMouseData((prev) => ({
-  //       ...prev,
-  //       [parentKey]: {
-  //         ...prev[parentKey],
-  //         [childKey]: value,
-  //       },
-  //     }));
-  //   } else {
-  //     setMouseData((prev) => ({
-  //       ...prev,
-  //       [name]: value,
-  //     }));
-  //   }
-  // };
+    // fetchStrainData();
+  }, [strainId, navigate]);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name.includes(".")) {
+      const [parentKey, childKey] = name.split(".");
+      setMouseData((prev) => ({
+        ...prev,
+        [parentKey]: {
+          ...prev[parentKey],
+          [childKey]: value,
+        },
+      }));
+    } else {
+      setMouseData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  console.log(mouseData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-      return;
-    }
-
-    setValidated(true);
+    if (!validateForm(event)) return;
 
     const { _id, __v, ...rest } = mouseData;
 
@@ -70,53 +99,54 @@ export default function EditMice() {
     };
     console.log(updatedFormData);
 
-    try {
-      const res = await axios.put(
-        `/api/strains/${strainId}/mice/${mouseId}`,
-        updatedFormData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+    sendFormData(
+      `/api/strains/${strainId}/mice/${mouseId}`,
+      updatedFormData,
+      navigate,
+      "PUT"
+    );
+    // try {
+    //   const res = await axios.put(
+    //     `/api/strains/${strainId}/mice/${mouseId}`,
+    //     updatedFormData,
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   );
 
-      if (res.data.redirect) {
-        navigate(res.data.redirect);
-      } else {
-        console.log("資料送出成功:", res.data);
-      }
-    } catch (error) {
-      let errorMessage = "提交失敗，請稍後再試。";
-      let errorStack = "";
-      console.log(error.response);
-
-      if (error.response) {
-        errorMessage = error.response.data.message || "伺服器錯誤。";
-        errorStack = error.response.data.stack || "XXX";
-      } else if (error.request) {
-        errorMessage = "伺服器未響應，請稍後再試。";
-      } else {
-        errorMessage = error.message;
-        errorStack = error.stack;
-      }
-
-      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
-    }
+    //   if (res.data.redirect) {
+    //     navigate(res.data.redirect);
+    //   } else {
+    //     console.log("資料送出成功:", res.data);
+    //   }
+    // } catch (error) {
+    //   let errorMessage = "提交失敗，請稍後再試。";
+    //   let errorStack = "";
+    //   console.log(error.response);
+    //   if (error.response) {
+    //     errorMessage = error.response.data.message || "伺服器錯誤。";
+    //     errorStack = error.response.data.stack || "XXX";
+    //   } else if (error.request) {
+    //     errorMessage = "伺服器未響應，請稍後再試。";
+    //   } else {
+    //     errorMessage = error.message;
+    //     errorStack = error.stack;
+    //   }
+    //   navigate("/error", { state: { error: errorMessage, stack: errorStack } });
+    // }
   };
-
   if (isAuthorized === null) {
     return <div>正在檢查權限...</div>;
   }
-
   if (!isAuthorized) {
     return null;
   }
-
   return (
     <>
       <h1 className="text-center">修改小鼠資料</h1>
-      {/* <form
+      <form
         onSubmit={handleSubmit}
         noValidate
         className={`validated-form ${validated ? "was-validated" : ""}`}
@@ -148,7 +178,7 @@ export default function EditMice() {
               <th scope="col" className="col-1">
                 趾號
               </th>
-              {strain?.genes?.map((gene) => (
+              {genes?.map((gene) => (
                 <th key={gene} scope="col" className="col-1">
                   {gene}
                 </th>
@@ -257,13 +287,23 @@ export default function EditMice() {
                   onChange={handleChange}
                 />
               </td>
-              {strain?.genes?.map((_, index) => (
+              {genes?.map((_, index) => (
                 <td>
                   <select
                     className="form-control"
                     name={`sampling_results_${index}`}
                     id={`sampling_results_${index}`}
-                    value={mouseData.sampling_results?.[index]}
+                    value={mouseData.sampling_results[index] || "檢測中"}
+                    onChange={(event) => {
+                      {
+                        const newResults = [...mouseData.sampling_results];
+                        newResults[index] = event.target.value || "檢測中";
+                        setMouseData({
+                          ...mouseData,
+                          sampling_results: newResults,
+                        });
+                      }
+                    }}
                   >
                     <option value="WT">WT</option>
                     <option value="HT">HT</option>
@@ -299,7 +339,7 @@ export default function EditMice() {
           </tbody>
         </table>
         <button className="btn btn-success">修改小鼠資料</button>
-      </form> */}
+      </form>
       <Link to={`/strains/${strainId}`}>返回小鼠品系資訊</Link>
     </>
   );
