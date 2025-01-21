@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useCheckPermission } from "../../hooks/useCheckPermission";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import { useForm } from "../../hooks/useForm";
+import { sendFormData } from "../../utils/sendFormData";
+import { fetchData } from "../../utils/fetchData";
+import InputField from "../../components/InputField";
 
 export default function EditBreedingRecord() {
   const { strainId, breedingRecordId } = useParams();
   const navigate = useNavigate();
-  const [breedingRecord, setBreedingRecord] = useState({
+  const isAuthorized = useCheckPermission(strainId);
+  const [formData, handleChange, setFormData] = useForm({
     strain: strainId,
     cage_no: "",
     parents: {
@@ -15,76 +21,36 @@ export default function EditBreedingRecord() {
     pairing_date: "",
     on_shelf: "在架上",
   });
-  const [validated, setValidated] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(null);
-
-  const fetchStrainData = async () => {
-    try {
-      const res = await axios.get(
-        `/api/strains/${strainId}/breedingRecord/${breedingRecordId}/edit`
-      );
-
-      console.log(res.data);
-      setBreedingRecord(res.data.breedingRecord);
-    } catch (error) {
-      console.error("Error fetching strain data:", error);
-    }
-  };
-
-  async function checkPermission() {
-    try {
-      await axios.get(`/api/strains/${strainId}/check-permission`);
-      setIsAuthorized(true);
-    } catch (error) {
-      console.log(error);
-      setIsAuthorized(false);
-      navigate("/error", {
-        state: {
-          error: error.response?.data?.message || "您沒有權限訪問此頁面。",
-          stack: error.response?.data?.stack || "XXX",
-        },
-      });
-    }
-  }
+  const { validated, validateForm } = useFormValidation();
 
   useEffect(() => {
-    checkPermission();
-    fetchStrainData();
-  }, [strainId, navigate]);
+    const loadData = async () => {
+      try {
+        const res = await fetchData(
+          `/api/strains/${strainId}/breedingRecord/${breedingRecordId}/edit`
+        );
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name.includes(".")) {
-      const [parentKey, childKey] = name.split(".");
-      setBreedingRecord((prev) => ({
-        ...prev,
-        [parentKey]: {
-          ...prev[parentKey],
-          [childKey]: value,
-        },
-      }));
-    } else {
-      setBreedingRecord((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+        setFormData((prev) => ({
+          ...prev,
+          ...res.breedingRecord,
+        }));
+        console.log(res);
+      } catch (error) {
+        console.error("Error fetching strains data:", error);
+      }
+    };
+
+    if (isAuthorized) {
+      loadData();
     }
-  };
-
-  console.log(breedingRecord);
+  }, [strainId, navigate]);
+  console.log(formData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-      return;
-    }
+    if (!validateForm(event)) return;
 
-    setValidated(true);
-
-    const { _id, __v, ...rest } = breedingRecord;
+    const { _id, __v, ...rest } = formData;
 
     const updatedFormData = {
       breedingRecord: {
@@ -93,39 +59,12 @@ export default function EditBreedingRecord() {
     };
     console.log(updatedFormData);
 
-    try {
-      const res = await axios.put(
-        `/api/strains/${strainId}/breedingRecord/${breedingRecordId}`,
-        updatedFormData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (res.data.redirect) {
-        navigate(res.data.redirect);
-      } else {
-        console.log("資料送出成功:", res.data);
-      }
-    } catch (error) {
-      let errorMessage = "提交失敗，請稍後再試。";
-      let errorStack = "";
-      console.log(error.response);
-
-      if (error.response) {
-        errorMessage = error.response.data.message || "伺服器錯誤。";
-        errorStack = error.response.data.stack || "XXX";
-      } else if (error.request) {
-        errorMessage = "伺服器未響應，請稍後再試。";
-      } else {
-        errorMessage = error.message;
-        errorStack = error.stack;
-      }
-
-      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
-    }
+    sendFormData(
+      `/api/strains/${strainId}/breedingRecord/${breedingRecordId}`,
+      updatedFormData,
+      navigate,
+      "PUT"
+    );
   };
 
   if (isAuthorized === null) {
@@ -146,72 +85,41 @@ export default function EditBreedingRecord() {
             noValidate
             className={`validated-form ${validated ? "was-validated" : ""}`}
           >
-            <div className="mb-3">
-              <label className="form-label" for="cage_no">
-                繁殖籠編號:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="cage_no"
-                name="cage_no"
-                onChange={handleChange}
-                value={breedingRecord.cage_no}
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" for="father">
-                父:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="father"
-                name="parents.father"
-                onChange={handleChange}
-                value={breedingRecord.parents.father}
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" for="abbr">
-                母:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="mother"
-                name="parents.mother"
-                onChange={handleChange}
-                value={breedingRecord.parents.mother}
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" for="pairing_date">
-                配種日期:
-              </label>
-              <input
-                className="form-control"
-                type="date"
-                id="pairing_date"
-                name="pairing_date"
-                onChange={handleChange}
-                value={
-                  breedingRecord?.pairing_date
-                    ? new Date(breedingRecord.pairing_date)
-                        .toISOString()
-                        .split("T")[0]
-                    : ""
-                }
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
+            <InputField
+              label="繁殖籠編號"
+              id="cage_no"
+              name="cage_no"
+              onChange={handleChange}
+              value={formData.cage_no}
+            />
+            <InputField
+              label="父"
+              id="father"
+              name="parents.father"
+              onChange={handleChange}
+              value={formData.parents.father}
+            />
+
+            <InputField
+              label="母"
+              id="mother"
+              name="parents.mother"
+              onChange={handleChange}
+              value={formData.parents.mother}
+            />
+            <InputField
+              label="配種日期"
+              type="date"
+              id="pairing_date"
+              name="pairing_date"
+              onChange={handleChange}
+              value={
+                formData?.pairing_date
+                  ? new Date(formData.pairing_date).toISOString().split("T")[0]
+                  : ""
+              }
+            />
+
             <div className="mb-3">
               <label className="form-label" for="on_shelf">
                 繁殖籠狀態:
@@ -221,11 +129,12 @@ export default function EditBreedingRecord() {
                 id="on_shelf"
                 className="form-select"
                 onChange={handleChange}
+                value={formData?.on_shelf}
               >
                 <option value="在架上">在架上</option>
                 <option value="已關閉">已關閉</option>
               </select>
-              <div className="valid-feedback">looks good!</div>
+              <div className="valid-feedback">看起來不錯</div>
             </div>
 
             <div className="mb-3">
