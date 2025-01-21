@@ -12,10 +12,14 @@ const InputField = ({
   invalidFeedback = "此欄位為必填",
 }) => {
   return (
-    <div className="mb-3">
-      <label className="form-label" htmlFor={id}>
-        {label}
-      </label>
+    <>
+      {label ? (
+        <label className="form-label" htmlFor={id}>
+          {label}
+        </label>
+      ) : (
+        ""
+      )}
       <input
         className="form-control"
         type={type}
@@ -27,7 +31,7 @@ const InputField = ({
       />
       <div className="valid-feedback">{validFeedback}</div>
       <div className="invalid-feedback">{invalidFeedback}</div>
-    </div>
+    </>
   );
 };
 
