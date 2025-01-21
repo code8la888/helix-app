@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { fetchData } from "../../utils/fetchData";
 import { useCheckPermission } from "../../hooks/useCheckPermission";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { sendFormData } from "../../utils/sendFormData";
+import TableHeaderItem from "../../components/TableHeaderItem";
+import InputField from "../../components/InputField";
 
 export default function EditMice() {
   const { strainId, mouseId } = useParams();
@@ -12,39 +13,10 @@ export default function EditMice() {
   const [mouseData, setMouseData] = useState({});
   const [genes, setGenes] = useState([]);
   const { validated, validateForm } = useFormValidation();
-  // const [isAuthorized, setIsAuthorized] = useState(null);
+
   const isAuthorized = useCheckPermission(strainId);
 
-  // const fetchStrainData = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       `/api/strains/${strainId}/mice/${mouseId}/edit`
-  //     );
-
-  //     mouse = res.data.mouse;
-  //     setMouseData(mouse);
-  //     strain = res.data.strain;
-  //   } catch (error) {
-  //     console.error("Error fetching strain data:", error);
-  //   }
-  // };
-
   useEffect(() => {
-    // async function checkPermission() {
-    //   try {
-    //     await axios.get(`/api/strains/${strainId}/check-permission`);
-    //     setIsAuthorized(true);
-    //   } catch (error) {
-    //     setIsAuthorized(false);
-    //     navigate("/error", {
-    //       state: {
-    //         error: error.response?.data?.message || "您沒有權限訪問此頁面。",
-    //         stack: error.response?.data?.stack || "XXX",
-    //       },
-    //     });
-    //   }
-    // }
-    // checkPermission();
     const loadData = async () => {
       try {
         const res = await fetchData(
@@ -61,9 +33,7 @@ export default function EditMice() {
     if (isAuthorized) {
       loadData();
     }
-
-    // fetchStrainData();
-  }, [strainId, navigate]);
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -83,7 +53,6 @@ export default function EditMice() {
       }));
     }
   };
-
   console.log(mouseData);
 
   const handleSubmit = async (event) => {
@@ -105,37 +74,6 @@ export default function EditMice() {
       navigate,
       "PUT"
     );
-    // try {
-    //   const res = await axios.put(
-    //     `/api/strains/${strainId}/mice/${mouseId}`,
-    //     updatedFormData,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-
-    //   if (res.data.redirect) {
-    //     navigate(res.data.redirect);
-    //   } else {
-    //     console.log("資料送出成功:", res.data);
-    //   }
-    // } catch (error) {
-    //   let errorMessage = "提交失敗，請稍後再試。";
-    //   let errorStack = "";
-    //   console.log(error.response);
-    //   if (error.response) {
-    //     errorMessage = error.response.data.message || "伺服器錯誤。";
-    //     errorStack = error.response.data.stack || "XXX";
-    //   } else if (error.request) {
-    //     errorMessage = "伺服器未響應，請稍後再試。";
-    //   } else {
-    //     errorMessage = error.message;
-    //     errorStack = error.stack;
-    //   }
-    //   navigate("/error", { state: { error: errorMessage, stack: errorStack } });
-    // }
   };
   if (isAuthorized === null) {
     return <div>正在檢查權限...</div>;
@@ -154,81 +92,48 @@ export default function EditMice() {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col" className="col-1">
-                No
-              </th>
-              <th scope="col" className="col-1">
-                父
-              </th>
-              <th scope="col" className="col-1">
-                母
-              </th>
-              <th scope="col" className="col-1">
-                胎次
-              </th>
-              <th scope="col" className="col-1">
-                性別
-              </th>
-              <th scope="col" className="col-1">
-                出生日期
-              </th>
-              <th scope="col" className="col-1">
-                採樣日期
-              </th>
-              <th scope="col" className="col-1">
-                趾號
-              </th>
+              <TableHeaderItem title="編號" />
+              <TableHeaderItem title="父" />
+              <TableHeaderItem title="母" />
+              <TableHeaderItem title="胎次" />
+              <TableHeaderItem title="性別" />
+              <TableHeaderItem title="出生日期" />
+              <TableHeaderItem title="採樣日期" />
+              <TableHeaderItem title="趾號" />
               {genes?.map((gene) => (
-                <th key={gene} scope="col" className="col-1">
-                  {gene}
-                </th>
+                <TableHeaderItem key={gene} title={gene} />
               ))}
-              <th scope="col" className="col-1">
-                狀態
-              </th>
-              <th scope="col" className="col-1">
-                備註
-              </th>
+              <TableHeaderItem title="狀態" />
+              <TableHeaderItem title="備註" />
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <input
-                  className="form-control"
+                <InputField
                   type="number"
                   name="no"
-                  required
                   value={mouseData.no}
                   onChange={handleChange}
                 />
               </td>
               <td>
-                <input
-                  className="form-control"
-                  type="text"
+                <InputField
                   name="parents.father"
-                  required
                   value={mouseData?.parents?.father}
                   onChange={handleChange}
                 />
               </td>
               <td>
-                <input
-                  className="form-control"
-                  type="text"
+                <InputField
                   name="parents.mother"
-                  required
                   value={mouseData?.parents?.mother}
                   onChange={handleChange}
                 />
               </td>
               <td>
-                <input
-                  className="form-control"
-                  type="number"
+                <InputField
                   name="litter"
-                  required
                   value={mouseData.litter}
                   onChange={handleChange}
                 />
@@ -246,11 +151,9 @@ export default function EditMice() {
                 </select>
               </td>
               <td>
-                <input
-                  className="form-control"
+                <InputField
                   type="date"
                   name="birth_date"
-                  required
                   value={
                     mouseData?.birth_date
                       ? new Date(mouseData.birth_date)
@@ -262,11 +165,9 @@ export default function EditMice() {
                 />
               </td>
               <td>
-                <input
-                  className="form-control"
+                <InputField
                   type="date"
                   name="sampling_date"
-                  required
                   value={
                     mouseData.sampling_date
                       ? new Date(mouseData.sampling_date)
@@ -278,11 +179,8 @@ export default function EditMice() {
                 />
               </td>
               <td>
-                <input
-                  className="form-control"
-                  type="text"
+                <InputField
                   name="toeNumber"
-                  required
                   value={mouseData.toeNumber}
                   onChange={handleChange}
                 />
@@ -327,9 +225,8 @@ export default function EditMice() {
                 </select>
               </td>
               <td>
-                <input
-                  className="form-control"
-                  type="text"
+                <InputField
+                  required={false}
                   name="note"
                   value={mouseData.note}
                   onChange={handleChange}
