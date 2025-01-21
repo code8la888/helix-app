@@ -1,12 +1,14 @@
-import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useForm } from "../../hooks/useForm";
+import { useFormValidation } from "../../hooks/useFormValidation";
+import { sendFormData } from "../../utils/sendFormData";
+import InputField from "../../components/InputField";
 
 export default function NewBreedingRecord() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState({
+  const { validated, validateForm } = useFormValidation();
+  const [formData, handleChange] = useForm({
     strain: id,
     cage_no: "",
     parents: {
@@ -17,37 +19,11 @@ export default function NewBreedingRecord() {
     on_shelf: "在架上",
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name.includes(".")) {
-      const [parentKey, childKey] = name.split(".");
-      setFormData((prev) => ({
-        ...prev,
-        [parentKey]: {
-          ...prev[parentKey],
-          [childKey]: value,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
   console.log(formData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-      return;
-    }
-
-    setValidated(true);
+    if (!validateForm(event)) return;
 
     const updatedFormData = {
       breedingRecord: {
@@ -56,32 +32,11 @@ export default function NewBreedingRecord() {
     };
     console.log(updatedFormData);
 
-    try {
-      const res = await axios.post(
-        `/api/strains/${id}/breedingRecord`,
-        updatedFormData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (res.data.redirect) {
-        navigate(res.data.redirect);
-      } else {
-        console.log("資料送出成功:", res.data);
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error("伺服器返回錯誤:", error.response.data);
-        console.error("HTTP 狀態碼:", error.response.status);
-      } else if (error.request) {
-        console.error("沒有收到伺服器回應:", error.request);
-      } else {
-        console.error("發送失敗:", error.message);
-      }
-    }
+    sendFormData(
+      `/api/strains/${id}/breedingRecord`,
+      updatedFormData,
+      navigate
+    );
   };
 
   return (
@@ -94,66 +49,35 @@ export default function NewBreedingRecord() {
             noValidate
             className={`validated-form ${validated ? "was-validated" : ""}`}
           >
-            <div className="mb-3">
-              <label className="form-label" htmlFor="cage_no">
-                繁殖籠編號:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="cage_no"
-                name="cage_no"
-                value={formData.cage_no}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="father">
-                父:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="father"
-                name="parents.father"
-                value={formData.parents.father}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="mother">
-                母:
-              </label>
-              <input
-                className="form-control"
-                type="text"
-                id="mother"
-                name="parents.mother"
-                value={formData.parents.mother}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
-            <div className="mb-3">
-              <label className="form-label" htmlFor="pairing_date">
-                配種日期:
-              </label>
-              <input
-                className="form-control"
-                type="date"
-                id="pairing_date"
-                name="pairing_date"
-                value={formData.pairing_date}
-                onChange={handleChange}
-                required
-              />
-              <div className="valid-feedback">looks good!</div>
-            </div>
+            <InputField
+              label="繁殖籠編號"
+              id="cage_no"
+              name="cage_no"
+              value={formData.cage_no}
+              onChange={handleChange}
+            />
+            <InputField
+              label="父"
+              id="father"
+              name="parents.father"
+              value={formData.parents.father}
+              onChange={handleChange}
+            />
+            <InputField
+              label="母"
+              id="mother"
+              name="parents.mother"
+              value={formData.parents.mother}
+              onChange={handleChange}
+            />
+            <InputField
+              label="配種日期"
+              type="date"
+              id="pairing_date"
+              name="pairing_date"
+              value={formData.pairing_date}
+              onChange={handleChange}
+            />
             <div className="mb-3">
               <label className="form-label" htmlFor="on_shelf">
                 繁殖籠狀態:
@@ -170,7 +94,6 @@ export default function NewBreedingRecord() {
               </select>
               <div className="valid-feedback">looks good!</div>
             </div>
-
             <div className="mb-3">
               <button className="btn btn-success">新增繁殖籠</button>
             </div>
