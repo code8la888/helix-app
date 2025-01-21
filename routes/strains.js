@@ -60,7 +60,7 @@ router.get(
   isLoggedIn,
   verifyEditPermission,
   (req, res) => {
-    res.status(200).json({ message: "該使用者有權限" });
+    res.status(200).json({ message: "該使用者有權限方問此頁面" });
   }
 );
 
