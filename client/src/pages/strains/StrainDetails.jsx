@@ -4,103 +4,91 @@ import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "../../actions/index";
+import { sendFormData } from "../../utils/sendFormData";
+import { fetchData } from "../../utils/fetchData";
+import { toast } from "react-toastify";
 
 export default function StrainDetails() {
   const { id } = useParams();
   const [strain, setStrain] = useState(null);
+  const [breedingRecord, setBreedingRecord] = useState([]);
+  const [mice, setMice] = useState([]);
+  const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const fetchStrainData = async () => {
+  const [isAuthorized, setIsAuthorized] = useState(null);
+  const loadData = async () => {
     try {
-      const res = await axios.get(`/api/strains/${id}`);
-      setStrain(res.data);
+      const res = await fetchData(`/api/strains/${id}`);
+      setStrain(res.strain);
+      setMice(res.mice);
+      setBreedingRecord(res.breedingRecord);
+      setUsers(res.users);
+      console.log(res);
     } catch (error) {
-      console.error("Error fetching strain data:", error);
+      console.error("Error fetching strains data:", error);
     }
   };
 
   useEffect(() => {
     dispatch(fetchUser());
-    fetchStrainData();
-    // console.log(currentUser);
-  }, [dispatch]);
+    const fetchPermission = async () => {
+      try {
+        await axios.get(`/api/strains/${id}/browse-permission`);
+        setIsAuthorized(true);
+        loadData();
+      } catch (error) {
+        setIsAuthorized(false);
+        navigate("/error", {
+          state: {
+            error: error.response?.data?.message || "您沒有權限訪問此頁面。",
+            stack: error.response?.data?.stack || "XXX",
+          },
+        });
+      }
+    };
+
+    fetchPermission();
+  }, [dispatch, navigate, id]);
 
   const handleDeleteStrain = async (event) => {
     event.preventDefault();
-    try {
-      const res = await axios.delete(`/api/strains/${id}`);
-      // console.log(res.data);
-      if (res.data.redirect) {
-        navigate(res.data.redirect);
-      }
-    } catch (error) {
-      let errorMessage = "提交失敗，請稍後再試。";
-      let errorStack = "";
-      console.log(error.response);
-
-      if (error.response) {
-        errorMessage = error.response.data.message || "伺服器錯誤。";
-        errorStack = error.response.data.stack || "無堆疊資訊";
-      } else if (error.request) {
-        errorMessage = "伺服器未響應，請稍後再試。";
-      } else {
-        errorMessage = error.message;
-        errorStack = error.stack;
-      }
-
-      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
-    }
+    await sendFormData(`/api/strains/${id}`, undefined, navigate, "DELETE");
+    await loadData();
+    toast.success("成功刪除品系資料！");
   };
 
   const handleDeleteMice = async (miceId, event) => {
     event.preventDefault();
-    try {
-      const res = await axios.delete(`/api/strains/${id}/mice/${miceId}`);
-      if (res.status === 200) {
-        await fetchStrainData(); // 刪除成功後重新加載數據
-      }
-    } catch (error) {
-      let errorMessage = "提交失敗，請稍後再試。";
-      let errorStack = "";
-      console.log(error.response);
-
-      if (error.response) {
-        errorMessage = error.response.data.message || "伺服器錯誤。";
-        errorStack = error.response.data.stack || "無堆疊資訊";
-      } else if (error.request) {
-        errorMessage = "伺服器未響應，請稍後再試。";
-      } else {
-        errorMessage = error.message;
-        errorStack = error.stack;
-      }
-
-      navigate("/error", { state: { error: errorMessage, stack: errorStack } });
-    }
+    await sendFormData(
+      `/api/strains/${id}/mice/${miceId}`,
+      undefined,
+      navigate,
+      "DELETE"
+    );
+    await loadData();
+    toast.success("成功刪除採樣記錄！");
   };
 
   const handleDeleteBreedingRecord = async (breedingRecordId, event) => {
     event.preventDefault();
-    try {
-      const res = await axios.delete(
-        `/api/strains/${id}/breedingRecord/${breedingRecordId}`
-      );
-      if (res.status === 200) {
-        await fetchStrainData(); // 刪除成功後重新加載數據
-      }
-    } catch (error) {
-      console.error("刪除失敗：", error);
-    }
+    await sendFormData(
+      `/api/strains/${id}/breedingRecord/${breedingRecordId}`,
+      undefined,
+      navigate,
+      "DELETE"
+    );
+    await loadData();
+    toast.success("成功刪除繁殖紀錄！");
   };
-
-  console.log(strain || "");
 
   return (
     <div>
       <h1>NTUMC-LAC 基因改造小鼠採樣記錄</h1>
       <br />
       {currentUser &&
-      strain?.strain?.users?.includes(currentUser.username) &&
+      strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
         <div className="mb-3 d-flex">
           <h3>品系資訊:</h3>
@@ -122,18 +110,16 @@ export default function StrainDetails() {
       )}
       {strain ? (
         <div className="row g-3 mouse.-2">
-          <div className="col-mouse.-3">品系名稱: {strain.strain.strain}</div>
-          <div className="col-mouse.-2">品系簡稱: {strain.strain.abbr}</div>
-          <div className="col-mouse.-2">單位: {strain.strain.dept}</div>
+          <div className="col-mouse.-3">品系名稱: {strain.strain}</div>
+          <div className="col-mouse.-2">品系簡稱: {strain.abbr}</div>
+          <div className="col-mouse.-2">單位: {strain.dept}</div>
+          <div className="col-mouse.-2">IACUC編號: {strain.iacuc_no}</div>
           <div className="col-mouse.-2">
-            IACUC編號: {strain.strain.iacuc_no}
-          </div>
-          <div className="col-mouse.-2">
-            計畫期限: {new Date(strain.strain.EXP).toLocaleDateString("zh-TW")}
+            計畫期限: {new Date(strain.EXP).toLocaleDateString("zh-TW")}
           </div>
         </div>
       ) : (
-        "loading"
+        ""
       )}
       <br />
       <h3>使用者資訊:</h3>
@@ -147,8 +133,8 @@ export default function StrainDetails() {
           </tr>
         </thead>
         <tbody>
-          {strain
-            ? strain.users
+          {users
+            ? users
                 .filter((user) => user.role !== "獸醫")
                 .map((user) => (
                   <tr key={user._id}>
@@ -164,7 +150,7 @@ export default function StrainDetails() {
       <br />
       <h3>小鼠採樣記錄:</h3>
       {currentUser &&
-      strain?.strain?.users?.includes(currentUser.username) &&
+      strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
         <Link to={`/strains/${id}/mice/new`}>新增採樣記錄</Link>
       ) : (
@@ -181,16 +167,16 @@ export default function StrainDetails() {
             <th scope="col">採樣日期</th>
             <th scope="col">趾號</th>
             {strain
-              ? strain.strain.genes.map((gene, index) => (
-                  <th scope="col" key={index}>
+              ? strain.genes.map((gene) => (
+                  <th scope="col" key={gene}>
                     {gene}
                   </th>
                 ))
-              : "loading"}
+              : ""}
             <th scope="col">狀態</th>
             <th scope="col">備註</th>
             {currentUser &&
-            strain?.strain?.users?.includes(currentUser.username) &&
+            strain?.users?.includes(currentUser.username) &&
             currentUser.role === "品系管理人" ? (
               <>
                 <th scope="col">編輯</th>
@@ -202,7 +188,7 @@ export default function StrainDetails() {
           </tr>
         </thead>
         <tbody>
-          {strain?.mice.map((mouse) => (
+          {mice.map((mouse) => (
             <tr key={mouse._id}>
               <td scope="row">{mouse.no}</td>
               <td>
@@ -225,7 +211,7 @@ export default function StrainDetails() {
               <td>{mouse.on_shelf}</td>
               <td>{mouse.note ? mouse.note : "-"}</td>
               {currentUser &&
-              strain?.strain?.users?.includes(currentUser.username) &&
+              strain?.users?.includes(currentUser.username) &&
               currentUser.role === "品系管理人" ? (
                 <>
                   <td>
@@ -259,7 +245,7 @@ export default function StrainDetails() {
       <br />
       <h3>繁殖記錄表:</h3>
       {currentUser &&
-      strain?.strain?.users.includes(currentUser.username) &&
+      strain?.users.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
         <Link to={`/strains/${id}/breedingRecord/new`}>新增繁殖資料</Link>
       ) : (
@@ -273,7 +259,7 @@ export default function StrainDetails() {
             <th scope="col">配種日期</th>
             <th scope="col">繁殖籠狀態</th>
             {currentUser &&
-            strain?.strain?.users?.includes(currentUser.username) &&
+            strain?.users?.includes(currentUser.username) &&
             currentUser.role === "品系管理人" ? (
               <>
                 <th scope="col">編輯</th>
@@ -285,8 +271,8 @@ export default function StrainDetails() {
           </tr>
         </thead>
         <tbody>
-          {strain
-            ? strain.breedingRecord.map((b) => (
+          {breedingRecord
+            ? breedingRecord.map((b) => (
                 <tr key={b._id}>
                   <th scope="row">{b.cage_no}</th>
                   <td>
@@ -297,7 +283,7 @@ export default function StrainDetails() {
                   </td>
                   <td>{b.on_shelf}</td>
                   {currentUser &&
-                  strain?.strain?.users?.includes(currentUser.username) &&
+                  strain?.users?.includes(currentUser.username) &&
                   currentUser.role === "品系管理人" ? (
                     <>
                       <td>
