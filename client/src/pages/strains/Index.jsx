@@ -1,37 +1,31 @@
-import Table from "react-bootstrap/Table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { fetchData } from "../../utils/fetchData";
+import TableHeaderItem from "../../components/TableHeaderItem";
 
 function Index() {
   const [strains, setStrains] = useState([]);
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await axios.get("/api/strains");
-        const { strains } = res.data;
-        setStrains(strains);
-      } catch (error) {
-        console.error("Error fetching strains data:", error);
-      }
-    }
-
-    fetchData();
+    const loadData = async () => {
+      const res = await fetchData("/api/strains");
+      setStrains(res.strains);
+    };
+    loadData();
   }, []);
 
   return (
     <div>
       <h1 className="text-center mb-5">所有品系</h1>
-      <Table striped hover>
+      <table class="table table-striped table-hover">
         <thead>
           <tr>
-            <th scope="col">品系名稱</th>
-            <th scope="col">品系縮寫</th>
-            <th scope="col">單位</th>
-            <th scope="col">IACUC編號</th>
-            <th scope="col">計畫期限</th>
-            <th scope="col">PI</th>
-            <th scope="col">品系管理人</th>
+            <TableHeaderItem title="品系名稱" />
+            <TableHeaderItem title="品系縮寫" />
+            <TableHeaderItem title="單位" />
+            <TableHeaderItem title="IACUC編號" />
+            <TableHeaderItem title="計畫期限" />
+            <TableHeaderItem title="PI" />
+            <TableHeaderItem title="品系管理人" />
           </tr>
         </thead>
         <tbody>
@@ -59,7 +53,7 @@ function Index() {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }
