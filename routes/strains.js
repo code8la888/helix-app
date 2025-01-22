@@ -64,4 +64,13 @@ router.get(
   }
 );
 
+router.get(
+  "/:strainId/browse-permission",
+  isLoggedIn,
+  verifyBrowsePermission,
+  (req, res) => {
+    res.status(200).json({ message: "該使用者有權限方問此頁面" });
+  }
+);
+
 module.exports = router;
