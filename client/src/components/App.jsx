@@ -15,7 +15,7 @@ import EditStrain from "../pages/strains/EditStrain";
 import NewMice from "../pages/mice/NewMice";
 import NewBreedingRecord from "../pages/breedingRecords/NewBreedingRecord";
 import EditBreedingRecord from "../pages/breedingRecords/EditBreedingRecord";
-import EditMice from "../pages/mice/EditMice";
+import EditMiceCopy from "../pages/mice/EditMiceCopy";
 import ErrorPage from "../pages/ErrorPage";
 
 class App extends Component {
@@ -50,7 +50,7 @@ class App extends Component {
                     />
                     <Route
                       path="/strains/:strainId/mice/:mouseId/edit"
-                      element={<EditMice />}
+                      element={<EditMiceCopy />}
                     />
                     <Route
                       path="/strains/:id/breedingRecord/new"
