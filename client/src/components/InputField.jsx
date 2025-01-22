@@ -10,6 +10,7 @@ const InputField = ({
   required = true,
   validFeedback = "看起來不錯",
   invalidFeedback = "此欄位為必填",
+  autoComplete,
 }) => {
   return (
     <div className="mb-3">
@@ -28,6 +29,7 @@ const InputField = ({
         value={value}
         onChange={onChange}
         required={required}
+        autoComplete={autoComplete}
       />
       <div className="valid-feedback">{validFeedback}</div>
       <div className="invalid-feedback">{invalidFeedback}</div>
