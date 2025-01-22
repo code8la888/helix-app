@@ -21,7 +21,7 @@ module.exports.register = async (req, res) => {
         success: true,
         message: "註冊成功!歡迎來到LIMS",
         data: registeredUser,
-        redirect: "/index",
+        redirect: "/strains/index",
       });
     });
   } catch (error) {
