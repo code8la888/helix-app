@@ -25,7 +25,7 @@ router.get("/auth/google/callback", (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.redirect("/index");
+      res.redirect("/strains/index");
     });
   })(req, res, next);
 });
