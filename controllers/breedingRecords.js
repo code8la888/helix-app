@@ -47,6 +47,9 @@ module.exports.updateBreedingRecord = async (req, res) => {
 module.exports.deleteBreedingRecord = async (req, res) => {
   const { strainId, breedingRecordId } = req.params;
   await BreedingRecord.findByIdAndDelete(breedingRecordId);
+  await Strain.findByIdAndUpdate(strainId, {
+    $pull: { breedingRecords: breedingRecordId },
+  });
   // req.flash("success", "成功刪除繁殖記錄");
   // res.redirect(`/strains/${strainId}`);
   res
