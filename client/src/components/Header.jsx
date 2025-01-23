@@ -1,9 +1,7 @@
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { SiHelix } from "react-icons/si";
 
 class Header extends Component {
   renderContent() {
@@ -47,6 +45,7 @@ class Header extends Component {
             className="navbar-brand"
             to={this.props.user ? "/surveys" : "/"}
           >
+            <SiHelix />
             Helix
           </Link>
           <button
