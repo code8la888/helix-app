@@ -8,6 +8,7 @@ import reducers from "./reducers";
 import { thunk } from "redux-thunk";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./styles/style.css";
 const el = document.getElementById("root");
 const root = ReactDOM.createRoot(el);
 
