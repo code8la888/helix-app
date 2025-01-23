@@ -8,14 +8,15 @@ const InputField = ({
   value,
   onChange,
   required = true,
-  validFeedback = "看起來不錯",
+  validFeedback,
   invalidFeedback = "此欄位為必填",
   autoComplete,
+  className,
 }) => {
   return (
-    <div className="mb-3">
+    <div className={`mb-2 ${className}`}>
       {label ? (
-        <label className="form-label" htmlFor={id}>
+        <label className="form-label fw-bold" htmlFor={id}>
           {label}
         </label>
       ) : (
