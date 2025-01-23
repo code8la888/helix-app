@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { toast } from "react-toastify";
@@ -32,7 +33,7 @@ export default function RegisterPage() {
       });
       toast.success(res.data.message);
       if (res.data.redirect) {
-        window.location.href = res.data.redirect; // 導航到伺服器指定的頁面
+        window.location.href = res.data.redirect;
       } else {
         console.log("資料送出成功:", res.data);
       }
@@ -53,23 +54,31 @@ export default function RegisterPage() {
       className="d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
-        backgroundImage: "linear-gradient(60deg, #64b3f4 0%, #c2e59c 100%)",
+        background: "linear-gradient(to top, #4b6cb7, #182848)",
       }}
     >
       <div className="container">
         <div className="row justify-content-center p-5">
-          <div className="card border-light rounded-3">
+          <div className="card border-light rounded-3 p-3">
             <div className="row g-0 align-items-center">
-              <div className="col-md-6">
+              <div className="col-md-6 p-5">
                 <img
-                  src="../../public/undraw_access-account_aydp.svg"
+                  src="../../public/Blood test-pana.svg"
                   alt="..."
-                  className="img-fluid rounded-starts p-3"
+                  className="img-fluid"
                 />
               </div>
               <div className="col-md-6">
                 <div className="card-body">
-                  <h2 className="card-title text-center">註冊</h2>
+                  <h2
+                    className="card-title mb-2 fw-bold"
+                    style={{ color: " rgb(6, 60, 139)" }}
+                  >
+                    Welcome to Helix
+                  </h2>
+                  <p className="mb-2" style={{ color: " rgb(6, 60, 139)" }}>
+                    Register your account
+                  </p>
                   <form
                     noValidate
                     onSubmit={handleSubmit}
@@ -77,14 +86,56 @@ export default function RegisterPage() {
                       validated ? "was-validated" : ""
                     }`}
                   >
-                    <InputField
-                      label="使用者名稱"
-                      id="username"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleChange}
-                    />
+                    <div className="row">
+                      <InputField
+                        className="col"
+                        label="使用者名稱"
+                        id="username"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                      />
+                      <InputField
+                        className="col"
+                        label="計畫單位"
+                        id="dept"
+                        name="dept"
+                        value={formData.dept}
+                        onChange={handleChange}
+                      />
+                    </div>
 
+                    <div className="row">
+                      <InputField
+                        className="col"
+                        label="連絡電話"
+                        id="tel"
+                        name="tel"
+                        value={formData.tel}
+                        onChange={handleChange}
+                      />
+
+                      <div className="mb-2 col">
+                        <label className="form-label" htmlFor="role">
+                          <b>職稱</b>
+                        </label>
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
+                          name="role"
+                          id="role"
+                          value={formData.role}
+                          onChange={handleChange}
+                        >
+                          <option value="計畫主持人">計畫主持人</option>
+                          <option value="學生">學生</option>
+                          <option value="研究助理">研究助理</option>
+                          <option value="品系管理人">品系管理人</option>
+                          <option value="獸醫">獸醫</option>
+                        </select>
+                        {/* <div className="valid-feedback">看起來不錯</div> */}
+                      </div>
+                    </div>
                     <InputField
                       label="使用者信箱"
                       id="email"
@@ -92,41 +143,6 @@ export default function RegisterPage() {
                       value={formData.email}
                       onChange={handleChange}
                     />
-                    <InputField
-                      label="連絡電話"
-                      id="tel"
-                      name="tel"
-                      value={formData.tel}
-                      onChange={handleChange}
-                    />
-
-                    <InputField
-                      label="計畫單位"
-                      id="dept"
-                      name="dept"
-                      value={formData.dept}
-                      onChange={handleChange}
-                    />
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="role">
-                        職稱:
-                      </label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        name="role"
-                        id="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                      >
-                        <option value="計畫主持人">計畫主持人</option>
-                        <option value="學生">學生</option>
-                        <option value="研究助理">研究助理</option>
-                        <option value="品系管理人">品系管理人</option>
-                        <option value="獸醫">獸醫</option>
-                      </select>
-                      <div className="valid-feedback">看起來不錯</div>
-                    </div>
                     <InputField
                       label="密碼"
                       type="password"
@@ -136,10 +152,25 @@ export default function RegisterPage() {
                       onChange={handleChange}
                     />
 
-                    <div className="d-grid gap-2">
-                      <button className="btn btn-success">註冊</button>
+                    <div className="d-grid gap-2 mt-4">
+                      <button
+                        type="submit"
+                        className="btn"
+                        style={{
+                          backgroundColor: " rgb(6, 60, 139)",
+                          color: "white",
+                        }}
+                      >
+                        註冊
+                      </button>
                     </div>
                   </form>
+                  <p className="text-center mt-3">
+                    已經有帳戶嗎?
+                    <Link to="/login" style={{ textDecoration: "none" }}>
+                      &nbsp;登入
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>
