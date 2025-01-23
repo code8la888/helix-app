@@ -1,0 +1,7 @@
+.custom-striped {
+  --bs-table-striped-bg: rgb(139, 185, 254, 0.3);
+  --bs-table-hover-bg: rgb(139, 185, 254);
+}
+label {
+  color: rgb(6, 60, 139);
+}
