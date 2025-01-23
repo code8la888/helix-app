@@ -67,23 +67,28 @@ export default function LoginPage() {
       className="d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
-        backgroundImage: "linear-gradient(60deg, #64b3f4 0%, #c2e59c 100%)",
+        background: "linear-gradient(to top, #4b6cb7, #182848)",
       }}
     >
       <div className="container">
         <div className="row justify-content-center p-5">
-          <div className="card border-light rounded-3">
+          <div className="card border-light rounded-3 p-3">
             <div className="row g-0 align-items-center">
-              <div className="col-md-6">
+              <div className="col-md-6 p-5">
                 <img
-                  src="../../public/undraw_access-account_aydp.svg"
+                  src="../../public/Computer login-rafiki.svg"
                   alt="..."
                   className="img-fluid rounded-starts p-3"
                 />
               </div>
               <div className="col-md-6">
                 <div className="card-body">
-                  <h2 className="card-title text-center">登入</h2>
+                  <h2
+                    className="card-title text-center mb-2 fw-bold"
+                    style={{ color: " rgb(6, 60, 139)" }}
+                  >
+                    登入
+                  </h2>
                   <form
                     onSubmit={handleLogin}
                     className={`validated-form ${
@@ -109,9 +114,9 @@ export default function LoginPage() {
                       autoComplete="current-password"
                     />
 
-                    <div className="d-grid gap-2">
+                    <div className="d-grid gap-2 mt-4">
                       <button
-                        className="btn btn-block rounded-pill btn-outline-primary"
+                        className="btn btn-block  btn-warning"
                         disabled={loading}
                       >
                         登入
@@ -120,9 +125,9 @@ export default function LoginPage() {
                   </form>
                   <hr />
                   <form onSubmit={handleGoogleAuth}>
-                    <div className="d-grid gap-2">
+                    <div className="d-grid gap-2 mt-4">
                       <button
-                        className="btn btn-block rounded-pill btn-outline-danger"
+                        className="btn btn-block btn-outline-danger"
                         disabled={loading}
                       >
                         使用 Google 帳號登入
