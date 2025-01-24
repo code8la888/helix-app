@@ -1,7 +1,63 @@
 .custom-striped {
   --bs-table-striped-bg: rgb(139, 185, 254, 0.3);
   --bs-table-hover-bg: rgb(139, 185, 254);
+  --bs-table-color: rgb(6, 60, 139);
+  --bs-table-striped-color: rgb(6, 60, 139);
+  --bs-table-hover-color: rgb(6, 60, 139);
 }
-label {
+
+h1,
+h2,
+h3,
+p,
+label,
+.apple {
   color: rgb(6, 60, 139);
+  font-weight: bold;
+  margin: 16px 0;
+}
+
+button {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.btn {
+  font-weight: bold;
+}
+
+tr {
+  vertical-align: middle;
+}
+
+td,
+.custom-color {
+  color: rgb(6, 60, 139);
+}
+
+.wh {
+  /*header footer文字*/
+  color: white;
+  font-weight: bold;
+}
+
+.pagination {
+  --bs-pagination-color: rgb(6, 60, 139);
+  --bs-pagination-active-bg: rgb(6, 60, 139);
+}
+
+.nav-link:active,
+.nav-link:hover,
+.nav-link:focus,
+.navbar-brand:active,
+.navbar-brand:hover {
+  color: rgb(139, 185, 254);
+}
+
+.navbar-brand:focus {
+  color: white;
+}
+
+.col {
+  margin-bottom: 16px;
 }
