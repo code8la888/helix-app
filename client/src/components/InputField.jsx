@@ -14,7 +14,7 @@ const InputField = ({
   className,
 }) => {
   return (
-    <div className={`mb-2 ${className}`}>
+    <div className={` ${className}`}>
       {label ? (
         <label className="form-label fw-bold" htmlFor={id}>
           {label}

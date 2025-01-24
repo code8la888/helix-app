@@ -67,21 +67,24 @@ export default function EditStrain() {
   }
 
   return (
-    <>
-      <div className="row">
-        <h1 className="text-center">編輯小鼠品系:</h1>
-        <div className="col-md-6 offset-md-3">
-          <form
-            noValidate
-            onSubmit={handleSubmit}
-            className={`validated-form ${validated ? "was-validated" : ""}`}
-          >
+    <div className="row">
+      <h1 className="text-center">編輯小鼠品系:</h1>
+      <div className="col-8 offset-2">
+        <form
+          noValidate
+          onSubmit={handleSubmit}
+          className={`validated-form ${
+            validated ? "was-validated" : ""
+          } shadow-lg mb-3 p-4 rounded-3`}
+        >
+          <div className="row">
             <InputField
               label="計畫單位"
               id="dept"
               name="dept"
               value={formData?.dept}
               onChange={handleChange}
+              className="col"
             />
             <InputField
               label="品系名稱"
@@ -89,6 +92,7 @@ export default function EditStrain() {
               name="strain"
               value={formData?.strain}
               onChange={handleChange}
+              className="col"
             />
             <InputField
               label="品系縮寫"
@@ -96,13 +100,17 @@ export default function EditStrain() {
               name="abbr"
               value={formData?.abbr}
               onChange={handleChange}
+              className="col"
             />
+          </div>
+          <div className="row">
             <InputField
               label="IACUC編號"
               id="iacuc_no"
               name="iacuc_no"
               value={formData?.iacuc_no}
               onChange={handleChange}
+              className="col"
             />
             <InputField
               type="date"
@@ -115,48 +123,56 @@ export default function EditStrain() {
                   : ""
               }
               onChange={handleChange}
+              className="col"
             />
+          </div>
 
-            <FieldList
-              FieldListName="採樣基因"
-              fields={
-                formData.genes?.map((gene, index) => ({
-                  id: index,
-                  name: gene,
-                })) || []
-              }
-              onFieldChange={(updatedFields) => {
-                const updatedGenes = updatedFields.map((field) => field.name);
-                setFormData((prev) => ({
-                  ...prev,
-                  genes: updatedGenes,
-                }));
-              }}
-            />
+          <FieldList
+            FieldListName="採樣基因"
+            fields={
+              formData.genes?.map((gene, index) => ({
+                id: index,
+                name: gene,
+              })) || []
+            }
+            onFieldChange={(updatedFields) => {
+              const updatedGenes = updatedFields.map((field) => field.name);
+              setFormData((prev) => ({
+                ...prev,
+                genes: updatedGenes,
+              }));
+            }}
+          />
 
-            <FieldList
-              FieldListName="計畫相關人員"
-              fields={
-                formData.users?.map((user, index) => ({
-                  id: index,
-                  name: user,
-                })) || []
-              }
-              onFieldChange={(updatedFields) => {
-                const updatedUsers = updatedFields.map((field) => field.name);
-                setFormData((prev) => ({
-                  ...prev,
-                  users: updatedUsers,
-                }));
-              }}
-            />
-            <div className="mb-3">
-              <button className="btn btn-success">更新小鼠品系</button>
-            </div>
-          </form>
-        </div>
+          <FieldList
+            FieldListName="計畫相關人員"
+            fields={
+              formData.users?.map((user, index) => ({
+                id: index,
+                name: user,
+              })) || []
+            }
+            onFieldChange={(updatedFields) => {
+              const updatedUsers = updatedFields.map((field) => field.name);
+              setFormData((prev) => ({
+                ...prev,
+                users: updatedUsers,
+              }));
+            }}
+          />
+          <div className="mt-5 d-flex justify-content-end">
+            <button className="btn btn-warning">更新小鼠品系</button>
+            <button className="btn btn-danger ms-2 border-2">
+              <Link
+                to={`/strains/${id}`}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                取消，返回品系資訊
+              </Link>
+            </button>
+          </div>
+        </form>
       </div>
-      <Link to={`/strains/${id}`}>返回小鼠品系資訊</Link>
-    </>
+    </div>
   );
 }

@@ -27,11 +27,11 @@ export default function FieldList({
   };
 
   return (
-    <div className="my-3">
-      <h5>{FieldListName}</h5>
+    <div className="mb-3">
+      <p className="apple mb-2">{FieldListName}</p>
       <div>
         {fields.map((field, index) => (
-          <div key={field.id} className="d-flex align-items-center">
+          <div key={field.id} className="d-flex align-items-center mb-3">
             <InputField
               id={field.id}
               name={`list[${index}]`}
@@ -53,8 +53,9 @@ export default function FieldList({
       </div>
       <button
         type="button"
-        className="btn btn-outline-primary"
+        className="btn"
         onClick={addField}
+        style={{ backgroundColor: " rgb(139, 185, 254)" }}
       >
         新增{FieldListName}
       </button>

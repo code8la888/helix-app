@@ -4,7 +4,6 @@ import { fetchData } from "../../utils/fetchData";
 import { useCheckPermission } from "../../hooks/useCheckPermission";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { sendFormData } from "../../utils/sendFormData";
-import TableHeaderItem from "../../components/TableHeaderItem";
 import InputField from "../../components/InputField";
 
 export default function EditMice() {
@@ -82,162 +81,178 @@ export default function EditMice() {
     return null;
   }
   return (
-    <>
+    <div className="row">
       <h1 className="text-center">修改小鼠資料</h1>
-      <form
-        onSubmit={handleSubmit}
-        noValidate
-        className={`validated-form ${validated ? "was-validated" : ""}`}
-      >
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <TableHeaderItem title="編號" />
-              <TableHeaderItem title="父" />
-              <TableHeaderItem title="母" />
-              <TableHeaderItem title="胎次" />
-              <TableHeaderItem title="性別" />
-              <TableHeaderItem title="出生日期" />
-              <TableHeaderItem title="採樣日期" />
-              <TableHeaderItem title="趾號" />
-              {genes?.map((gene) => (
-                <TableHeaderItem key={gene} title={gene} />
-              ))}
-              <TableHeaderItem title="狀態" />
-              <TableHeaderItem title="備註" />
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <InputField
-                  type="number"
-                  name="no"
-                  value={mouseData.no}
-                  onChange={handleChange}
-                />
-              </td>
-              <td>
-                <InputField
-                  name="parents.father"
-                  value={mouseData?.parents?.father}
-                  onChange={handleChange}
-                />
-              </td>
-              <td>
-                <InputField
-                  name="parents.mother"
-                  value={mouseData?.parents?.mother}
-                  onChange={handleChange}
-                />
-              </td>
-              <td>
-                <InputField
-                  name="litter"
-                  value={mouseData.litter}
-                  onChange={handleChange}
-                />
-              </td>
-              <td>
+      <div className="col-md-8 offset-md-2 shadow-lg mb-3 p-4 rounded-3">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className={`validated-form ${validated ? "was-validated" : ""}`}
+        >
+          <div className="row">
+            <InputField
+              label="編號"
+              type="number"
+              name="no"
+              value={mouseData.no}
+              onChange={handleChange}
+              className="col"
+            />
+
+            <InputField
+              label="父"
+              name="parents.father"
+              value={mouseData?.parents?.father}
+              onChange={handleChange}
+              className="col"
+            />
+
+            <InputField
+              label="母"
+              name="parents.mother"
+              value={mouseData?.parents?.mother}
+              onChange={handleChange}
+              className="col"
+            />
+          </div>
+          <div className="row">
+            <InputField
+              label="胎次"
+              name="litter"
+              value={mouseData.litter}
+              onChange={handleChange}
+              className="col"
+            />
+
+            <div className="col">
+              <label htmlFor="gender" className="fw-bold mb-2">
+                性別
+              </label>
+              <select
+                className="form-control"
+                name="gender"
+                id="gender"
+                value={mouseData.gender}
+                onChange={handleChange}
+              >
+                <option value="M">M</option>
+                <option value="F">F</option>
+              </select>
+            </div>
+
+            <InputField
+              label="出生日期"
+              type="date"
+              name="birth_date"
+              value={
+                mouseData?.birth_date
+                  ? new Date(mouseData.birth_date).toISOString().split("T")[0]
+                  : ""
+              }
+              onChange={handleChange}
+              className="col"
+            />
+
+            <InputField
+              label="採樣日期"
+              type="date"
+              name="sampling_date"
+              value={
+                mouseData.sampling_date
+                  ? new Date(mouseData.sampling_date)
+                      .toISOString()
+                      .split("T")[0]
+                  : ""
+              }
+              onChange={handleChange}
+              className="col"
+            />
+
+            <InputField
+              label="趾號"
+              name="toeNumber"
+              value={mouseData.toeNumber}
+              onChange={handleChange}
+              className="col"
+            />
+          </div>
+
+          <div className="row">
+            {" "}
+            {genes?.map((gene, index) => (
+              <div className="col mb-2">
+                <label
+                  htmlFor={`sampling_results_${index}`}
+                  className="fw-bold mb-2"
+                >
+                  {gene}
+                </label>
                 <select
                   className="form-control"
-                  name="gender"
-                  id="gender"
-                  value={mouseData.gender}
-                  onChange={handleChange}
+                  name={`sampling_results_${index}`}
+                  id={`sampling_results_${index}`}
+                  value={mouseData.sampling_results[index] || "檢測中"}
+                  onChange={(event) => {
+                    {
+                      const newResults = [...mouseData.sampling_results];
+                      newResults[index] = event.target.value || "檢測中";
+                      setMouseData({
+                        ...mouseData,
+                        sampling_results: newResults,
+                      });
+                    }
+                  }}
                 >
-                  <option value="M">M</option>
-                  <option value="F">F</option>
+                  <option value="WT">WT</option>
+                  <option value="HT">HT</option>
+                  <option value="KO">KO</option>
+                  <option value="檢測中">檢測中</option>
                 </select>
-              </td>
-              <td>
-                <InputField
-                  type="date"
-                  name="birth_date"
-                  value={
-                    mouseData?.birth_date
-                      ? new Date(mouseData.birth_date)
-                          .toISOString()
-                          .split("T")[0]
-                      : ""
-                  }
-                  onChange={handleChange}
-                />
-              </td>
-              <td>
-                <InputField
-                  type="date"
-                  name="sampling_date"
-                  value={
-                    mouseData.sampling_date
-                      ? new Date(mouseData.sampling_date)
-                          .toISOString()
-                          .split("T")[0]
-                      : ""
-                  }
-                  onChange={handleChange}
-                />
-              </td>
-              <td>
-                <InputField
-                  name="toeNumber"
-                  value={mouseData.toeNumber}
-                  onChange={handleChange}
-                />
-              </td>
-              {genes?.map((_, index) => (
-                <td>
-                  <select
-                    className="form-control"
-                    name={`sampling_results_${index}`}
-                    id={`sampling_results_${index}`}
-                    value={mouseData.sampling_results[index] || "檢測中"}
-                    onChange={(event) => {
-                      {
-                        const newResults = [...mouseData.sampling_results];
-                        newResults[index] = event.target.value || "檢測中";
-                        setMouseData({
-                          ...mouseData,
-                          sampling_results: newResults,
-                        });
-                      }
-                    }}
-                  >
-                    <option value="WT">WT</option>
-                    <option value="HT">HT</option>
-                    <option value="KO">KO</option>
-                    <option value="檢測中">檢測中</option>
-                  </select>
-                </td>
-              ))}
-              <td>
-                <select
-                  className="form-control"
-                  name="on_shelf"
-                  id="on_shelf"
-                  value={mouseData.on_shelf}
-                  onChange={handleChange}
-                >
-                  <option value="在架上">在架上</option>
-                  <option value="已移出">已移出</option>
-                  <option value="已犧牲">已犧牲</option>
-                  <option value="自然死亡">自然死亡</option>
-                </select>
-              </td>
-              <td>
-                <InputField
-                  required={false}
-                  name="note"
-                  value={mouseData.note}
-                  onChange={handleChange}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button className="btn btn-success">修改小鼠資料</button>
-      </form>
-      <Link to={`/strains/${strainId}`}>返回小鼠品系資訊</Link>
-    </>
+              </div>
+            ))}
+          </div>
+          <div className="row">
+            <div className="mb-2 col">
+              <label htmlFor="on_shelf" className="fw-bold mb-2">
+                狀態
+              </label>
+              <select
+                label="狀態"
+                className="form-control"
+                name="on_shelf"
+                id="on_shelf"
+                value={mouseData.on_shelf}
+                onChange={handleChange}
+              >
+                <option value="在架上">在架上</option>
+                <option value="已移出">已移出</option>
+                <option value="已犧牲">已犧牲</option>
+                <option value="自然死亡">自然死亡</option>
+              </select>
+            </div>
+
+            <InputField
+              label="備註"
+              required={false}
+              name="note"
+              value={mouseData.note}
+              onChange={handleChange}
+              className="col"
+            />
+          </div>
+          <div className="mt-5 d-flex justify-content-end">
+            <button className="btn btn-warning">修改小鼠資料</button>
+            <button className="btn btn-danger ms-2">
+              <Link
+                to={`/strains/${strainId}`}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                返回小鼠品系資訊
+              </Link>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

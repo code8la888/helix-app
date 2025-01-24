@@ -104,13 +104,11 @@ export default function StrainDetails() {
 
   return (
     <>
-      <h1>NTUMC-LAC 基因改造小鼠採樣記錄</h1>
-
+      <h1 className="text-center">NTUMC-LAC 基因改造小鼠採樣記錄</h1>
       {currentUser &&
       strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <div className="mb-3 d-flex">
-          <h3>品系資訊</h3>
+        <div className="mb-3 d-flex justify-content-center">
           <button className="btn btn-warning text-white mx-2">
             <Link
               to={`/strains/${id}/edit`}
@@ -127,22 +125,32 @@ export default function StrainDetails() {
       ) : (
         ""
       )}
+      <h3>品系資訊</h3>
       {strain ? (
-        <div className="row g-3 my-3">
-          <div>品系名稱: {strain.strain}</div>
-          <div>品系簡稱: {strain.abbr}</div>
-          <div>單位: {strain.dept}</div>
-          <div>IACUC編號: {strain.iacuc_no}</div>
-          <div>
-            計畫期限: {new Date(strain.EXP).toLocaleDateString("zh-TW")}
-          </div>
+        <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
+          <p>
+            <b>品系名稱:</b> {strain.strain}
+          </p>
+          <p>
+            <b>品系簡稱:</b> {strain.abbr}
+          </p>
+          <p>
+            <b>單位: </b>
+            {strain.dept}
+          </p>
+          <p>
+            <b>IACUC編號:</b> {strain.iacuc_no}
+          </p>
+          <p>
+            <b>計畫期限:</b> {new Date(strain.EXP).toLocaleDateString("zh-TW")}
+          </p>
         </div>
       ) : (
         ""
       )}
-      <br />
+
       <h3>使用者資訊</h3>
-      <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
+      <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
         <table className="table table-striped table-hover custom-striped">
           <thead>
             <tr>
@@ -173,11 +181,18 @@ export default function StrainDetails() {
       {currentUser &&
       strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <Link to={`/strains/${id}/mice/new`}>新增採樣記錄</Link>
+        <button className="btn btn-success">
+          <Link
+            to={`/strains/${id}/mice/new`}
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            新增採樣記錄
+          </Link>
+        </button>
       ) : (
         ""
       )}
-      <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
+      <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
         <table className="table table-striped table-hover custom-striped">
           <thead>
             <tr>
@@ -292,11 +307,18 @@ export default function StrainDetails() {
       {currentUser &&
       strain?.users.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <Link to={`/strains/${id}/breedingRecord/new`}>新增繁殖資料</Link>
+        <button className="btn btn-success">
+          <Link
+            to={`/strains/${id}/breedingRecord/new`}
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            新增繁殖資料
+          </Link>
+        </button>
       ) : (
         ""
       )}
-      <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
+      <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
         <table className="table table-striped table-hover custom-striped">
           <thead>
             <tr>

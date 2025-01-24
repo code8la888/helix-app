@@ -12,12 +12,12 @@ class Header extends Component {
         return (
           <>
             <li className="nav-item">
-              <Link className="nav-link" to="/login">
+              <Link className="nav-link wh" to="/login">
                 登入
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/register">
+            <li className="nav-item ">
+              <Link className="nav-link wh" to="/register">
                 註冊
               </Link>
             </li>
@@ -26,7 +26,7 @@ class Header extends Component {
       default:
         return (
           <li className="nav-item">
-            <a className="nav-link" href="/api/logout">
+            <a className="nav-link wh" href="/api/logout">
               登出
             </a>
           </li>
@@ -37,12 +37,12 @@ class Header extends Component {
   render() {
     return (
       <nav
-        className="navbar navbar-expand-lg"
-        style={{ backgroundColor: "var(--bs-success-border-subtle)" }}
+        className="navbar navbar-expand-lg "
+        style={{ backgroundColor: "rgb(6, 60, 139)" }}
       >
         <div className="container">
           <Link
-            className="navbar-brand"
+            className="navbar-brand wh"
             to={this.props.user ? "/surveys" : "/"}
           >
             <SiHelix />
@@ -57,17 +57,17 @@ class Header extends Component {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon wh"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="/strain/new">
+                <Link className="nav-link wh" to="/strain/new">
                   新增品系
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/strains/index">
+                <Link className="nav-link wh" to="/strains/index">
                   查看所有品系
                 </Link>
               </li>
