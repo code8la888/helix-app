@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const sendFormData = async (url, data, navigate, method = "POST") => {
   try {
@@ -12,6 +13,7 @@ export const sendFormData = async (url, data, navigate, method = "POST") => {
     });
 
     if (res.data.redirect) {
+      if (res.data.message) toast(res.data.message);
       navigate(res.data.redirect);
     } else {
       console.log("請求成功!", res.data);
