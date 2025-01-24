@@ -8,12 +8,19 @@ const ProtectedRoute = ({ children }) => {
   console.log(auth);
 
   if (auth === null) {
-    // 如果尚未加載，用戶資訊，返回 loading 或空狀態
-    return <div>Loading...</div>;
+    return (
+      <button class="btn btn-primary" type="button" disabled>
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+        Loading...
+      </button>
+    );
   }
 
   if (auth === false) {
-    // 未登入時跳轉到登入頁
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
