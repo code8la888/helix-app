@@ -6,29 +6,60 @@ import ReactPaginate from "react-paginate";
 
 function Index() {
   const [strains, setStrains] = useState([]);
+  const [filteredStrains, setFilteredStrains] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
       const res = await fetchData("/api/strains");
       setStrains(res.strains);
+      setFilteredStrains(res.strains);
     };
     loadData();
   }, []);
 
+  useEffect(() => {
+    const filtered = strains.filter((strain) =>
+      strain.strain.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setFilteredStrains(filtered);
+    setCurrentPage(0);
+  }, [keyword, strains]);
+
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentData = strains.slice(startIndex, endIndex);
+  const currentData = filteredStrains.slice(startIndex, endIndex);
 
   const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected); // React Paginate 提供的 selected 參數
+    setCurrentPage(selected);
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+  console.log(keyword);
   return (
     <div>
-      <h1 className="text-center mb-3">List of Strain</h1>
-      <div className="shadow-lg mb-3 p-4 rounded-3">
+      <h1 className="text-center">List of Strain</h1>
+      <form class="mb-3" onSubmit={handleSubmit}>
+        <div className="row justify-content-center">
+          <div className="col-4 mb-2">
+            <input
+              class="form-control"
+              type="search"
+              placeholder="請輸入關鍵字..."
+              value={keyword}
+              onChange={(event) => {
+                setKeyword(event.target.value);
+              }}
+            />
+          </div>
+        </div>
+      </form>
+
+      <div className="shadow-lg mb-3 p-4 rounded-3 table-responsive">
         <table className="table table-striped table-hover custom-striped">
           <thead>
             <tr>
@@ -45,7 +76,7 @@ function Index() {
             {currentData.map((strain) => (
               <tr key={strain._id}>
                 <td colSpan={1}>
-                  <Link to={`/strains/${strain._id}`} className="link-dark">
+                  <Link to={`/strains/${strain._id}`} className="custom-color">
                     {strain.strain}
                   </Link>
                 </td>
@@ -74,7 +105,7 @@ function Index() {
           previousLabel={"上一頁"}
           nextLabel={"下一頁"}
           breakLabel={"..."}
-          pageCount={Math.ceil(strains.length / itemsPerPage)}
+          pageCount={Math.ceil(filteredStrains.length / itemsPerPage)}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageChange}
