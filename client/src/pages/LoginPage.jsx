@@ -34,7 +34,7 @@ export default function LoginPage() {
 
       if (res.data.success) {
         dispatch(fetchUser());
-        toast.success("歡迎回來!");
+        toast("歡迎回來!");
         setTimeout(() => {
           navigate(from, { replace: true });
         }, 500);
