@@ -34,33 +34,17 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
       return next(new ExpressError("使用者資料不存在!", 400));
     }
 
-    if (
-      user.role === "獸醫" ||
-      (!strain.users.includes(user.username) && user.role === "品系管理人")
-    ) {
-      if (req.method === "GET") {
-        return next();
-      } else {
-        return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
-      }
+    if (dbUser.role === "品系管理人" || user.role === "獸醫") {
+      return next();
     }
 
     if (!strain.users.includes(user.username)) {
-      return next(new ExpressError("您不屬於該計畫的使用者!", 403));
+      return next(
+        new ExpressError("您不屬於該計畫的使用者!您無法瀏覽該品系資料", 403)
+      );
     }
 
-    if (dbUser.role === "品系管理人") {
-      return next();
-    }
-
-    if (["計畫主持人", "學生", "研究助理"].includes(dbUser.role)) {
-      if (req.method !== "GET") {
-        return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
-      }
-      return next();
-    }
-
-    return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
+    return next(new ExpressError("您沒有權限瀏覽該品系資料", 403));
   } catch (error) {
     next(error);
   }
