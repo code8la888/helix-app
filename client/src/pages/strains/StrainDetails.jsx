@@ -75,7 +75,6 @@ export default function StrainDetails() {
     event.preventDefault();
     await sendFormData(`/api/strains/${id}`, undefined, navigate, "DELETE");
     await loadData();
-    toast.success("成功刪除品系資料！");
   };
 
   const handleDeleteMice = async (miceId, event) => {
@@ -87,7 +86,6 @@ export default function StrainDetails() {
       "DELETE"
     );
     await loadData();
-    toast.success("成功刪除採樣記錄！");
   };
 
   const handleDeleteBreedingRecord = async (breedingRecordId, event) => {
@@ -99,7 +97,6 @@ export default function StrainDetails() {
       "DELETE"
     );
     await loadData();
-    toast.success("成功刪除繁殖紀錄！");
   };
 
   return (
