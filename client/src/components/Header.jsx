@@ -37,7 +37,7 @@ class Header extends Component {
   render() {
     return (
       <nav
-        className="navbar navbar-expand-lg "
+        className="navbar navbar-expand-lg sticky-top"
         style={{ backgroundColor: "rgb(6, 60, 139)" }}
       >
         <div className="container">
