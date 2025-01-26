@@ -13,6 +13,10 @@ const strains = require("../controllers/strains");
 //查詢所有品系
 router.get("/", isLoggedIn, catchAsync(strains.index));
 
+router.get("/verifyAdmin", isLoggedIn, verifyAdmin, (req, res) => {
+  res.status(200).json({ message: "該使用者有權限方問此頁面" });
+});
+
 //新增品系
 router.post(
   "/",

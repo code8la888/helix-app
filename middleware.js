@@ -89,7 +89,9 @@ module.exports.verifyAdmin = async (req, res, next) => {
       return next();
     }
 
-    return next(new ExpressError("你不具有此編輯權限!", 403));
+    return next(
+      new ExpressError("你不具有此編輯權限!新增品系請聯繫動物中心", 403)
+    );
   } catch (error) {
     next(error);
   }
