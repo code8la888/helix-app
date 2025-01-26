@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "../../actions/index";
 import { sendFormData } from "../../utils/sendFormData";
 import { fetchData } from "../../utils/fetchData";
-import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
 
 export default function StrainDetails() {
