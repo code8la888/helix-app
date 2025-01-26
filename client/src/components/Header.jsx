@@ -62,7 +62,7 @@ class Header extends Component {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
-                <Link className="nav-link wh" to="/strain/new">
+                <Link className="nav-link wh" to="/strains/new">
                   新增品系
                 </Link>
               </li>

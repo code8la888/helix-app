@@ -60,7 +60,7 @@ class App extends Component {
                     <Routes>
                       <Route path="/" element={<Landing />} />
                       <Route path="/strains/index" element={<Index />} />
-                      <Route path="/strain/new" element={<NewStrain />} />
+                      <Route path="/strains/new" element={<NewStrain />} />
                       <Route path="/strains/:id" element={<StrainDetails />} />
                       <Route
                         path="/strains/:id/edit"
