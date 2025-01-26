@@ -4,6 +4,8 @@ import InputField from "../../components/InputField";
 import FieldList from "../../components/FieldList";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { sendFormData } from "../../utils/sendFormData";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function NewStrain() {
   const [formData, handleChange, setFormData] = useForm({
@@ -17,9 +19,30 @@ function NewStrain() {
   });
 
   const { validated, validateForm } = useFormValidation();
+  const [isAuthorized, setIsAuthorized] = useState(null);
+
   const navigate = useNavigate();
 
   console.log(formData);
+
+  useEffect(() => {
+    const fetchPermission = async () => {
+      try {
+        await axios.get(`/api/strains/verifyAdmin`);
+        setIsAuthorized(true);
+      } catch (error) {
+        setIsAuthorized(false);
+        navigate("/error", {
+          state: {
+            error: error.response?.data?.message || "您沒有權限訪問此頁面。",
+            stack: error.response?.data?.stack || "XXX",
+          },
+        });
+      }
+    };
+
+    fetchPermission();
+  }, [navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
