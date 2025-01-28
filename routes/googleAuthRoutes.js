@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const User = require("../models/user");
 
 router.get(
   "/auth/google",
@@ -25,6 +26,9 @@ router.get("/auth/google/callback", (req, res, next) => {
       if (err) {
         return next(err);
       }
+      if (!user.role || user.role.trim() === "") {
+        return res.redirect("/profile");
+      }
       res.redirect("/strains/index");
     });
   })(req, res, next);
@@ -37,7 +41,13 @@ router.get("/api/logout", (req, res) => {
 
 router.get("/api/current_user", (req, res) => {
   res.send(req.user || null);
-  console.log(req.user);
+  console.log(`使用者資訊:, ${req.user}`);
+});
+
+router.put(`/api/users`, async (req, res) => {
+  const { role, tel, dept, _id } = req.body;
+  await User.findByIdAndUpdate(_id, { tel, dept, role });
+  res.status(200).json({ message: "更新成功!", redirect: `/strains/index` });
 });
 
 module.exports = router;
