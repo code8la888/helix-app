@@ -43,11 +43,11 @@ function Index() {
   return (
     <div>
       <h1 className="text-center">List of Strain</h1>
-      <form class="mb-3" onSubmit={handleSubmit}>
+      <form className="mb-3" onSubmit={handleSubmit}>
         <div className="row justify-content-center">
           <div className="col-4 mb-2">
             <input
-              class="form-control"
+              className="form-control"
               type="search"
               placeholder="請輸入關鍵字..."
               value={keyword}
