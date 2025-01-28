@@ -1,7 +1,8 @@
-import { Component, lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { connect } from "react-redux";
-import * as actions from "../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../actions";
+// import * as actions from "../actions";
 
 // import ProtectedRoute from "./ProtectedRoute";
 // import AppLayout from "./AppLayout";
@@ -17,6 +18,7 @@ import * as actions from "../actions";
 // import EditBreedingRecord from "../pages/breedingRecords/EditBreedingRecord";
 // import EditMice from "../pages/mice/EditMice";
 // import ErrorPage from "../pages/ErrorPage";
+// import ProfilePage from "../pages/ProfilePage";
 
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 const AppLayout = lazy(() => import("./AppLayout"));
@@ -36,67 +38,57 @@ const EditBreedingRecord = lazy(() =>
 );
 const EditMice = lazy(() => import("../pages/mice/EditMice"));
 const ErrorPage = lazy(() => import("../pages/ErrorPage"));
+const ProfilePage = lazy(() => import("../pages/ProfilePage"));
 
-class App extends Component {
-  componentDidMount() {
-    this.props.fetchUser();
-  }
+const App = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
 
-  render() {
-    const isLoggedIn = !!this.props.auth;
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<p>載入中...</p>}>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-    return (
-      <BrowserRouter>
-        <Suspense fallback={<p>載入中...</p>}>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/strains/index" element={<Index />} />
+                    <Route path="/strains/new" element={<NewStrain />} />
+                    <Route path="/strains/:id" element={<StrainDetails />} />
+                    <Route path="/strains/:id/edit" element={<EditStrain />} />
+                    <Route path="/strains/:id/mice/new" element={<NewMice />} />
+                    <Route
+                      path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
+                      element={<EditBreedingRecord />}
+                    />
+                    <Route
+                      path="/strains/:strainId/mice/:mouseId/edit"
+                      element={<EditMice />}
+                    />
+                    <Route
+                      path="/strains/:id/breedingRecord/new"
+                      element={<NewBreedingRecord />}
+                    />
+                    <Route path="/profile" element={<ProfilePage />}></Route>
+                    <Route path="/error" element={<ErrorPage />} />
+                  </Routes>
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
+};
 
-            <Route
-              path="*"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <AppLayout>
-                    <Routes>
-                      <Route path="/" element={<Landing />} />
-                      <Route path="/strains/index" element={<Index />} />
-                      <Route path="/strains/new" element={<NewStrain />} />
-                      <Route path="/strains/:id" element={<StrainDetails />} />
-                      <Route
-                        path="/strains/:id/edit"
-                        element={<EditStrain />}
-                      />
-                      <Route
-                        path="/strains/:id/mice/new"
-                        element={<NewMice />}
-                      />
-                      <Route
-                        path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
-                        element={<EditBreedingRecord />}
-                      />
-                      <Route
-                        path="/strains/:strainId/mice/:mouseId/edit"
-                        element={<EditMice />}
-                      />
-                      <Route
-                        path="/strains/:id/breedingRecord/new"
-                        element={<NewBreedingRecord />}
-                      />
-                      <Route path="/error" element={<ErrorPage />} />
-                    </Routes>
-                  </AppLayout>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    );
-  }
-}
-
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default connect(mapStateToProps, actions)(App);
+export default App;
