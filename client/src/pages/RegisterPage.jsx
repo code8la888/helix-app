@@ -133,7 +133,6 @@ export default function RegisterPage() {
                           <option value="品系管理人">品系管理人</option>
                           <option value="獸醫">獸醫</option>
                         </select>
-                        {/* <div className="valid-feedback">看起來不錯</div> */}
                       </div>
                     </div>
                     <InputField
