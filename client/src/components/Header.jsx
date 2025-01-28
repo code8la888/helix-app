@@ -25,11 +25,18 @@ class Header extends Component {
         );
       default:
         return (
-          <li className="nav-item">
-            <a className="nav-link wh" href="/api/logout">
-              登出
-            </a>
-          </li>
+          <>
+            <li>
+              <Link className="nav-link wh" to="/profile">
+                使用者資料
+              </Link>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link wh" href="/api/logout">
+                登出
+              </a>
+            </li>
+          </>
         );
     }
   }
