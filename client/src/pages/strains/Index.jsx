@@ -14,18 +14,24 @@ function Index() {
   useEffect(() => {
     const loadData = async () => {
       const res = await fetchData("/api/strains");
+      console.log(res);
+
       setStrains(res.strains);
       setFilteredStrains(res.strains);
     };
     loadData();
   }, []);
+  console.log(filteredStrains);
 
   useEffect(() => {
-    const filtered = strains.filter((strain) =>
-      strain.strain.toLowerCase().includes(keyword.toLowerCase())
-    );
-    setFilteredStrains(filtered);
-    setCurrentPage(0);
+    const timer = setTimeout(() => {
+      const filtered = strains.filter((strain) =>
+        strain.strain.toLowerCase().includes(keyword.toLowerCase())
+      );
+      setFilteredStrains(filtered);
+      setCurrentPage(0);
+    }, 500);
+    return () => clearTimeout(timer);
   }, [keyword, strains]);
 
   const startIndex = currentPage * itemsPerPage;
@@ -39,7 +45,7 @@ function Index() {
   const handleSubmit = (event) => {
     event.preventDefault();
   };
-  console.log(keyword);
+
   return (
     <div>
       <h1 className="text-center">List of Strain</h1>
