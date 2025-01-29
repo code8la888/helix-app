@@ -17,6 +17,11 @@ label,
   margin: 16px 0;
 }
 
+.form-control,
+.form-select {
+  background-color: rgba(139, 185, 254, 0.3);
+}
+
 button {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
@@ -60,4 +65,44 @@ td,
 
 .col {
   margin-bottom: 16px;
+}
+
+/* 全螢幕背景 */
+.loader-overlay {
+  position: fixed; /* 固定在視窗 */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(139, 185, 254, 0.5); /* 半透明背景 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* 旋轉動畫 */
+.loader-icon {
+  font-size: 60px; /* 圖示大小 */
+  color: white; /* 顏色 */
+  animation: spin 1s linear infinite; /* 讓圖示旋轉 */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 文字樣式 */
+.loader-text {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
 }
