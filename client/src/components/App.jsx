@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../actions";
 import Loader from "./Loader";
+import HomePage from "../pages/HomePage";
 // import * as actions from "../actions";
 
 // import ProtectedRoute from "./ProtectedRoute";
@@ -54,38 +55,38 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/home" element={<HomePage />}></Route>
+          {/* <Route path="/error" element={<ErrorPage />} /> */}
 
           <Route
-            path="*"
+            path="/*"
             element={
               <ProtectedRoute>
-                <AppLayout>
-                  <Routes>
-                    <Route path="/" element={<Landing />} />
-                    <Route path="/strains/index" element={<Index />} />
-                    <Route path="/strains/new" element={<NewStrain />} />
-                    <Route path="/strains/:id" element={<StrainDetails />} />
-                    <Route path="/strains/:id/edit" element={<EditStrain />} />
-                    <Route path="/strains/:id/mice/new" element={<NewMice />} />
-                    <Route
-                      path="/strains/:strainId/breedingRecord/:breedingRecordId/edit"
-                      element={<EditBreedingRecord />}
-                    />
-                    <Route
-                      path="/strains/:strainId/mice/:mouseId/edit"
-                      element={<EditMice />}
-                    />
-                    <Route
-                      path="/strains/:id/breedingRecord/new"
-                      element={<NewBreedingRecord />}
-                    />
-                    <Route path="/profile" element={<ProfilePage />}></Route>
-                    <Route path="/error" element={<ErrorPage />} />
-                  </Routes>
-                </AppLayout>
+                <AppLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<Landing />} />
+            <Route path="strains/index" element={<Index />} />
+            <Route path="strains/new" element={<NewStrain />} />
+            <Route path="strains/:id" element={<StrainDetails />} />
+            <Route path="strains/:id/edit" element={<EditStrain />} />
+            <Route path="strains/:id/mice/new" element={<NewMice />} />
+            <Route
+              path="strains/:strainId/breedingRecord/:breedingRecordId/edit"
+              element={<EditBreedingRecord />}
+            />
+            <Route
+              path="strains/:strainId/mice/:mouseId/edit"
+              element={<EditMice />}
+            />
+            <Route
+              path="strains/:id/breedingRecord/new"
+              element={<NewBreedingRecord />}
+            />
+            <Route path="profile" element={<ProfilePage />}></Route>
+            <Route path="*" element={<ErrorPage />}></Route>
+          </Route>
         </Routes>
       </Suspense>
     </BrowserRouter>
