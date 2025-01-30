@@ -1,23 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Loader from "./Loader";
 
 const ProtectedRoute = ({ children }) => {
   const auth = useSelector((state) => state.auth);
   const location = useLocation();
-  console.log(auth);
+  useEffect(() => {
+    console.log(auth);
+  }, [auth]);
 
   if (auth === null) {
-    return (
-      <button className="btn btn-primary" type="button" disabled>
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Loading...
-      </button>
-    );
+    return <Loader content="檢查權限中,請稍後..." />;
   }
 
   if (auth === false) {
