@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../actions";
 import Loader from "./Loader";
 import HomePage from "../pages/HomePage";
+import NoPage from "../pages/NoPage";
+import Dashboard from "./Dashboard";
 
 // import ProtectedRoute from "./ProtectedRoute";
 // import AppLayout from "./AppLayout";
@@ -66,6 +68,7 @@ const App = () => {
             }
           >
             <Route index element={<Landing />} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="strains/index" element={<Index />} />
             <Route path="strains/new" element={<NewStrain />} />
             <Route path="strains/:id" element={<StrainDetails />} />
@@ -84,7 +87,7 @@ const App = () => {
               element={<NewBreedingRecord />}
             />
             <Route path="profile" element={<ProfilePage />}></Route>
-            <Route path="*" element={<ErrorPage />}></Route>
+            <Route path="*" element={<NoPage />}></Route>
           </Route>
         </Routes>
       </Suspense>
