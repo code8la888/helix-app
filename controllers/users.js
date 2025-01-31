@@ -21,7 +21,7 @@ module.exports.register = async (req, res) => {
         success: true,
         message: "註冊成功!歡迎來到LIMS",
         data: registeredUser,
-        redirect: "/strains/index",
+        redirect: "/dashboard",
       });
     });
   } catch (error) {
@@ -33,7 +33,7 @@ module.exports.register = async (req, res) => {
 
 module.exports.login = (req, res) => {
   try {
-    const redirectUrl = res.locals.returnTo || "/";
+    const redirectUrl = res.locals.returnTo || "/dashboard";
     res.status(200).json({
       success: true,
       message: "成功登入，歡迎回來!",
@@ -50,6 +50,6 @@ module.exports.logout = (req, res) => {
       return next(err);
     }
     req.flash("success", "再見!");
-    res.redirect("/strains");
+    res.redirect("/home");
   });
 };
