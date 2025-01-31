@@ -78,7 +78,6 @@ export default function NewMice() {
           <div className="row">
             <InputField
               label="編號"
-              type="number"
               name="no"
               value={formData.no}
               onChange={handleChange}
