@@ -92,7 +92,6 @@ export default function EditMice() {
           <div className="row">
             <InputField
               label="編號"
-              type="number"
               name="no"
               value={mouseData.no}
               onChange={handleChange}
