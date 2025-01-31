@@ -1,15 +1,22 @@
 import Header from "./Header";
 import Footer from "./Footer";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import ScrollToTop from "react-scroll-up";
 import { FaChevronCircleUp } from "react-icons/fa";
+import { useEffect } from "react";
 
 function AppLayout() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <div className="d-flex flex-column vh-100">
       <Header />
-      <main className="flex-grow-1">
-        <div className="mt-3 mb-3 container">
+      <main className="flex-grow-1  d-flex align-items-center justify-content-center">
+        <div className="my-3 container">
           <Outlet />
         </div>
       </main>
