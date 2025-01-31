@@ -26,7 +26,9 @@ const Joi = BaseJoi.extend(extension);
 
 module.exports.mouseSchema = Joi.object({
   mouse: Joi.object({
-    no: Joi.number().required().min(1),
+    no: Joi.string()
+      .pattern(/^[FM][1-9][0-9]{0,2}$/)
+      .required(),
     strain: Joi.string()
       .pattern(/^[a-fA-F0-9]{24}$/)
       .required()
