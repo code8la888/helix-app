@@ -1,3 +1,9 @@
+html,
+body {
+  height: 100vh;
+  margin: 0;
+}
+
 .custom-striped {
   --bs-table-striped-bg: rgb(139, 185, 254, 0.3);
   --bs-table-hover-bg: rgb(139, 185, 254);
@@ -69,12 +75,12 @@ td,
 
 /* 全螢幕背景 */
 .loader-overlay {
-  position: fixed; /* 固定在視窗 */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(139, 185, 254, 0.5); /* 半透明背景 */
+  background: rgb(139, 185, 254);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,4 +111,15 @@ td,
   font-weight: bold;
   margin-top: 10px;
   text-align: center;
+}
+
+.custom-toggler {
+  /* background-color: #063c8b !important;  */
+  border: 3px solid white; /* 白色邊框 */
+  padding: 5px 10px;
+  border-radius: 5px; /* 圓角 */
+}
+
+.custom-toggler .navbar-toggler-icon {
+  filter: invert(1); /* 讓三條線變白色 */
 }
