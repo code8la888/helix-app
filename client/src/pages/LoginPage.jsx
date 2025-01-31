@@ -14,7 +14,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/strains/index";
+  const from = location.state?.from?.pathname || "/dashboard";
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -72,7 +72,7 @@ export default function LoginPage() {
     >
       <div className="container">
         <div className="row justify-content-center p-5">
-          <div className="card border-light rounded-3 p-3">
+          <div className="card border-light rounded-3">
             <div className="row g-0 align-items-center">
               <div className="col-md-6 p-5">
                 <img
