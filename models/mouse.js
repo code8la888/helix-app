@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 // const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const MouseSchema = new Schema({
-  no: Number,
+  no: String,
   strain: {
     type: Schema.Types.ObjectId,
     ref: "Strain",
