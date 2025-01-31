@@ -26,11 +26,6 @@ class Header extends Component {
       default:
         return (
           <>
-            <li>
-              <Link className="nav-link wh" to="/profile">
-                使用者資料
-              </Link>
-            </li>
             <li className="nav-item">
               <a className="nav-link wh" href="/api/logout">
                 登出
@@ -50,13 +45,13 @@ class Header extends Component {
         <div className="container">
           <Link
             className="navbar-brand wh"
-            to={this.props.user ? "/surveys" : "/"}
+            to={this.props.user ? "/strains/index" : "/home"}
           >
             <SiHelix />
             Helix
           </Link>
           <button
-            className="navbar-toggler"
+            className="navbar-toggler custom-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
@@ -64,21 +59,9 @@ class Header extends Component {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon wh"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto">
-              <li className="nav-item">
-                <Link className="nav-link wh" to="/strains/new">
-                  新增品系
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link wh" to="/strains/index">
-                  查看所有品系
-                </Link>
-              </li>
-            </ul>
             <ul className="navbar-nav ms-auto">{this.renderContent()}</ul>
           </div>
         </div>
