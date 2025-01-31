@@ -59,7 +59,7 @@ export default function RegisterPage() {
     >
       <div className="container">
         <div className="row justify-content-center p-5">
-          <div className="card border-light rounded-3 p-3">
+          <div className="card border-light rounded-3">
             <div className="row g-0 align-items-center">
               <div className="col-md-6 p-5">
                 <img
@@ -74,10 +74,10 @@ export default function RegisterPage() {
                     className="card-title mb-2 fw-bold"
                     style={{ color: " rgb(6, 60, 139)" }}
                   >
-                    Welcome to Helix
+                    歡迎來到 Helix LIMS
                   </h2>
                   <p className="mb-2" style={{ color: " rgb(6, 60, 139)" }}>
-                    Register your account
+                    建立您的個人帳號
                   </p>
                   <form
                     noValidate
@@ -97,7 +97,7 @@ export default function RegisterPage() {
                       />
                       <InputField
                         className="col"
-                        label="計畫單位"
+                        label="單位"
                         id="dept"
                         name="dept"
                         value={formData.dept}
