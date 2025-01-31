@@ -29,7 +29,7 @@ router.get("/auth/google/callback", (req, res, next) => {
       if (!user.role || user.role.trim() === "") {
         return res.redirect("/profile");
       }
-      res.redirect("/strains/index");
+      res.redirect("/dashboard");
     });
   })(req, res, next);
 });
