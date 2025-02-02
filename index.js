@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieSession = require("cookie-session");
-const flash = require("connect-flash");
 const passport = require("passport");
 const keys = require("./config/keys");
 const cors = require("cors");
@@ -16,7 +15,6 @@ const app = express();
 app.use(bodyParser.json());
 
 const path = require("path");
-require(path.resolve(__dirname, "./models/user"));
 
 app.use(
   cookieSession({
@@ -25,17 +23,8 @@ app.use(
   })
 );
 
-app.use(flash());
-
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  next();
-});
 
 app.use(
   cors({
@@ -51,13 +40,11 @@ app.use(
   "/api/strains/:strainId/breedingRecord",
   require("./routes/breedingRecords")
 );
-app.use("/", require("./routes/flashRoutes"));
 app.use("/", require("./routes/googleAuthRoutes"));
 app.use("/", require("./routes/localAuthRoutes"));
 
 app.use((err, req, res, next) => {
-  // const isDevelopment = process.env.NODE_ENV === "development";
-  const isDevelopment = true;
+  const isDevelopment = keys.env === "development";
   res.status(err.status || 500).json({
     message: err.message,
     stack: isDevelopment ? err.stack : "error", // 僅在開發環境返回堆疊
