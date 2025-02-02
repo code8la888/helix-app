@@ -19,7 +19,7 @@ module.exports.register = async (req, res) => {
       }
       res.status(200).json({
         success: true,
-        message: "註冊成功!歡迎來到LIMS",
+        message: "註冊成功!歡迎來到Helix LIMS",
         data: registeredUser,
         redirect: "/dashboard",
       });
@@ -49,7 +49,6 @@ module.exports.logout = (req, res) => {
     if (err) {
       return next(err);
     }
-    req.flash("success", "再見!");
     res.redirect("/home");
   });
 };

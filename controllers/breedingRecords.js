@@ -1,6 +1,5 @@
 const Strain = require("../models/strain");
 const BreedingRecord = require("../models/breedingRecord");
-const on_shelf = ["在架上", "已關閉"];
 
 module.exports.renderNewForm = (req, res) => {
   const { strainId } = req.params;
@@ -17,8 +16,6 @@ module.exports.createBreedingRecord = async (req, res) => {
   strain.breedingRecords.push(breedingRecord);
   await breedingRecord.save();
   await strain.save();
-  // req.flash("success", "成功新增繁殖記錄");
-  // res.redirect(`/strains/${strainId}`);
   res
     .status(200)
     .json({ message: "成功新增繁殖記錄", redirect: `/strains/${strainId}` });
@@ -27,7 +24,6 @@ module.exports.createBreedingRecord = async (req, res) => {
 module.exports.renderEditForm = async (req, res) => {
   const { strainId, breedingRecordId } = req.params;
   const breedingRecord = await BreedingRecord.findById(breedingRecordId);
-  // res.render("breedingRecords/edit", { breedingRecord, strainId, on_shelf });
   res.status(200).json({ breedingRecord });
 };
 
@@ -37,8 +33,6 @@ module.exports.updateBreedingRecord = async (req, res) => {
     breedingRecordId,
     req.body.breedingRecord
   );
-  // req.flash("success", "成功修改繁殖記錄");
-  // res.redirect(`/strains/${strainId}`);
   res
     .status(200)
     .json({ message: "成功修改繁殖記錄", redirect: `/strains/${strainId}` });
@@ -50,8 +44,6 @@ module.exports.deleteBreedingRecord = async (req, res) => {
   await Strain.findByIdAndUpdate(strainId, {
     $pull: { breedingRecords: breedingRecordId },
   });
-  // req.flash("success", "成功刪除繁殖記錄");
-  // res.redirect(`/strains/${strainId}`);
   res
     .status(200)
     .json({ message: "成功刪除繁殖記錄", redirect: `/strains/${strainId}` });

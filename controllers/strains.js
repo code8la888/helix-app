@@ -39,7 +39,7 @@ module.exports.createNewStrain = async (req, res) => {
     }
   }
   await newStrain.save();
-  res.status(200).json({ message: "品系成功新增", redirect: "/strains/index" });
+  res.status(200).json({ message: "成功新增品系", redirect: "/strains/index" });
 };
 
 module.exports.showStrain = async (req, res) => {
@@ -59,13 +59,9 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateStrain = async (req, res) => {
   const { strainId } = req.params;
-
   await Strain.findByIdAndUpdate(strainId, req.body.strain);
-
   const strain = await Strain.findById(strainId);
-
   await strain.save();
-
   res
     .status(200)
     .json({ message: "成功修改品系資訊", redirect: `/strains/${strainId}` });
