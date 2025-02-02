@@ -36,7 +36,7 @@ router.get("/auth/google/callback", (req, res, next) => {
 
 router.get("/api/logout", (req, res) => {
   req.logout();
-  res.redirect("/");
+  res.redirect("/home");
 });
 
 router.get("/api/current_user", (req, res) => {
