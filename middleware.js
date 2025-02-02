@@ -44,7 +44,6 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
       );
     }
     return next();
-    // return next(new ExpressError("您沒有權限瀏覽該品系資料", 403));
   } catch (error) {
     next(error);
   }
