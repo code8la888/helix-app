@@ -5,7 +5,7 @@ import { sendFormData } from "../utils/sendFormData";
 import { useNavigate, Link } from "react-router-dom";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAccount } from "../actions";
+import { deleteAccount } from "../actions/authActions";
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -64,7 +64,6 @@ export default function ProfilePage() {
     }
   };
 
-  // console.log(formData);
   return (
     <div className="row">
       <h1 className="text-center">編輯使用者資料</h1>

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUser } from "../../actions/index";
+import { fetchUser } from "../../actions/authActions";
 import { sendFormData } from "../../utils/sendFormData";
 import { fetchStrain } from "../../actions/strainActions";
 import ReactPaginate from "react-paginate";
