@@ -31,23 +31,4 @@ const StrainSchema = new Schema({
   ],
 });
 
-StrainSchema.post("findOneAndDelete", async function (doc) {
-  if (doc) {
-    const Mouse = require("./mouse");
-    const BreedingRecord = require("./breedingRecord");
-    await Mouse.deleteMany({
-      _id: {
-        $in: doc.mice,
-      },
-    });
-
-    await BreedingRecord.deleteMany({
-      _id: {
-        $in: doc.breedingRecords,
-      },
-    });
-    console.log("check");
-  }
-});
-
 module.exports = mongoose.model("Strain", StrainSchema);

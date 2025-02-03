@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const MouseSchema = new Schema({
   no: String,
@@ -33,7 +32,5 @@ const MouseSchema = new Schema({
   on_shelf: { type: String, enum: ["在架上", "已移出", "已犧牲", "自然死亡"] },
   note: String,
 });
-
-// MouseSchema.plugin(AutoIncrement, { inc_field: "no" });
 
 module.exports = mongoose.model("Mouse", MouseSchema);
