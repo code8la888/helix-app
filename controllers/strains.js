@@ -3,6 +3,7 @@ const Strain = require("../models/strain");
 const Mouse = require("../models/mouse");
 const BreedingRecord = require("../models/breedingRecord");
 const ExpressError = require("../utils/ExpressError");
+const strain = require("../models/strain");
 
 module.exports.index = async (req, res) => {
   const strains = await Strain.find({});
@@ -47,8 +48,8 @@ module.exports.showStrain = async (req, res) => {
   const strain = await Strain.findById(strainId);
   const mice = await Mouse.find({ strain: strainId });
   const users = await User.find({ username: { $in: strain.users } });
-  const breedingRecord = await BreedingRecord.find({ strain: strainId });
-  res.status(200).json({ strain, mice, users, strainId, breedingRecord });
+  const breedingRecords = await BreedingRecord.find({ strain: strainId });
+  res.status(200).json({ strain, mice, users, strainId, breedingRecords });
 };
 
 module.exports.renderEditForm = async (req, res) => {
@@ -70,5 +71,10 @@ module.exports.updateStrain = async (req, res) => {
 module.exports.deleteStrain = async (req, res) => {
   const { strainId } = req.params;
   await Strain.findByIdAndDelete(strainId);
-  res.status(200).json({ message: "成功刪除品系", redirect: "/strains/index" });
+  await Mouse.deleteMany({ strain: strainId });
+  await BreedingRecord.deleteMany({ strain: strainId });
+
+  res
+    .status(200)
+    .json({ message: "成功刪除品系及相關數據", redirect: "/strains/index" });
 };
