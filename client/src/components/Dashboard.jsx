@@ -6,8 +6,9 @@ export default function Dashboard() {
     <section className="container-fluid p-5">
       <div className="row row-cols-1 row-cols-md-2 g-4">
         {[
-          { title: "個人資訊", href: "/profile", icon: "👤" },
           { title: "數據平台", href: "/strains/index", icon: "📊" },
+          { title: "申請計畫", href: "/strains/new", icon: "✒️" },
+          { title: "個人資訊", href: "/profile", icon: "👤" },
         ].map((feature, index) => (
           <div key={index} className="col">
             <div
