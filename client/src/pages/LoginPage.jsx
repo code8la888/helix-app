@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchUser } from "../actions/index";
+import { fetchUser } from "../actions/authActions";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useFormValidation } from "../hooks/useFormValidation";
