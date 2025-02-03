@@ -1,1 +1,10 @@
 export const FETCH_USER = "fetch_user";
+export const DELETE_ACCOUNT = "delete_account";
+export const FETCH_STRAINS = "fetch_strains";
+export const FETCH_STRAIN = "fetch_strain";
+export const DELETE_STRAIN = "delete_strain";
+export const RESTORE_STRAIN = "restore_strain";
+export const DELETE_MOUSE = "delete_mouse";
+export const RESTORE_MOUSE = "restore_mouse";
+export const DELETE_BREEDINGRECORD = "delete_breedingrecord";
+export const RESTORE_BREEDINGRECORD = "restore_breedingrecord";
