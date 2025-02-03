@@ -28,7 +28,7 @@ router.post("/api/login", storeReturnTo, (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/api/logOut", users.logout);
+router.delete("/api/users/:id", catchAsync(users.deleteUser));
 
 router.use(handleErrors);
 
