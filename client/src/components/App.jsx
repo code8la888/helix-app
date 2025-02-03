@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "../actions";
+import { fetchUser } from "../actions/authActions";
 import Loader from "./Loader";
 import HomePage from "../pages/HomePage";
 import NoPage from "../pages/NoPage";
