@@ -1,4 +1,6 @@
+const strain = require("../models/strain");
 const User = require("../models/user");
+const mongoose = require("mongoose");
 
 module.exports.register = async (req, res) => {
   try {
@@ -51,4 +53,26 @@ module.exports.logout = (req, res) => {
     }
     res.redirect("/home");
   });
+};
+
+module.exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "無效的使用者 ID" });
+    }
+
+    if (req.user.id !== userId) {
+      return res.status(403).json({ message: "您無權刪除此帳戶" });
+    }
+
+    await User.findByIdAndDelete(userId);
+    await strain.updateMany({ users: userId }, { $pull: { users: userId } });
+
+    res.json({ message: "帳戶及相關資料已成功刪除" });
+  } catch (error) {
+    console.error("刪除帳戶錯誤:", error);
+    res.status(500).json({ message: "伺服器錯誤" });
+  }
 };
