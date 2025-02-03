@@ -1,47 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { SiHelix } from "react-icons/si";
 import { Link as ScrollLink } from "react-scroll";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function HomePage() {
   return (
     <div className="d-flex flex-column">
-      <nav
-        className="navbar navbar-expand-lg sticky-top wh"
-        style={{ backgroundColor: "rgb(6, 60, 139)" }}
-      >
-        <div className="container">
-          <Link className="navbar-brand text-white" to="/home">
-            <SiHelix />
-            Helix
-          </Link>
-          <button
-            className="navbar-toggler custom-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
-              <li>
-                <Link className="nav-link text-white" to="/login">
-                  登入
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link text-white" href="/register">
-                  註冊
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       <section
         className="container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center text-center"
@@ -161,14 +127,7 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <footer
-        className="footer py-3 mt-auto wh"
-        style={{ backgroundColor: " rgb(6, 60, 139)" }}
-      >
-        <div className="container text-center text-white">
-          <span>&copy; Helix LIMS 2024</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
