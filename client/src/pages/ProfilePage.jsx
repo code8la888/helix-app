@@ -2,11 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import InputField from "../components/InputField";
 import { sendFormData } from "../utils/sendFormData";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useFormValidation } from "../hooks/useFormValidation";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAccount } from "../actions";
 
 export default function ProfilePage() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     _id: "",
     username: "",
@@ -20,7 +23,6 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get("/api/current_user");
-      //   console.log(res);
       if (res.data) {
         setFormData((prevData) => ({
           ...prevData,
@@ -55,7 +57,14 @@ export default function ProfilePage() {
     sendFormData("/api/users", updatedFormData, navigate, "PUT");
   };
 
-  console.log(formData);
+  const handleDeleteAccount = (event) => {
+    event.preventDefault();
+    if (window.confirm("確定要刪除帳戶嗎？此操作無法恢復！")) {
+      dispatch(deleteAccount(user._id, navigate));
+    }
+  };
+
+  // console.log(formData);
   return (
     <div className="row">
       <h1 className="text-center">編輯使用者資料</h1>
@@ -129,7 +138,13 @@ export default function ProfilePage() {
             <button type="submit" className="btn btn-warning">
               更新使用者資料
             </button>
-            <button className="btn btn-danger ms-2 border-2">
+            <button
+              className="btn btn-danger ms-2"
+              onClick={handleDeleteAccount}
+            >
+              刪除使用者資料
+            </button>
+            <button className="btn btn-info ms-2 border-2">
               <Link
                 to={"/strains/index"}
                 style={{ textDecoration: "none", color: "white" }}
