@@ -1,51 +1,31 @@
 import axios from "axios";
-import React from "react";
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "../../actions/index";
 import { sendFormData } from "../../utils/sendFormData";
-import { fetchData } from "../../utils/fetchData";
+import { fetchStrain } from "../../actions/strainActions";
 import ReactPaginate from "react-paginate";
 import Loader from "../../components/Loader";
 
 export default function StrainDetails() {
   const { id } = useParams();
-  const [strain, setStrain] = useState(null);
-  const [breedingRecord, setBreedingRecord] = useState([]);
-  const [mice, setMice] = useState([]);
-  const [users, setUsers] = useState([]);
+  const strain = useSelector((state) => state.strains.selectedStrain);
+  const mice = useSelector((state) => state.strains.mice);
+  const breedingRecords = useSelector((state) => state.strains.breedingRecords);
+  const users = useSelector((state) => state.strains.users);
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [isAuthorized, setIsAuthorized] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 10;
   const [mouseOffset, setMouseOffset] = useState(0);
   const [breedingOffset, setBreedingOffset] = useState(0);
 
-  const loadData = async () => {
-    try {
-      const data = await fetchData(`/api/strains/${id}`);
-      setStrain(data.strain);
-      setMice(data.mice);
-      setBreedingRecord(data.breedingRecord);
-      setUsers(data.users);
-    } catch (error) {
-      console.error("error fetching strain data", error);
-      navigate("/error", {
-        state: {
-          error: error.response?.data?.message || "無法載入品系資料",
-          stack: error.response?.data?.stack || "伺服器未提供詳細資訊",
-          statusCode: error.response?.status || 500,
-        },
-      });
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-    }
-  };
+  useEffect(() => {
+    dispatch(fetchStrain(id));
+  }, [id, dispatch]);
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -53,7 +33,6 @@ export default function StrainDetails() {
       try {
         await axios.get(`/api/strains/${id}/browse-permission`);
         setIsAuthorized(true);
-        loadData();
       } catch (error) {
         setIsAuthorized(false);
         navigate("/error", {
@@ -78,37 +57,72 @@ export default function StrainDetails() {
   const paginatedMice = paginate(mice, mouseOffset, itemsPerPage);
 
   const paginatedBreedingRecords = paginate(
-    breedingRecord,
+    breedingRecords,
     breedingOffset,
     itemsPerPage
   );
 
   const handleDeleteStrain = async (event) => {
     event.preventDefault();
-    await sendFormData(`/api/strains/${id}`, undefined, navigate, "DELETE");
-    await loadData();
+    dispatch({
+      type: "DELETE_STRAIN",
+      payload: id,
+    });
+    try {
+      await sendFormData(`/api/strains/${id}`, undefined, navigate, "DELETE");
+    } catch (error) {
+      console.error("刪除品系失敗:", error);
+      dispatch({
+        type: "RESTORE_STRAIN",
+        payload: id,
+      });
+    }
   };
 
   const handleDeleteMice = async (miceId, event) => {
     event.preventDefault();
-    await sendFormData(
-      `/api/strains/${id}/mice/${miceId}`,
-      undefined,
-      navigate,
-      "DELETE"
-    );
-    await loadData();
+    dispatch({
+      type: "DELETE_MOUSE",
+      payload: miceId,
+    });
+    try {
+      await sendFormData(
+        `/api/strains/${id}/mice/${miceId}`,
+        undefined,
+        navigate,
+        "DELETE"
+      );
+      dispatch(fetchStrain(id));
+    } catch (error) {
+      console.error("刪除小鼠失敗", error);
+      dispatch({
+        type: "RESTORE_MOUSE",
+        payload: miceId,
+      });
+    }
   };
 
   const handleDeleteBreedingRecord = async (breedingRecordId, event) => {
     event.preventDefault();
-    await sendFormData(
-      `/api/strains/${id}/breedingRecord/${breedingRecordId}`,
-      undefined,
-      navigate,
-      "DELETE"
-    );
-    await loadData();
+    dispatch({
+      type: "DELETE_BREEDINGRECORD",
+      payload: breedingRecordId,
+    });
+    try {
+      await sendFormData(
+        `/api/strains/${id}/breedingRecord/${breedingRecordId}`,
+        undefined,
+        navigate,
+        "DELETE"
+      );
+      dispatch(fetchStrain(id));
+    } catch (error) {
+      console.error("刪除繁殖記錄失敗", error);
+      dispatch({
+        type: "RESTORE_BREEDINGRECORD",
+        payload: breedingRecordId,
+      });
+    }
   };
 
   return (
@@ -426,7 +440,7 @@ export default function StrainDetails() {
                 onPageChange={(event) =>
                   setBreedingOffset(event.selected * itemsPerPage)
                 }
-                pageCount={getPageCount(breedingRecord)}
+                pageCount={getPageCount(breedingRecords)}
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 containerClassName="pagination justify-content-center"

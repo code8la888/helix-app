@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchData } from "../../utils/fetchData";
 import TableHeaderItem from "../../components/TableHeaderItem";
 import ReactPaginate from "react-paginate";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStrains } from "../../actions/strainActions";
 
 function Index() {
-  const [strains, setStrains] = useState([]);
+  const dispatch = useDispatch();
+  const strains = useSelector((state) => state.strains.list.strains);
   const [filteredStrains, setFilteredStrains] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
   const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
-    const loadData = async () => {
-      const res = await fetchData("/api/strains");
-      console.log(res);
+    dispatch(fetchStrains());
+  }, [dispatch]);
 
-      setStrains(res.strains);
-      setFilteredStrains(res.strains);
-    };
-    loadData();
-  }, []);
-  console.log(filteredStrains);
+  console.log(strains);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,7 +44,7 @@ function Index() {
 
   return (
     <div>
-      <h1 className="text-center">List of Strain</h1>
+      <h1 className="text-center">計畫清單</h1>
       <form className="mb-3" onSubmit={handleSubmit}>
         <div className="row justify-content-center">
           <div className="col-4 mb-2">
