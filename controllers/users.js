@@ -20,8 +20,7 @@ module.exports.register = async (req, res) => {
         return next(err);
       }
       res.status(200).json({
-        success: true,
-        message: "註冊成功!歡迎來到Helix LIMS",
+        message: "註冊成功 ! 歡迎來到Helix LIMS",
         data: registeredUser,
         redirect: "/dashboard",
       });
@@ -53,6 +52,14 @@ module.exports.logout = (req, res) => {
     }
     res.redirect("/home");
   });
+};
+
+module.exports.editUser = async (req, res) => {
+  const { role, tel, dept, _id } = req.body;
+  await User.findByIdAndUpdate(_id, { tel, dept, role });
+  res
+    .status(200)
+    .json({ message: "成功更新使用者資訊!", redirect: `/dashboard` });
 };
 
 module.exports.deleteUser = async (req, res) => {
