@@ -40,14 +40,13 @@ app.use(
   "/api/strains/:strainId/breedingRecord",
   require("./routes/breedingRecords")
 );
-app.use("/", require("./routes/googleAuthRoutes"));
-app.use("/", require("./routes/localAuthRoutes"));
+app.use("/", require("./routes/users"));
 
 app.use((err, req, res, next) => {
   const isDevelopment = keys.env === "development";
   res.status(err.status || 500).json({
     message: err.message,
-    stack: isDevelopment ? err.stack : "error", // 僅在開發環境返回堆疊
+    stack: isDevelopment ? err.stack : "error",
   });
   console.error(err.stack);
 });
