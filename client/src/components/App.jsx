@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../actions/authActions";
 import Loader from "./Loader";
@@ -52,11 +52,12 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <Suspense fallback={<Loader content="..." />}>
+      <Suspense fallback={<Loader content="載入中..." />}>
         <Routes>
+          <Route index element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<HomePage />}></Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/home" element={<HomePage />}></Route>
           <Route path="/error" element={<ErrorPage />} />
 
           <Route
