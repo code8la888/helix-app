@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUser } from "../../actions/authActions";
 import { fetchStrain } from "../../actions/strainActions";
@@ -9,6 +9,7 @@ import StrainInfo from "./StrainInfo";
 import UserInfo from "../UserInfo";
 import MouseSamplingRecords from "../mice/MouseSamplingRecords";
 import BreedingRecords from "../breedingRecords/BreedingRecords";
+import Charts from "../Charts";
 
 export default function StrainDetails() {
   const { id } = useParams();
@@ -27,7 +28,6 @@ export default function StrainDetails() {
       try {
         await axios.get(`/api/strains/${id}/browse-permission`);
         setIsAuthorized(true);
-
         dispatch(fetchStrain(id));
 
         if (!currentUser?.username) {
@@ -57,8 +57,13 @@ export default function StrainDetails() {
 
   return (
     <>
+      <h1 className="text-center">
+        {strain ? `${strain.strain}採樣記錄` : "基因剔除小鼠採樣記錄"}
+      </h1>
+
       <StrainInfo strain={strain} currentUser={currentUser} id={id} />
       <UserInfo users={users} />
+      <Charts id={id} />
       <MouseSamplingRecords
         mice={mice}
         strain={strain}
@@ -71,6 +76,13 @@ export default function StrainDetails() {
         currentUser={currentUser}
         id={id}
       />
+      <Link
+        className="fw-bold"
+        to="/strains/index"
+        style={{ textDecoration: "none", color: "rgb(6, 60, 139)" }}
+      >
+        ⬅️返回查詢系統
+      </Link>
     </>
   );
 }
