@@ -44,7 +44,7 @@ function Index() {
 
   return (
     <div>
-      <h1 className="text-center">計畫清單</h1>
+      <h1 className="text-center">NTUMC-LAC 基因改造小鼠採樣記錄查詢系統</h1>
       <form className="mb-3" onSubmit={handleSubmit}>
         <div className="row justify-content-center">
           <div className="col-4 mb-2">

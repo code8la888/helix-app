@@ -62,7 +62,7 @@ function NewStrain() {
 
   return (
     <div className="row">
-      <h1 className="text-center">新增小鼠品系:</h1>
+      <h1 className="text-center">特殊品系實驗動物繁殖申請</h1>
       <div className="col-md-8 offset-md-2">
         <form
           noValidate
