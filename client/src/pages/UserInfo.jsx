@@ -5,9 +5,9 @@ export default function UserInfo({ users }) {
 
   return (
     <>
-      <h3>使用者資訊</h3>
       <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
-        <table className="table table-striped table-hover custom-striped">
+        <table className="table table-striped table-hover custom-striped caption-top">
+          <caption className="fs-3 fw-bold">使用者資訊</caption>
           <thead>
             <tr>
               <th scope="col">姓名</th>

@@ -23,7 +23,6 @@ export default function StrainInfo({ strain, currentUser, id }) {
 
   return (
     <>
-      <h1 className="text-center">NTUMC-LAC 基因改造小鼠採樣記錄</h1>
       {currentUser &&
       strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
@@ -44,8 +43,9 @@ export default function StrainInfo({ strain, currentUser, id }) {
       ) : (
         ""
       )}
-      <h3>品系資訊</h3>
+
       <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
+        <h3 className="my-2">品系資訊</h3>
         <p>
           <b>品系名稱:</b> {strain.strain}
         </p>

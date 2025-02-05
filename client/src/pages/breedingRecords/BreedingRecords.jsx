@@ -44,7 +44,6 @@ export default function BreedingRecords({
 
   return (
     <>
-      <h3>繁殖記錄表</h3>
       {currentUser &&
       strain?.users.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
@@ -61,7 +60,8 @@ export default function BreedingRecords({
       )}
       {paginatedBreedingRecords ? (
         <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
-          <table className="table table-striped table-hover custom-striped">
+          <table className="table table-striped table-hover custom-striped caption-top">
+            <caption className="fs-3 fw-bold">繁殖記錄表</caption>
             <thead>
               <tr>
                 <th scope="col">繁殖籠編號</th>

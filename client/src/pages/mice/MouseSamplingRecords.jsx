@@ -41,7 +41,6 @@ export default function MouseSamplingRecords({
 
   return (
     <>
-      <h3>小鼠採樣記錄</h3>
       {currentUser &&
       strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
@@ -58,7 +57,8 @@ export default function MouseSamplingRecords({
       )}
       {paginatedMice ? (
         <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
-          <table className="table table-striped table-hover custom-striped">
+          <table className="table table-striped table-hover custom-striped caption-top">
+            <caption className="fs-3 fw-bold">小鼠採樣記錄</caption>
             <thead>
               <tr>
                 <th scope="col">No</th>
