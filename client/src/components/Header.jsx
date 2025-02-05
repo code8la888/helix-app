@@ -37,7 +37,7 @@ export default function Header() {
       <>
         <li>
           <Link className="nav-link wh" to="/dashboard">
-            我的儀錶板
+            我的儀表板
           </Link>
         </li>
         <li className="nav-item">
