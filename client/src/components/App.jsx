@@ -3,9 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../actions/authActions";
 import Loader from "./Loader";
-import HomePage from "../pages/HomePage";
-import NoPage from "../pages/NoPage";
-import Dashboard from "./Dashboard";
 
 // import ProtectedRoute from "./ProtectedRoute";
 // import AppLayout from "./AppLayout";
@@ -26,7 +23,6 @@ import Dashboard from "./Dashboard";
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 const AppLayout = lazy(() => import("./AppLayout"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
-const Landing = lazy(() => import("./Landing"));
 const RegisterPage = lazy(() => import("../pages/RegisterPage"));
 const Index = lazy(() => import("../pages/strains/Index"));
 const NewStrain = lazy(() => import("../pages/strains/NewStrain"));
@@ -42,6 +38,10 @@ const EditBreedingRecord = lazy(() =>
 const EditMice = lazy(() => import("../pages/mice/EditMice"));
 const ErrorPage = lazy(() => import("../pages/ErrorPage"));
 const ProfilePage = lazy(() => import("../pages/ProfilePage"));
+const Dashboard = lazy(() => import("./Dashboard"));
+const References = lazy(() => import("./References"));
+const HomePage = lazy(() => import("../pages/HomePage"));
+const NoPage = lazy(() => import("../pages/NoPage"));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -67,7 +67,7 @@ const App = () => {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Landing />} />
+            <Route index element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="strains/index" element={<Index />} />
             <Route path="strains/new" element={<NewStrain />} />
@@ -87,6 +87,7 @@ const App = () => {
               element={<NewBreedingRecord />}
             />
             <Route path="profile" element={<ProfilePage />}></Route>
+            <Route path="references" element={<References />}></Route>
             <Route path="*" element={<NoPage />}></Route>
           </Route>
         </Routes>
