@@ -30,7 +30,7 @@ export default function NewMice() {
     if (isAuthorized) {
       loadData();
     }
-  }, [id, samplingGeneList]);
+  }, [id]);
 
   const [formData, handleChange, setFormData] = useForm({
     no: "",
