@@ -63,8 +63,8 @@ export default function RegisterPage() {
             <div className="row g-0 align-items-center">
               <div className="col-md-6 p-5">
                 <img
-                  src="../../public/Blood test-pana.svg"
-                  alt="..."
+                  src="images/Blood test-pana.svg"
+                  alt="register image"
                   className="img-fluid"
                 />
               </div>
