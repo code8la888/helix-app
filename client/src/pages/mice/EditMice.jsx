@@ -3,16 +3,32 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { fetchData } from "../../utils/fetchData";
 import { useCheckPermission } from "../../hooks/useCheckPermission";
 import { useFormValidation } from "../../hooks/useFormValidation";
+import { useForm } from "../../hooks/useForm";
 import { sendFormData } from "../../utils/sendFormData";
 import InputField from "../../components/InputField";
+import Loader from "../../components/Loader";
 
 export default function EditMice() {
   const { strainId, mouseId } = useParams();
   const navigate = useNavigate();
-  const [mouseData, setMouseData] = useState({});
+  const [formData, handleChange, setFormData] = useForm({
+    no: "",
+    strain: strainId,
+    toeNumber: "",
+    birth_date: "",
+    gender: "M",
+    parents: {
+      father: "",
+      mother: "",
+    },
+    sampling_date: "",
+    sampling_results: [],
+    litter: "",
+    on_shelf: "在架上",
+    note: "",
+  });
   const [genes, setGenes] = useState([]);
   const { validated, validateForm } = useFormValidation();
-
   const isAuthorized = useCheckPermission(strainId);
 
   useEffect(() => {
@@ -22,7 +38,7 @@ export default function EditMice() {
           `/api/strains/${strainId}/mice/${mouseId}/edit`
         );
         console.log(res);
-        setMouseData(res.mouse);
+        setFormData((prev) => ({ ...prev, ...res.mouse }));
         setGenes(res.strain.genes);
       } catch (error) {
         console.error("Error fetching strains data:", error);
@@ -34,31 +50,11 @@ export default function EditMice() {
     }
   }, []);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (name.includes(".")) {
-      const [parentKey, childKey] = name.split(".");
-      setMouseData((prev) => ({
-        ...prev,
-        [parentKey]: {
-          ...prev[parentKey],
-          [childKey]: value,
-        },
-      }));
-    } else {
-      setMouseData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-  console.log(mouseData);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
 
-    const { _id, __v, ...rest } = mouseData;
+    const { _id, __v, ...rest } = formData;
 
     const updatedFormData = {
       mouse: {
@@ -74,15 +70,18 @@ export default function EditMice() {
       "PUT"
     );
   };
+
   if (isAuthorized === null) {
-    return <div>正在檢查權限...</div>;
+    return <Loader content="正在檢查權限..."></Loader>;
   }
+
   if (!isAuthorized) {
-    return null;
+    navigate("/error");
   }
+
   return (
     <div className="row">
-      <h1 className="text-center">修改小鼠資料</h1>
+      <h1 className="text-center">編輯採樣記錄</h1>
       <div className="col-md-8 offset-md-2 shadow-lg mb-3 p-4 rounded-3">
         <form
           onSubmit={handleSubmit}
@@ -93,7 +92,7 @@ export default function EditMice() {
             <InputField
               label="編號"
               name="no"
-              value={mouseData.no}
+              value={formData.no}
               onChange={handleChange}
               className="col"
             />
@@ -101,7 +100,7 @@ export default function EditMice() {
             <InputField
               label="父"
               name="parents.father"
-              value={mouseData?.parents?.father}
+              value={formData?.parents?.father}
               onChange={handleChange}
               className="col"
             />
@@ -109,7 +108,7 @@ export default function EditMice() {
             <InputField
               label="母"
               name="parents.mother"
-              value={mouseData?.parents?.mother}
+              value={formData?.parents?.mother}
               onChange={handleChange}
               className="col"
             />
@@ -118,7 +117,7 @@ export default function EditMice() {
             <InputField
               label="胎次"
               name="litter"
-              value={mouseData.litter}
+              value={formData.litter}
               onChange={handleChange}
               className="col"
             />
@@ -131,7 +130,7 @@ export default function EditMice() {
                 className="form-control"
                 name="gender"
                 id="gender"
-                value={mouseData.gender}
+                value={formData.gender}
                 onChange={handleChange}
               >
                 <option value="M">M</option>
@@ -144,8 +143,8 @@ export default function EditMice() {
               type="date"
               name="birth_date"
               value={
-                mouseData?.birth_date
-                  ? new Date(mouseData.birth_date).toISOString().split("T")[0]
+                formData?.birth_date
+                  ? new Date(formData.birth_date).toISOString().split("T")[0]
                   : ""
               }
               onChange={handleChange}
@@ -157,10 +156,8 @@ export default function EditMice() {
               type="date"
               name="sampling_date"
               value={
-                mouseData.sampling_date
-                  ? new Date(mouseData.sampling_date)
-                      .toISOString()
-                      .split("T")[0]
+                formData.sampling_date
+                  ? new Date(formData.sampling_date).toISOString().split("T")[0]
                   : ""
               }
               onChange={handleChange}
@@ -170,14 +167,13 @@ export default function EditMice() {
             <InputField
               label="趾號"
               name="toeNumber"
-              value={mouseData.toeNumber}
+              value={formData.toeNumber}
               onChange={handleChange}
               className="col"
             />
           </div>
 
           <div className="row">
-            {" "}
             {genes?.map((gene, index) => (
               <div className="col mb-2">
                 <label
@@ -190,13 +186,13 @@ export default function EditMice() {
                   className="form-control"
                   name={`sampling_results_${index}`}
                   id={`sampling_results_${index}`}
-                  value={mouseData.sampling_results[index] || "檢測中"}
+                  value={formData.sampling_results[index] || "檢測中"}
                   onChange={(event) => {
                     {
-                      const newResults = [...mouseData.sampling_results];
+                      const newResults = [...formData.sampling_results];
                       newResults[index] = event.target.value || "檢測中";
                       setMouseData({
-                        ...mouseData,
+                        ...formData,
                         sampling_results: newResults,
                       });
                     }
@@ -220,7 +216,7 @@ export default function EditMice() {
                 className="form-control"
                 name="on_shelf"
                 id="on_shelf"
-                value={mouseData.on_shelf}
+                value={formData.on_shelf}
                 onChange={handleChange}
               >
                 <option value="在架上">在架上</option>
@@ -234,7 +230,7 @@ export default function EditMice() {
               label="備註"
               required={false}
               name="note"
-              value={mouseData.note}
+              value={formData.note}
               onChange={handleChange}
               className="col"
             />
