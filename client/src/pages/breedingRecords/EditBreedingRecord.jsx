@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useCheckPermission } from "../../hooks/useCheckPermission";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { useForm } from "../../hooks/useForm";
 import { sendFormData } from "../../utils/sendFormData";
 import { fetchData } from "../../utils/fetchData";
 import InputField from "../../components/InputField";
+import Loader from "../../components/Loader";
 
 export default function EditBreedingRecord() {
   const { strainId, breedingRecordId } = useParams();
@@ -44,7 +45,6 @@ export default function EditBreedingRecord() {
       loadData();
     }
   }, [strainId, navigate]);
-  console.log(formData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,7 +57,7 @@ export default function EditBreedingRecord() {
         ...rest,
       },
     };
-    console.log(updatedFormData);
+    // console.log(updatedFormData)
 
     sendFormData(
       `/api/strains/${strainId}/breedingRecord/${breedingRecordId}`,
@@ -68,11 +68,11 @@ export default function EditBreedingRecord() {
   };
 
   if (isAuthorized === null) {
-    return <div>正在檢查權限...</div>;
+    return <Loader>正在檢查權限...</Loader>;
   }
 
   if (!isAuthorized) {
-    return null;
+    navigate("/error");
   }
 
   return (
@@ -148,12 +148,12 @@ export default function EditBreedingRecord() {
           <div className="mt-5 d-flex justify-content-end">
             <button className="btn btn-warning">修改繁殖籠資料</button>
             <button className="btn btn-danger ms-2 border-2">
-              <a
-                href={`/strains/${strainId}`}
+              <Link
+                to={`/strains/${strainId}`}
                 style={{ textDecoration: "none", color: "white" }}
               >
                 取消，返回品系資訊
-              </a>
+              </Link>
             </button>
           </div>
         </form>
