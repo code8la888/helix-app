@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useCheckPermission } from "../../hooks/useCheckPermission";
 import InputField from "../../components/InputField";
@@ -7,6 +7,7 @@ import { fetchData } from "../../utils/fetchData";
 import { useForm } from "../../hooks/useForm";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { sendFormData } from "../../utils/sendFormData";
+import Loader from "../../components/Loader";
 
 export default function EditStrain() {
   const { id } = useParams();
@@ -59,11 +60,11 @@ export default function EditStrain() {
   };
 
   if (isAuthorized === null) {
-    return <div>正在檢查權限...</div>;
+    return <Loader>正在檢查權限...</Loader>;
   }
 
   if (!isAuthorized) {
-    return null;
+    navigate("/error");
   }
 
   return (
