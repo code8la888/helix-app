@@ -53,7 +53,7 @@ export default function HomePage() {
         <div className="row align-items-center">
           <div className="col-md-6">
             <img
-              src="/Researchers-rafiki.svg"
+              src="/images/Researchers-rafiki.svg"
               alt="Lab"
               className="img-fluid rounded"
             />
