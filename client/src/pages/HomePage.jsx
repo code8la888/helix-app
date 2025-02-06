@@ -29,7 +29,7 @@ export default function HomePage() {
         </p>
 
         <div className="d-flex flex-column flex-md-row gap-3 mt-4">
-          <Link to="/login" className="btn btn-lg btn-warning fw-bold">
+          <Link to="/register" className="btn btn-lg btn-warning fw-bold">
             立即註冊
           </Link>
           <button className="btn btn-lg btn-info fw-bold">
@@ -53,7 +53,7 @@ export default function HomePage() {
         <div className="row align-items-center">
           <div className="col-md-6">
             <img
-              src="../../public/Researchers-rafiki.svg"
+              src="/Researchers-rafiki.svg"
               alt="Lab"
               className="img-fluid rounded"
             />
