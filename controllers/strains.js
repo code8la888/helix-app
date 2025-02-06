@@ -3,7 +3,6 @@ const Strain = require("../models/strain");
 const Mouse = require("../models/mouse");
 const BreedingRecord = require("../models/breedingRecord");
 const ExpressError = require("../utils/ExpressError");
-const strain = require("../models/strain");
 
 module.exports.index = async (req, res) => {
   const strains = await Strain.find({});
@@ -11,8 +10,8 @@ module.exports.index = async (req, res) => {
     strains.map(async (strain) => {
       const users = await User.find({ username: { $in: strain.users } });
       return {
-        ...strain.toObject(), // 將 Mongoose 文件轉換為普通物件
-        users, // 關聯的使用者資料
+        ...strain.toObject(),
+        users,
       };
     })
   );
@@ -34,13 +33,18 @@ module.exports.createNewStrain = async (req, res) => {
     for (let username of strain.users) {
       const user = await User.findOne({ username });
       if (!user) {
-        throw new ExpressError(`使用者 ${username} 不存在`, 400);
+        throw new ExpressError(
+          `使用者 ${username} 不存在，請先註冊使用者帳戶`,
+          400
+        );
       }
       newStrain.users.push(user.username);
     }
   }
   await newStrain.save();
-  res.status(200).json({ message: "成功新增品系", redirect: "/strains/index" });
+  res
+    .status(200)
+    .json({ message: "成功新增特殊品系資訊", redirect: "/strains/index" });
 };
 
 module.exports.showStrain = async (req, res) => {
@@ -50,12 +54,6 @@ module.exports.showStrain = async (req, res) => {
   const users = await User.find({ username: { $in: strain.users } });
   const breedingRecords = await BreedingRecord.find({ strain: strainId });
   res.status(200).json({ strain, mice, users, strainId, breedingRecords });
-};
-
-module.exports.renderEditForm = async (req, res) => {
-  const strain = await Strain.findById(req.params.strainId).populate("users");
-  const roles = ["計畫主持人", "學生", "研究助理", "品系管理人", "獸醫"];
-  res.render("strains/edit", { strain, roles });
 };
 
 module.exports.updateStrain = async (req, res) => {
@@ -73,7 +71,6 @@ module.exports.deleteStrain = async (req, res) => {
   await Strain.findByIdAndDelete(strainId);
   await Mouse.deleteMany({ strain: strainId });
   await BreedingRecord.deleteMany({ strain: strainId });
-
   res
     .status(200)
     .json({ message: "成功刪除品系及相關數據", redirect: "/strains/index" });
