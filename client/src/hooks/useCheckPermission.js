@@ -8,7 +8,7 @@ export const useCheckPermission = async (id) => {
   useEffect(() => {
     const fetchPermission = async () => {
       try {
-        await axios.get(`/api/strains/${id}/check-permission`);
+        await axios.get(`/api/strains/${id}/edit-permission`);
         setIsAuthorized(true);
       } catch (error) {
         setIsAuthorized(false);
