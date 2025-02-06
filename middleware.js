@@ -68,29 +68,7 @@ module.exports.verifyEditPermission = async (req, res, next) => {
     if (strain.users.includes(user.username) && user.role === "品系管理人") {
       return next();
     }
-    return next(new ExpressError("您沒有權限修改或刪除該品系資料!", 403));
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports.verifyAdmin = async (req, res, next) => {
-  const user = req.user;
-  console.log(req.user);
-
-  try {
-    const dbUser = await User.findById(user._id);
-    if (!dbUser) {
-      return next(new ExpressError("不存在此使用者!", 404));
-    }
-
-    if (user.role === "品系管理人") {
-      return next();
-    }
-
-    return next(
-      new ExpressError("你不具有此編輯權限!新增品系請聯繫動物中心", 403)
-    );
+    return next(new ExpressError("⛔您沒有權限訪問或編輯此頁面", 403));
   } catch (error) {
     next(error);
   }
