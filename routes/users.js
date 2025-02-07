@@ -4,7 +4,7 @@ const passport = require("passport");
 const users = require("../controllers/users");
 const catchAsync = require("../utils/catchAsync");
 const { handleErrors } = require("../controllers/error");
-const { storeReturnTo } = require("../middleware");
+const { storeReturnTo, validateObjectId } = require("../middleware");
 const User = require("../models/user");
 
 // google登入
@@ -78,7 +78,11 @@ router.get("/api/current_user", (req, res) => {
 router.put(`/api/users`, catchAsync(users.editUser));
 
 //刪除使用者
-router.delete("/api/users/:id", catchAsync(users.deleteUser));
+router.delete(
+  "/api/users/:userId",
+  validateObjectId,
+  catchAsync(users.deleteUser)
+);
 
 router.use(handleErrors);
 

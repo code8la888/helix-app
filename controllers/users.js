@@ -64,7 +64,7 @@ module.exports.editUser = async (req, res) => {
 
 module.exports.deleteUser = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.userId;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "無效的使用者 ID" });

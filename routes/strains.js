@@ -6,6 +6,7 @@ const {
   verifyBrowsePermission,
   verifyEditPermission,
   validStrain,
+  validateObjectId,
 } = require("../middleware.js");
 const strains = require("../controllers/strains");
 
@@ -18,6 +19,7 @@ router.post("/", isLoggedIn, validStrain, catchAsync(strains.createNewStrain));
 // 查詢單一品系及該品系所有小鼠
 router.get(
   "/:strainId",
+  validateObjectId,
   isLoggedIn,
   verifyBrowsePermission,
   catchAsync(strains.showStrain)
@@ -26,6 +28,7 @@ router.get(
 // 更新品系
 router.put(
   "/:strainId",
+  validateObjectId,
   isLoggedIn,
   verifyEditPermission,
   validStrain,
@@ -35,6 +38,7 @@ router.put(
 //刪除品系
 router.delete(
   "/:strainId",
+  validateObjectId,
   isLoggedIn,
   verifyEditPermission,
   catchAsync(strains.deleteStrain)
@@ -43,6 +47,7 @@ router.delete(
 //確認編輯權限
 router.get(
   "/:strainId/edit-permission",
+  validateObjectId,
   isLoggedIn,
   verifyEditPermission,
   (req, res) => {
@@ -53,6 +58,7 @@ router.get(
 //確認瀏覽權限
 router.get(
   "/:strainId/browse-permission",
+  validateObjectId,
   isLoggedIn,
   verifyBrowsePermission,
   (req, res) => {

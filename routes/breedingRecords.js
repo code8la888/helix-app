@@ -6,6 +6,7 @@ const {
   isLoggedIn,
   verifyEditPermission,
   validBreedingRecord,
+  validateObjectId,
 } = require("../middleware.js");
 
 //新增繁殖記錄
@@ -29,6 +30,7 @@ router
   .route("/:breedingRecordId")
   .put(
     //修改繁殖記錄
+    validateObjectId,
     isLoggedIn,
     verifyEditPermission,
     validBreedingRecord,
@@ -36,6 +38,7 @@ router
   )
   .delete(
     //刪除繁殖記錄
+    validateObjectId,
     isLoggedIn,
     verifyEditPermission,
     catchAsync(breedingRecords.deleteBreedingRecord)
@@ -44,6 +47,7 @@ router
 //編輯繁殖記錄表單
 router.get(
   "/:breedingRecordId/edit",
+  validBreedingRecord,
   isLoggedIn,
   verifyEditPermission,
   catchAsync(breedingRecords.renderEditForm)

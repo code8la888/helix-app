@@ -6,6 +6,7 @@ const {
   isLoggedIn,
   verifyEditPermission,
   validateMouse,
+  validateObjectId,
 } = require("../middleware.js");
 
 router
@@ -27,6 +28,7 @@ router
 //編輯採樣記錄表單
 router.get(
   "/:mouseId/edit",
+  validateObjectId,
   isLoggedIn,
   verifyEditPermission,
   catchAsync(mice.renderEditForm)
@@ -36,6 +38,7 @@ router
   .route("/:mouseId")
   .put(
     //更新採樣記錄
+    validateObjectId,
     isLoggedIn,
     verifyEditPermission,
     validateMouse,
@@ -43,6 +46,7 @@ router
   )
   .delete(
     //刪除採樣記錄
+    validateObjectId,
     isLoggedIn,
     verifyEditPermission,
     catchAsync(mice.deleteMouse)
