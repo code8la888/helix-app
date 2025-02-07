@@ -4,6 +4,7 @@ const { strainSchema } = require("./schema.js");
 const { mouseSchema } = require("./schema.js");
 const { breedingRecordSchema } = require("./schema");
 const ExpressError = require("./utils/ExpressError");
+const mongoose = require("mongoose");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.user) {
@@ -107,4 +108,20 @@ module.exports.validBreedingRecord = (req, res, next) => {
   } else {
     next();
   }
+};
+
+module.exports.validateObjectId = (req, res, next) => {
+  const { strainId, breedingRecordId, mouseId, userId, id } = req.params;
+  for (const [key, value] of Object.entries({
+    strainId,
+    breedingRecordId,
+    mouseId,
+    userId,
+    id,
+  })) {
+    if (value && !mongoose.Types.ObjectId.isValid(value)) {
+      return res.status(400).json({ message: `無效的 ${key} ID` });
+    }
+  }
+  next();
 };
