@@ -26,9 +26,7 @@ module.exports.register = async (req, res) => {
       });
     });
   } catch (error) {
-    res
-      .status(400)
-      .json({ success: false, error: error.message, redirect: "/register" });
+    next(error);
   }
 };
 
@@ -54,12 +52,24 @@ module.exports.logout = (req, res) => {
   });
 };
 
-module.exports.editUser = async (req, res) => {
-  const { role, tel, dept, _id } = req.body;
-  await User.findByIdAndUpdate(_id, { tel, dept, role });
-  res
-    .status(200)
-    .json({ message: "成功更新使用者資訊!", redirect: `/dashboard` });
+module.exports.editUser = async (req, res, next) => {
+  try {
+    const { role, tel, dept, _id } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      { tel, dept, role },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return next(new Error("使用者不存在"));
+    }
+
+    res
+      .status(200)
+      .json({ message: "成功更新使用者資訊!", redirect: `/dashboard` });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports.deleteUser = async (req, res) => {
