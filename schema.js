@@ -73,8 +73,8 @@ module.exports.breedingRecordSchema = Joi.object({
       .required(),
     cage_no: Joi.string().required(),
     parents: Joi.object({
-      father: Joi.string().required(),
-      mother: Joi.string().required(),
+      father: Joi.string().required().escapeHTML(),
+      mother: Joi.string().required().escapeHTML(),
     }),
     pairing_date: Joi.date().required(),
     offspring: Joi.string()
@@ -82,4 +82,17 @@ module.exports.breedingRecordSchema = Joi.object({
       .optional(),
     on_shelf: Joi.string().valid("在架上", "已關閉").required(),
   }),
+});
+
+module.exports.userSchema = Joi.object({
+  _id: Joi.string()
+    .pattern(/^[a-fA-F0-9]/)
+    .optional(),
+  username: Joi.string().min(2).max(20).optional().escapeHTML(),
+  email: Joi.string().email().optional(),
+  role: Joi.string()
+    .valid("計畫主持人", "學生", "研究助理", "品系管理人", "獸醫")
+    .required(),
+  tel: Joi.string().required().escapeHTML(),
+  dept: Joi.string().min(2).max(15).required().escapeHTML(),
 });
