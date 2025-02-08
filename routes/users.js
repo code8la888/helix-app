@@ -4,8 +4,11 @@ const passport = require("passport");
 const users = require("../controllers/users");
 const catchAsync = require("../utils/catchAsync");
 const { handleErrors } = require("../controllers/error");
-const { storeReturnTo, validateObjectId } = require("../middleware");
-const User = require("../models/user");
+const {
+  storeReturnTo,
+  validateObjectId,
+  validateUser,
+} = require("../middleware");
 
 // google登入
 router.get(
@@ -39,7 +42,7 @@ router.get("/auth/google/callback", (req, res, next) => {
 });
 
 //本地註冊
-router.post("/api/register", catchAsync(users.register));
+router.post("/api/register", validateUser, catchAsync(users.register));
 
 //本地登入
 router.post("/api/login", storeReturnTo, (req, res, next) => {
@@ -75,7 +78,7 @@ router.get("/api/current_user", (req, res) => {
 });
 
 //編輯使用者資訊
-router.put(`/api/users`, catchAsync(users.editUser));
+router.put(`/api/users`, validateUser, catchAsync(users.editUser));
 
 //刪除使用者
 router.delete(
