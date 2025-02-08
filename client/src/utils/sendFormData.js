@@ -21,7 +21,6 @@ export const sendFormData = async (url, data, navigate, method = "POST") => {
   } catch (error) {
     let errorMessage = "提交失敗，請稍後再試。";
     let errorStack = "";
-    console.log(error.response);
 
     if (error.response) {
       errorMessage = error.response.data.message || "伺服器錯誤。";
