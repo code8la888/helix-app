@@ -3,6 +3,7 @@ const Strain = require("./models/strain");
 const { strainSchema } = require("./schema.js");
 const { mouseSchema } = require("./schema.js");
 const { breedingRecordSchema } = require("./schema");
+const { userSchema } = require("./schema.js");
 const ExpressError = require("./utils/ExpressError");
 const mongoose = require("mongoose");
 
@@ -108,6 +109,17 @@ module.exports.validBreedingRecord = (req, res, next) => {
   } else {
     next();
   }
+};
+
+module.exports.validateUser = (req, res, next) => {
+  const { error } = userSchema.validate(req.body);
+  console.log("錯誤訊息:", error);
+
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(", ");
+    return next(new ExpressError(msg, 400));
+  }
+  next();
 };
 
 module.exports.validateObjectId = (req, res, next) => {
