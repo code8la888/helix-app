@@ -95,4 +95,5 @@ module.exports.userSchema = Joi.object({
     .required(),
   tel: Joi.string().required().escapeHTML(),
   dept: Joi.string().min(2).max(15).required().escapeHTML(),
+  password: Joi.string().optional(),
 });
