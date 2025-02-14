@@ -115,7 +115,7 @@ export default function HomePage() {
       </section>
 
       <section
-        className="container-fluid text-center py-5"
+        className="container-fluid text-center pt-5"
         style={{ backgroundColor: "#a4c8e1" }}
       >
         <h2 className="text-black">🚀 立即體驗智能化實驗管理！</h2>
@@ -127,7 +127,20 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <Footer />
+      <div className="column">
+        <div
+          className="footerImage text-center"
+          style={{ backgroundColor: "#a4c8e1" }}
+        >
+          <img src="/images/footerImage.png" alt="" style={{ width: "50%" }} />
+        </div>
+        <div
+          className="footer py-3 mt-auto text-center wh"
+          style={{ backgroundColor: "rgb(6, 60, 139)" }}
+        >
+          <span>&copy; Helix LIMS 2024</span>
+        </div>
+      </div>
     </div>
   );
 }
