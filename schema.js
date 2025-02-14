@@ -1,5 +1,6 @@
 const BaseJoi = require("joi");
 const sanitizeHtml = require("sanitize-html");
+const breedingRecord = require("./models/breedingRecord");
 
 const extension = (joi) => ({
   type: "string",
@@ -61,6 +62,23 @@ module.exports.strainSchema = Joi.object({
     EXP: Joi.date().required(),
     users: Joi.array().items(Joi.string().escapeHTML()).optional(),
     genes: Joi.array().items(Joi.string().escapeHTML()).optional(),
+    mice: Joi.array()
+      .items(
+        Joi.string()
+          .pattern(/^[a-fA-F0-9]{24}$/)
+          .escapeHTML()
+      )
+      .optional(),
+    breedingRecords: Joi.array()
+      .items(
+        Joi.string()
+          .pattern(/^[a-fA-F0-9]{24}$/)
+          .escapeHTML()
+      )
+      .optional(),
+    _id: Joi.string()
+      .pattern(/^[a-fA-F0-9]/)
+      .optional(),
   }).required(),
   deleteUsers: Joi.array().items(Joi.string().escapeHTML()).optional(),
   newUsers: Joi.array().items(Joi.string().escapeHTML()).optional(),

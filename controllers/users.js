@@ -1,10 +1,16 @@
 const strain = require("../models/strain");
 const User = require("../models/user");
-const mongoose = require("mongoose");
+const ExpressError = require("../utils/ExpressError");
 
-module.exports.register = async (req, res) => {
+module.exports.register = async (req, res, next) => {
   try {
     const { username, email, tel, dept, role, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(new ExpressError("此 Email 已經被註冊!", 409));
+    }
+
     const user = new User({
       username,
       email,
@@ -13,83 +19,74 @@ module.exports.register = async (req, res) => {
       role,
     });
     const registeredUser = await User.register(user, password);
-    await registeredUser.save();
 
-    req.login(registeredUser, (err) => {
-      if (err) {
-        return next(err);
-      }
-      res.status(200).json({
-        message: "註冊成功 ! 歡迎來到Helix LIMS",
-        data: registeredUser,
-        redirect: "/dashboard",
-      });
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports.login = (req, res) => {
-  try {
-    const redirectUrl = res.locals.returnTo || "/dashboard";
     res.status(200).json({
-      success: true,
-      message: "成功登入，歡迎回來!",
-      redirect: redirectUrl,
+      message: "註冊成功，請重新登入!",
+      data: registeredUser,
+      redirect: "/login",
     });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports.logout = (req, res) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/home");
+module.exports.login = (req, res, next) => {
+  if (!req.user) {
+    return next(new ExpressError("登入失敗，請確認帳號密碼是否正確!", 401));
+  }
+
+  const redirectUrl = res.locals.returnTo || "/dashboard";
+  res.status(200).json({
+    success: true,
+    message: "成功登入，歡迎回來!",
+    redirect: redirectUrl,
   });
 };
 
 module.exports.editUser = async (req, res, next) => {
   try {
-    const { role, tel, dept, _id } = req.body;
+    const { role, tel, dept } = req.body;
+    const userId = req.user.id;
     const updatedUser = await User.findByIdAndUpdate(
-      _id,
+      userId,
       { tel, dept, role },
       { new: true }
     );
+
     if (!updatedUser) {
-      return next(new Error("使用者不存在"));
+      return next(new ExpressError("找不到該使用者", 404));
     }
 
     res
       .status(200)
-      .json({ message: "成功更新使用者資訊!", redirect: `/dashboard` });
+      .json({ message: "成功更新使用者資訊!", redirect: "/dashboard" });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports.deleteUser = async (req, res) => {
+module.exports.deleteUser = async (req, res, next) => {
   try {
     const userId = req.params.userId;
-
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "無效的使用者 ID" });
-    }
+    console.log("req.user", req.user);
 
     if (req.user.id !== userId) {
-      return res.status(403).json({ message: "您無權刪除此帳戶" });
+      return next(new ExpressError("您無權刪除此帳戶", 403));
     }
 
-    await User.findByIdAndDelete(userId);
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return next(new ExpressError("找不到該使用者", 404));
+    }
+
     await strain.updateMany({ users: userId }, { $pull: { users: userId } });
 
-    res.json({ message: "帳戶及相關資料已成功刪除" });
+    res.status(200).json({
+      message: "帳戶及相關資料已成功刪除",
+      redirect: "/home",
+    });
   } catch (error) {
-    console.error("刪除帳戶錯誤:", error);
-    res.status(500).json({ message: "伺服器錯誤" });
+    console.error("刪除帳戶發生錯誤:", error);
+    next(error);
   }
 };

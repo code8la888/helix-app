@@ -19,7 +19,7 @@ router.get(
 );
 
 router.get("/auth/google/callback", (req, res, next) => {
-  passport.authenticate("google", (err, user, info) => {
+  passport.authenticate("google", (err, user) => {
     if (err) {
       return next(err);
     }
@@ -68,13 +68,14 @@ router.post("/api/login", storeReturnTo, (req, res, next) => {
 //登出
 router.get("/api/logout", (req, res) => {
   req.logout();
+  req.session = null;
   res.redirect("/home");
 });
 
 //取得當前使用者資訊
 router.get("/api/current_user", (req, res) => {
   res.send(req.user || null);
-  console.log(`使用者資訊:, ${req.user}`);
+  console.log(`使用者資訊： ${req.user}`);
 });
 
 //編輯使用者資訊

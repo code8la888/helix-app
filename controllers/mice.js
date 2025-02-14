@@ -4,7 +4,7 @@ const Mouse = require("../models/mouse");
 module.exports.renderNewForm = async (req, res) => {
   const { strainId } = req.params;
   const strain = await Strain.findById(strainId);
-  res.render("mice/new", { strainId, strain });
+  res.status(200).json({ strainId, strain });
 };
 
 module.exports.createNewMouse = async (req, res) => {

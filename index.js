@@ -9,7 +9,9 @@ require("./models/user");
 require("./models/strain");
 require("./services/passport");
 
-mongoose.connect(keys.mongoURI);
+if (process.env.NODE_ENV !== "test") {
+  mongoose.connect(keys.mongoURI);
+}
 
 const app = express();
 app.use(bodyParser.json());
@@ -59,5 +61,11 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT);
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;

@@ -4,18 +4,25 @@ const Mouse = require("../models/mouse");
 const BreedingRecord = require("../models/breedingRecord");
 const ExpressError = require("../utils/ExpressError");
 
-module.exports.index = async (req, res) => {
-  const strains = await Strain.find({});
-  const strainsWithUsers = await Promise.all(
-    strains.map(async (strain) => {
-      const users = await User.find({ username: { $in: strain.users } });
-      return {
-        ...strain.toObject(),
-        users,
-      };
-    })
-  );
-  res.status(200).json({ strains: strainsWithUsers });
+module.exports.index = async (req, res, next) => {
+  try {
+    const { role, username } = req.user;
+
+    let query = {}; // 預設查詢條件
+
+    if (!["品系管理人", "獸醫"].includes(role)) {
+      query = { users: username };
+    }
+
+    const strains = await Strain.find(query).populate({
+      path: "users",
+      select: "username email role tel",
+    });
+
+    res.status(200).json({ strains });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports.createNewStrain = async (req, res) => {
