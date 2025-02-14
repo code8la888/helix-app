@@ -12,7 +12,7 @@ body {
   z-index: 1050;
 }
 
-#root > div {
+main > div {
   padding-top: 61.333px;
 }
 

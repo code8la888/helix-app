@@ -16,7 +16,7 @@ function AppLayout() {
     <div className="d-flex flex-column vh-100">
       <Header />
       <main className="flex-grow-1  d-flex align-items-center justify-content-center">
-        <div className="my-3 container test">
+        <div className="my-3 container">
           <Outlet />
         </div>
       </main>
