@@ -4,6 +4,18 @@ body {
   margin: 0;
 }
 
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1050;
+}
+
+#root > div {
+  padding-top: 61.333px;
+}
+
 .custom-striped {
   --bs-table-striped-bg: rgb(139, 185, 254, 0.3);
   --bs-table-hover-bg: rgb(139, 185, 254);

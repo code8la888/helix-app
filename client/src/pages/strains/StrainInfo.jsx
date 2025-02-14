@@ -19,6 +19,12 @@ export default function StrainInfo({ strain, currentUser, id }) {
     }
   };
 
+  const expirationDate = new Date(strain?.EXP);
+  const today = new Date();
+  const timeDiff = expirationDate - today;
+  const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+  const isUrgent = daysRemaining <= 90;
+
   if (!strain) return null;
 
   return (
@@ -60,7 +66,15 @@ export default function StrainInfo({ strain, currentUser, id }) {
           <b>IACUC編號:</b> {strain.iacuc_no}
         </p>
         <p>
-          <b>計畫期限:</b> {new Date(strain.EXP).toLocaleDateString("zh-TW")}
+          <b>計畫期限:</b>{" "}
+          <span
+            style={{
+              color: isUrgent ? "red" : "",
+            }}
+          >
+            {expirationDate.toLocaleDateString("zh-TW")}
+          </span>
+          {isUrgent && " ⚠️ 計畫即將或已經到期，請盡快展延計畫！"}
         </p>
       </div>
     </>

@@ -118,6 +118,7 @@ export default function LoginPage() {
                       <button
                         className="btn btn-block  btn-warning"
                         disabled={loading}
+                        type="submit"
                       >
                         登入
                       </button>

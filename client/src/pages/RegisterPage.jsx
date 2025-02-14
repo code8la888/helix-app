@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 import { useFormValidation } from "../hooks/useFormValidation";
-import { toast } from "react-toastify";
 import InputField from "../components/InputField";
+import { sendFormData } from "../utils/sendFormData";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -22,31 +21,12 @@ export default function RegisterPage() {
       [name]: value,
     });
   };
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
-
-    try {
-      const res = await axios.post("/api/register", formData, {
-        headers: { "Content-Type": "application/json" },
-      });
-      toast.success(res.data.message);
-      if (res.data.redirect) {
-        window.location.href = res.data.redirect;
-      } else {
-        console.log("資料送出成功:", res.data);
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error("伺服器返回錯誤:", error.response.data);
-        console.error("HTTP 狀態碼:", error.response.status);
-      } else if (error.request) {
-        console.error("沒有收到伺服器回應:", error.request);
-      } else {
-        console.error("發送失敗:", error.message);
-      }
-    }
+    sendFormData(`/api/register`, formData, navigate);
   };
 
   return (

@@ -175,7 +175,7 @@ export default function EditMice() {
 
           <div className="row">
             {genes?.map((gene, index) => (
-              <div className="col mb-2">
+              <div className="col mb-2" key={gene}>
                 <label
                   htmlFor={`sampling_results_${index}`}
                   className="fw-bold mb-2"

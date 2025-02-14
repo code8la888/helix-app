@@ -51,7 +51,7 @@ export default function Header() {
 
   return (
     <nav
-      className="navbar navbar-expand-lg sticky-top"
+      className="navbar navbar-expand-lg header"
       style={{ backgroundColor: "rgb(6, 60, 139)" }}
     >
       <div className="container">
