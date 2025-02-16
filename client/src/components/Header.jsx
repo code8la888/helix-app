@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { SiHelix } from "react-icons/si";
 import { useEffect } from "react";
 import { fetchUser } from "../actions/authActions";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -50,17 +51,14 @@ export default function Header() {
   };
 
   return (
-    <nav
-      className="navbar navbar-expand-lg header"
-      style={{ backgroundColor: "rgb(6, 60, 139)" }}
-    >
+    <nav className="navbar navbar-expand-lg header">
       <div className="container">
-        <Link className="navbar-brand wh" to={auth ? "/dashboard" : "/home"}>
+        <Link className="navbar-brand wh" to="/home">
           <SiHelix />
           Helix
         </Link>
         <button
-          className="navbar-toggler custom-toggler"
+          className={`navbar-toggler custom-toggler ${styles.navButton}`}
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -68,7 +66,7 @@ export default function Header() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <i class="bi bi-list"></i>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">{renderContent()}</ul>

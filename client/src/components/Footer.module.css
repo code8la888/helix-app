@@ -1,0 +1,8 @@
+.footerImage > img {
+  text-align: center;
+  width: 100%;
+}
+
+.footerInfo {
+  background: var(--theme-color);
+}

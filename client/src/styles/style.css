@@ -1,3 +1,11 @@
+@import "bootstrap-icons/font/bootstrap-icons.css";
+:root {
+  --primary-color: rgb(6, 60, 139);
+  --secondary-color: rgb(139, 185, 254);
+  --warning-gradient: linear-gradient(to right, #ffcc33, #ffb347);
+  --theme-color: linear-gradient(to right, #363795, #005c97);
+}
+
 html,
 body {
   height: 100vh;
@@ -10,6 +18,7 @@ body {
   left: 0;
   width: 100%;
   z-index: 1050;
+  background: var(--theme-color);
 }
 
 main > div {
@@ -30,7 +39,7 @@ h3,
 p,
 label,
 .apple {
-  color: rgb(6, 60, 139);
+  color: var(--primary-color);
   font-weight: bold;
   margin: 16px 0;
 }
@@ -124,17 +133,6 @@ caption,
   font-weight: bold;
   margin-top: 10px;
   text-align: center;
-}
-
-.custom-toggler {
-  /* background-color: #063c8b !important;  */
-  border: 3px solid white; /* 白色邊框 */
-  padding: 5px 10px;
-  border-radius: 5px; /* 圓角 */
-}
-
-.custom-toggler .navbar-toggler-icon {
-  filter: invert(1); /* 讓三條線變白色 */
 }
 
 canvas {
