@@ -6,7 +6,7 @@ export default function NoPage() {
   return (
     <div className="d-flex flex-column justify-content-center align-items-center">
       <img
-        src="/images/404 Error-pana.svg"
+        src="https://res.cloudinary.com/ddmaqiu3h/image/upload/v1739640830/404_Error-pana_nij1rd.svg"
         alt="404 error image"
         style={{ maxWidth: "50%" }}
       />

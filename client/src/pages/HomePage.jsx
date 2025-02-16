@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   return (
@@ -10,10 +10,11 @@ export default function HomePage() {
       <Header />
 
       <section
+        id="hero-section"
         className="container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center text-center"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1628595351029-c2bf17511435?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+            "url(https://res.cloudinary.com/ddmaqiu3h/image/upload/v1739641175/photo-1628595351029-c2bf17511435_dwj7pn.avif)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -45,15 +46,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section
-        id="about-section"
-        className="container-fluid p-5"
-        style={{ backgroundColor: "#e4eef5" }}
-      >
+      <section className={`container-fluid p-5 ${styles.aboutSection}`}>
         <div className="row align-items-center">
           <div className="col-md-6">
             <img
-              src="/images/Researchers-rafiki.svg"
+              src="https://res.cloudinary.com/ddmaqiu3h/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1739640828/Researchers-rafiki_ophbk8.svg"
               alt="Lab"
               className="img-fluid rounded"
             />
@@ -84,10 +81,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section
-        className="container-fluid p-5"
-        style={{ backgroundColor: "#c8d8e4" }}
-      >
+      <section className={`container-fluid p-5 ${styles.featureSection}`}>
         <h2 className="text-center mb-4 text-black">核心功能</h2>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
           {[
@@ -98,7 +92,7 @@ export default function HomePage() {
           ].map((feature, index) => (
             <div key={index} className="col">
               <div
-                className="card text-center h-100 shadow-sm"
+                className={`card text-center h-100 shadow-sm card-container ${styles.featureCard}`}
                 style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}
               >
                 <div className="card-body">
@@ -115,32 +109,50 @@ export default function HomePage() {
       </section>
 
       <section
-        className="container-fluid text-center pt-5"
-        style={{ backgroundColor: "#a4c8e1" }}
+        className={`container-fluid text-center pt-5 ${styles.ctaSection}`}
       >
         <h2 className="text-black">🚀 立即體驗智能化實驗管理！</h2>
         <p className="lead text-muted fw-bold">
           透過數據驅動的決策提升實驗室運營效率，立即註冊開始使用！
         </p>
-        <Link to="/register" className="btn btn-lg btn-warning fw-bold">
+        <Link
+          to="/register"
+          className={`btn btn-lg fw-bold ${styles.registerButton}`}
+        >
           前往註冊
         </Link>
       </section>
 
-      <div className="column">
-        <div
-          className="footerImage text-center"
-          style={{ backgroundColor: "#a4c8e1" }}
-        >
-          <img src="/images/footerImage.png" alt="" style={{ width: "50%" }} />
+      <footer>
+        <div className="column">
+          <div className={`text-center ${styles.footerImage}`}>
+            <img
+              src="https://res.cloudinary.com/ddmaqiu3h/image/upload/v1739640826/gradient_footer_Image_gq9rfr.png"
+              alt="footer-image"
+              style={{ width: "100%" }}
+            />
+          </div>
+          <div
+            className={`pt-3 py-3 mt-auto text-center wh ${styles.footerInfo}`}
+          >
+            <p className="text-white">國立臺灣大學醫學院實驗動物中心</p>
+            <p className="text-white">
+              <i className="bi bi-geo-alt-fill"></i>
+              &emsp;臺北市中正區徐州路2號8~10F
+            </p>
+            <p className="text-white">
+              <i className="bi bi-telephone-fill"></i>&emsp; (02) 23123456 轉
+              267224
+            </p>
+            <p className="text-white">
+              <i className="bi bi-envelope-fill"></i>&emsp;ntulacbd@ntu.edu.tw
+            </p>
+            <p className="text-white">
+              &copy; 2025 國立臺灣大學醫學院實驗動物中心. All Rights Reserved.
+            </p>
+          </div>
         </div>
-        <div
-          className="footer py-3 mt-auto text-center wh"
-          style={{ backgroundColor: "rgb(6, 60, 139)" }}
-        >
-          <span>&copy; Helix LIMS 2024</span>
-        </div>
-      </div>
+      </footer>
     </div>
   );
 }

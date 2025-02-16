@@ -76,7 +76,7 @@ export default function LoginPage() {
             <div className="row g-0 align-items-center">
               <div className="col-md-6 p-5">
                 <img
-                  src="/images/Computer login-rafiki.svg?v=2"
+                  src="https://res.cloudinary.com/ddmaqiu3h/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1739640825/Computer_login-rafiki_a8w5sd.svg"
                   alt="login page"
                   className="img-fluid rounded-starts p-3"
                 />

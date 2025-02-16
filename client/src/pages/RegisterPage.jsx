@@ -43,7 +43,7 @@ export default function RegisterPage() {
             <div className="row g-0 align-items-center">
               <div className="col-md-6 p-5">
                 <img
-                  src="/images/Blood test-pana.svg"
+                  src="https://res.cloudinary.com/ddmaqiu3h/image/upload/v1739640826/Blood_test-pana_jh4rlz.svg"
                   alt="register image"
                   className="img-fluid"
                 />
