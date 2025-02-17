@@ -5,7 +5,7 @@ import { sendFormData } from "../utils/sendFormData";
 import { useNavigate, Link } from "react-router-dom";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAccount } from "../actions/authActions";
+import { deleteAccount } from "../redux/auth/authActions";
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -134,20 +134,14 @@ export default function ProfilePage() {
             </div>
           </div>
           <div className="mt-5 d-flex justify-content-end">
-            <button type="submit" className="btn btn-warning">
+            <button type="submit" className=" warning">
               更新使用者資料
             </button>
-            <button
-              className="btn btn-danger ms-2"
-              onClick={handleDeleteAccount}
-            >
+            <button className=" danger ms-2" onClick={handleDeleteAccount}>
               刪除使用者資料
             </button>
-            <button className="btn btn-info ms-2 border-2">
-              <Link
-                to={"/strains/index"}
-                style={{ textDecoration: "none", color: "white" }}
-              >
+            <button className=" info ms-2">
+              <Link to={"/strains/index"} className="link">
                 取消，返回品系資訊
               </Link>
             </button>

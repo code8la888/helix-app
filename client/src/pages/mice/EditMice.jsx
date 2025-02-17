@@ -236,12 +236,9 @@ export default function EditMice() {
             />
           </div>
           <div className="mt-5 d-flex justify-content-end">
-            <button className="btn btn-warning">修改小鼠資料</button>
-            <button className="btn btn-danger ms-2">
-              <Link
-                to={`/strains/${strainId}`}
-                style={{ textDecoration: "none", color: "white" }}
-              >
+            <button className=" warning">修改小鼠資料</button>
+            <button className=" danger ms-2">
+              <Link to={`/strains/${strainId}`} className="link">
                 返回小鼠品系資訊
               </Link>
             </button>

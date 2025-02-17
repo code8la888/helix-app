@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import TableHeaderItem from "../../components/TableHeaderItem";
 import ReactPaginate from "react-paginate";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStrains } from "../../actions/strainActions";
+import { fetchStrains } from "../../redux/strain/strainActions";
 
 function Index() {
   const dispatch = useDispatch();
-  const strains = useSelector((state) => state.strains.list.strains);
+  const strains = useSelector((state) => state.strains.list.strainsWithUsers);
   const [filteredStrains, setFilteredStrains] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
@@ -78,7 +78,7 @@ function Index() {
             {currentData.map((strain) => (
               <tr key={strain._id}>
                 <td colSpan={1}>
-                  <Link to={`/strains/${strain._id}`} className="custom-color">
+                  <Link to={`/strains/${strain._id}`} className="link">
                     {strain.strain}
                   </Link>
                 </td>
@@ -87,16 +87,16 @@ function Index() {
                 <td>{strain.iacuc_no}</td>
                 <td>{new Date(strain.EXP).toLocaleDateString("zh-TW")}</td>
                 <td>
-                  {strain.users
+                  {strain?.users
                     .filter((user) => user.role === "計畫主持人")
                     .map((user) => user.username)
-                    .join(", ")}
+                    .join("， ") || "-"}
                 </td>
                 <td>
-                  {strain.users
+                  {strain?.users
                     .filter((user) => user.role === "品系管理人")
                     .map((user) => user.username)
-                    .join(", ")}
+                    .join("， ") || "-"}
                 </td>
               </tr>
             ))}

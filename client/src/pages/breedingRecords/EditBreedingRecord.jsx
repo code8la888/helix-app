@@ -77,7 +77,7 @@ export default function EditBreedingRecord() {
 
   return (
     <div className="row">
-      <h1 className="text-center">編輯繁殖籠表:</h1>
+      <h1 className="text-center">編輯繁殖籠表</h1>
       <div className="col-md-8 offset-md-2">
         <form
           onSubmit={handleSubmit}
@@ -146,12 +146,9 @@ export default function EditBreedingRecord() {
           </div>
 
           <div className="mt-5 d-flex justify-content-end">
-            <button className="btn btn-warning">修改繁殖籠資料</button>
-            <button className="btn btn-danger ms-2 border-2">
-              <Link
-                to={`/strains/${strainId}`}
-                style={{ textDecoration: "none", color: "white" }}
-              >
+            <button className=" warning">修改繁殖籠資料</button>
+            <button className=" danger ms-2 border-2">
+              <Link to={`/strains/${strainId}`} className="link">
                 取消，返回品系資訊
               </Link>
             </button>

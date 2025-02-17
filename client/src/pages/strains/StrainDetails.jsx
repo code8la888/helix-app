@@ -2,8 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUser } from "../../actions/authActions";
-import { fetchStrain } from "../../actions/strainActions";
+import { fetchUser } from "../../redux/auth/authActions";
+import { fetchStrain } from "../../redux/strain/strainActions";
 import Loader from "../../components/Loader";
 import StrainInfo from "./StrainInfo";
 import UserInfo from "../UserInfo";
@@ -76,13 +76,12 @@ export default function StrainDetails() {
         currentUser={currentUser}
         id={id}
       />
-      <Link
-        className="fw-bold"
-        to="/strains/index"
-        style={{ textDecoration: "none", color: "rgb(6, 60, 139)" }}
-      >
-        ⬅️返回查詢系統
-      </Link>
+
+      <p className="text-center">
+        <Link to="/strains/index" className="link text-black">
+          ⬅️返回查詢系統
+        </Link>
+      </p>
     </>
   );
 }

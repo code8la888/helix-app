@@ -1,44 +1,13 @@
-:root {
-  --about-section-bg: linear-gradient(
-    180deg,
-    rgba(228, 239, 233, 1) 0%,
-    rgba(147, 165, 207, 1) 51%,
-    rgba(244, 238, 193, 1) 80%
-  );
-  --feature-section-bg: linear-gradient(
-    180deg,
-    rgba(244, 238, 193, 1) 0%,
-    rgba(252, 215, 119, 1) 60%
-  );
-  --cta-section-bg: linear-gradient(
-    0deg,
-    rgba(173, 227, 255, 1) 0%,
-    rgba(252, 215, 119, 1) 60%
-  );
-}
-
-.aboutSection {
-  background: var(--about-section-bg);
-}
-
-.featureSection {
-  background: var(--feature-section-bg);
-}
-
-.ctaSection {
-  background: var(--cta-section-bg);
+.main {
+  background: linear-gradient(to bottom, #003a73a9, #e5e5bea0);
 }
 
 .footerImage {
-  background: rgba(173, 227, 255, 1);
+  background: #e5e5bea0;
 }
 
 .footerInfo {
   background: var(--theme-color);
-}
-
-.registerButton {
-  background: var(--warning-gradient);
 }
 
 .featureCard:hover {

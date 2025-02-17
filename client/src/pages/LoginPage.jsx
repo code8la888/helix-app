@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchUser } from "../actions/authActions";
+import { fetchUser } from "../redux/auth/authActions";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useFormValidation } from "../hooks/useFormValidation";
@@ -67,7 +67,7 @@ export default function LoginPage() {
       className="d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(to top, #4b6cb7, #182848)",
+        background: "var(--theme-color)",
       }}
     >
       <div className="container">
@@ -83,12 +83,7 @@ export default function LoginPage() {
               </div>
               <div className="col-md-6">
                 <div className="card-body">
-                  <h2
-                    className="card-title text-center mb-2 fw-bold"
-                    style={{ color: " rgb(6, 60, 139)" }}
-                  >
-                    登入
-                  </h2>
+                  <h2 className="card-title text-center mb-2 fw-bold">登入</h2>
                   <form
                     onSubmit={handleLogin}
                     className={`validated-form ${
@@ -116,7 +111,7 @@ export default function LoginPage() {
 
                     <div className="d-grid gap-2 mt-4">
                       <button
-                        className="btn btn-block  btn-warning"
+                        className="warning"
                         disabled={loading}
                         type="submit"
                       >
@@ -127,17 +122,14 @@ export default function LoginPage() {
                   <hr />
                   <form onSubmit={handleGoogleAuth}>
                     <div className="d-grid gap-2 mt-4">
-                      <button
-                        className="btn btn-block btn-outline-danger"
-                        disabled={loading}
-                      >
+                      <button className="danger" disabled={loading}>
                         使用 Google 帳號登入
                       </button>
                     </div>
                   </form>
-                  <p className="text-center mt-3">
+                  <p className="text-center mt-3 fw-bold">
                     還沒有帳戶嗎?
-                    <Link to="/register" style={{ textDecoration: "none" }}>
+                    <Link to="/register" className="link">
                       &nbsp;註冊
                     </Link>
                   </p>

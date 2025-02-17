@@ -121,7 +121,7 @@ export default function Charts({ id }) {
 
   return (
     <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
-      <h3 className="my-2">圖表分析</h3>
+      <p className="table-title">圖表分析</p>
       <section className="container-fluid">
         <div className="row row-cols-1 row-cols-md-2 g-4">
           <div className="col d-flex justify-content-center align-items-center">

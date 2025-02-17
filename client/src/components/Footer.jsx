@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="column">
         <div className={styles.footerImage}>
           <img
-            src="https://res.cloudinary.com/ddmaqiu3h/image/upload/v1739640826/gradient_footer_Image_gq9rfr.png"
+            src="https://res.cloudinary.com/ddmaqiu3h/image/upload/v1739792912/footer_Image_modified_jes8k1.png"
             alt="footer-image"
           />
         </div>

@@ -44,13 +44,15 @@ function References() {
             >
               {ref.title} (點擊瀏覽)
             </a>
-            <a
-              href={ref.downloadUrl}
-              className="btn btn-success btn-sm"
-              download
-            >
-              下載
-            </a>
+            <button className="success">
+              <a
+                href={ref.downloadUrl}
+                style={{ textDecoration: "none" }}
+                download
+              >
+                下載
+              </a>
+            </button>
           </li>
         ))}
       </ul>

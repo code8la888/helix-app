@@ -33,16 +33,13 @@ export default function StrainInfo({ strain, currentUser, id }) {
       strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
         <div className="mb-3 d-flex justify-content-center">
-          <button className="btn btn-warning text-white mx-2">
-            <Link
-              to={`/strains/${id}/edit`}
-              style={{ textDecoration: "none", color: "black" }}
-            >
+          <button className=" warning text-white mx-2">
+            <Link to={`/strains/${id}/edit`} className="link">
               編輯品系資料
             </Link>
           </button>
 
-          <button className="btn btn-danger" onClick={handleDeleteStrain}>
+          <button className=" danger" onClick={handleDeleteStrain}>
             刪除品系資料
           </button>
         </div>
@@ -51,7 +48,7 @@ export default function StrainInfo({ strain, currentUser, id }) {
       )}
 
       <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
-        <h3 className="my-2">品系資訊</h3>
+        <p className="table-title">品系資訊</p>
         <p>
           <b>品系名稱:</b> {strain.strain}
         </p>
@@ -66,7 +63,7 @@ export default function StrainInfo({ strain, currentUser, id }) {
           <b>IACUC編號:</b> {strain.iacuc_no}
         </p>
         <p>
-          <b>計畫期限:</b>{" "}
+          <b>計畫期限:</b>
           <span
             style={{
               color: isUrgent ? "red" : "",

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { SiHelix } from "react-icons/si";
 import { useEffect } from "react";
-import { fetchUser } from "../actions/authActions";
+import { fetchUser } from "../redux/auth/authActions";
 import styles from "./Header.module.css";
 
 export default function Header() {
@@ -51,7 +51,7 @@ export default function Header() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg header">
+    <nav className="navbar navbar-expand-lg header sticky-top">
       <div className="container">
         <Link className="navbar-brand wh" to="/home">
           <SiHelix />
@@ -66,7 +66,7 @@ export default function Header() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <i class="bi bi-list"></i>
+          <i className="bi bi-list"></i>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">{renderContent()}</ul>

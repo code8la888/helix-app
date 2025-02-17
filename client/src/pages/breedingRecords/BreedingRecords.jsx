@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ReactPaginate from "react-paginate";
 import { sendFormData } from "../../utils/sendFormData";
-import { fetchStrain } from "../../actions/strainActions";
+import { fetchStrain } from "../../redux/strain/strainActions";
 
 export default function BreedingRecords({
   strain,
@@ -47,11 +47,8 @@ export default function BreedingRecords({
       {currentUser &&
       strain?.users.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <button className="btn btn-success">
-          <Link
-            to={`/strains/${id}/breedingRecord/new`}
-            style={{ textDecoration: "none", color: "white" }}
-          >
+        <button className="success">
+          <Link to={`/strains/${id}/breedingRecord/new`} className="link">
             新增繁殖資料
           </Link>
         </button>
@@ -61,7 +58,7 @@ export default function BreedingRecords({
       {paginatedBreedingRecords ? (
         <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
           <table className="table table-striped table-hover custom-striped caption-top">
-            <caption className="fs-3 fw-bold">繁殖記錄表</caption>
+            <caption className="table-title">繁殖記錄表</caption>
             <thead>
               <tr>
                 <th scope="col">繁殖籠編號</th>
@@ -99,13 +96,10 @@ export default function BreedingRecords({
                     currentUser.role === "品系管理人" ? (
                       <>
                         <td>
-                          <button className="btn btn-warning">
+                          <button className=" warning">
                             <Link
                               to={`/strains/${id}/breedingRecord/${record._id}/edit`}
-                              style={{
-                                textDecoration: "none",
-                                color: "black",
-                              }}
+                              className="link"
                             >
                               編輯
                             </Link>
@@ -113,7 +107,7 @@ export default function BreedingRecords({
                         </td>
                         <td>
                           <button
-                            className="btn btn-danger"
+                            className=" danger"
                             onClick={(event) => {
                               handleDeleteBreedingRecord(record._id, event);
                             }}
@@ -128,7 +122,7 @@ export default function BreedingRecords({
                   </tr>
                 ))
               ) : (
-                <p>尚無繁殖記錄</p>
+                <p className="py-2 fw-bold">尚無繁殖記錄</p>
               )}
             </tbody>
           </table>

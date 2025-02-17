@@ -22,6 +22,7 @@ body {
   margin: 0;
 }
 
+//常用
 h1,
 h2,
 label,
@@ -38,16 +39,19 @@ label,
 .col {
   margin-bottom: 16px;
 }
+//常用
 
+//按鈕
 button {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   font-weight: bold;
   border: none;
   border-radius: 50px;
   padding: 10px 15px;
-}
-button a {
-  color: white;
+  a {
+    color: white;
+  }
 }
 
 .danger {
@@ -82,7 +86,9 @@ button.warning > a {
 .header {
   background: var(--theme-color);
 }
+//按鈕
 
+//表格
 .custom-striped {
   --bs-table-striped-bg: #2b587631;
   --bs-table-hover-bg: #2b5876c0;
@@ -99,37 +105,46 @@ tr {
   vertical-align: middle;
 }
 
-tdhover {
-  color: var(--primary-color);
+td {
+  &hover {
+    color: var(--primary-color);
+  }
+  a {
+    color: black;
+    font-weight: bold;
+    &:hover {
+      font-weight: bolder;
+    }
+  }
 }
-td a {
-  color: black;
-  font-weight: bold;
-}
-td a:hover {
-  font-weight: bolder;
-}
+//表格
 
+//表單
 .form-control,
 .form-select {
-  background-color: rgba(43, 88, 118, 0.1921568627);
+  background-color: #2b587631;
 }
 
 .form-control,
 .form-select {
   border-radius: 50px;
 }
+//表單
 
+//深色背景文字
 .wh {
   color: white;
   font-weight: bold;
 }
 
+//頁碼
 .pagination {
   --bs-pagination-color: black;
   --bs-pagination-active-bg: var(--primary-color);
 }
+//頁碼
 
+//導航欄連結
 .nav-link:active,
 .nav-link:hover,
 .nav-link:focus,
@@ -141,8 +156,11 @@ td a:hover {
 .navbar-brand:focus {
   color: #b6fbff;
 }
+//導航欄連結
 
+//圖表
 canvas {
   max-width: 400px;
   max-height: 400px;
-}/*# sourceMappingURL=style.css.map */
+}
+//圖表

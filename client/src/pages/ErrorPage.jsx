@@ -24,7 +24,7 @@ function ErrorPage() {
       </div>
       <div className="text-center">
         <button
-          className="btn"
+          className=""
           style={{ backgroundColor: "var(--bs-danger-bg-subtle)" }}
           onClick={() => navigate("/strains/index")}
         >

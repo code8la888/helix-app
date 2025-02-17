@@ -1,9 +1,8 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import { Outlet, useLocation } from "react-router-dom";
-import ScrollToTop from "react-scroll-up";
-import { FaChevronCircleUp } from "react-icons/fa";
 import { useEffect } from "react";
+import ScrollUpTop from "./ScrollUpTop";
 
 function AppLayout() {
   const location = useLocation();
@@ -13,7 +12,7 @@ function AppLayout() {
   }, [location.pathname]);
 
   return (
-    <div className="d-flex flex-column vh-100">
+    <div id="pageTop">
       <Header />
       <main className="flex-grow-1  d-flex align-items-center justify-content-center">
         <div className="my-3 container">
@@ -21,16 +20,7 @@ function AppLayout() {
         </div>
       </main>
       <Footer />
-      <ScrollToTop showUnder={150}>
-        <span>
-          <FaChevronCircleUp
-            style={{
-              fontSize: 40,
-              color: "rgb(139, 185, 254)",
-            }}
-          />
-        </span>
-      </ScrollToTop>
+      <ScrollUpTop />
     </div>
   );
 }

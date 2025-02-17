@@ -14,12 +14,18 @@ module.exports.index = async (req, res, next) => {
       query = { users: username };
     }
 
-    const strains = await Strain.find(query).populate({
-      path: "users",
-      select: "username email role tel",
-    });
+    const strains = await Strain.find(query);
+    const strainsWithUsers = await Promise.all(
+      strains.map(async (strain) => {
+        const users = await User.find({ username: { $in: strain.users } });
+        return {
+          ...strain.toObject(), // 將 Mongoose 文件轉換為普通物件
+          users, // 關聯的使用者資料
+        };
+      })
+    );
 
-    res.status(200).json({ strains });
+    res.status(200).json({ strainsWithUsers });
   } catch (error) {
     next(error);
   }

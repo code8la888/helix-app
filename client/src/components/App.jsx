@@ -1,24 +1,8 @@
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "../actions/authActions";
+import { fetchUser } from "../redux/auth/authActions";
 import Loader from "./Loader";
-
-// import ProtectedRoute from "./ProtectedRoute";
-// import AppLayout from "./AppLayout";
-// import LoginPage from "../pages/LoginPage";
-// import Landing from "./Landing";
-// import RegisterPage from "../pages/RegisterPage";
-// import Index from "../pages/strains/Index";
-// import NewStrain from "../pages/strains/NewStrain";
-// import StrainDetails from "../pages/strains/StrainDetails";
-// import EditStrain from "../pages/strains/EditStrain";
-// import NewMice from "../pages/mice/NewMice";
-// import NewBreedingRecord from "../pages/breedingRecords/NewBreedingRecord";
-// import EditBreedingRecord from "../pages/breedingRecords/EditBreedingRecord";
-// import EditMice from "../pages/mice/EditMice";
-// import ErrorPage from "../pages/ErrorPage";
-// import ProfilePage from "../pages/ProfilePage";
 
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 const AppLayout = lazy(() => import("./AppLayout"));

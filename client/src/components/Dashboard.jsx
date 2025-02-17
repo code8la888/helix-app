@@ -18,6 +18,7 @@ export default function Dashboard() {
             >
               <div className="card-body">
                 <Link
+                  className="link"
                   to={feature.href}
                   style={{ textDecoration: "none", color: "rgb(6, 60, 139)" }}
                 >

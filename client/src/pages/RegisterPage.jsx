@@ -34,7 +34,7 @@ export default function RegisterPage() {
       className="d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(to top, #4b6cb7, #182848)",
+        background: "var(--theme-color)",
       }}
     >
       <div className="container">
@@ -50,15 +50,10 @@ export default function RegisterPage() {
               </div>
               <div className="col-md-6">
                 <div className="card-body">
-                  <h2
-                    className="card-title mb-2 fw-bold"
-                    style={{ color: " rgb(6, 60, 139)" }}
-                  >
+                  <h2 className="card-title mb-2 fw-bold">
                     歡迎來到 Helix LIMS
                   </h2>
-                  <p className="mb-2" style={{ color: " rgb(6, 60, 139)" }}>
-                    建立您的個人帳號
-                  </p>
+                  <p className="mb-2">建立您的個人帳號</p>
                   <form
                     noValidate
                     onSubmit={handleSubmit}
@@ -132,21 +127,14 @@ export default function RegisterPage() {
                     />
 
                     <div className="d-grid gap-2 mt-4">
-                      <button
-                        type="submit"
-                        className="btn"
-                        style={{
-                          backgroundColor: " rgb(6, 60, 139)",
-                          color: "white",
-                        }}
-                      >
+                      <button type="submit" className="button primary">
                         註冊
                       </button>
                     </div>
                   </form>
-                  <p className="text-center mt-3">
+                  <p className="text-center mt-3 fw-bold">
                     已經有帳戶嗎?
-                    <Link to="/login" style={{ textDecoration: "none" }}>
+                    <Link to="/login" className="link">
                       &nbsp;登入
                     </Link>
                   </p>

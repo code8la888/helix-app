@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ReactPaginate from "react-paginate";
 import { sendFormData } from "../../utils/sendFormData";
-import { fetchStrain } from "../../actions/strainActions";
+import { fetchStrain } from "../../redux/strain/strainActions";
 
 export default function MouseSamplingRecords({
   mice,
@@ -44,11 +44,8 @@ export default function MouseSamplingRecords({
       {currentUser &&
       strain?.users?.includes(currentUser.username) &&
       currentUser.role === "品系管理人" ? (
-        <button className="btn btn-success">
-          <Link
-            to={`/strains/${id}/mice/new`}
-            style={{ textDecoration: "none", color: "white" }}
-          >
+        <button className=" success">
+          <Link to={`/strains/${id}/mice/new`} className="link">
             新增採樣記錄
           </Link>
         </button>
@@ -58,7 +55,7 @@ export default function MouseSamplingRecords({
       {paginatedMice ? (
         <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
           <table className="table table-striped table-hover custom-striped caption-top">
-            <caption className="fs-3 fw-bold">小鼠採樣記錄</caption>
+            <caption className="table-title">小鼠採樣記錄</caption>
             <thead>
               <tr>
                 <th scope="col">No</th>
@@ -122,13 +119,10 @@ export default function MouseSamplingRecords({
                     currentUser.role === "品系管理人" ? (
                       <>
                         <td>
-                          <button className="btn btn-warning">
+                          <button className=" warning">
                             <Link
                               to={`/strains/${id}/mice/${mouse._id}/edit`}
-                              style={{
-                                textDecoration: "none",
-                                color: "black",
-                              }}
+                              className="link"
                             >
                               編輯
                             </Link>
@@ -136,7 +130,7 @@ export default function MouseSamplingRecords({
                         </td>
                         <td>
                           <button
-                            className="btn btn-danger"
+                            className=" danger"
                             onClick={(event) => {
                               handleDeleteMice(mouse._id, event);
                             }}
@@ -151,7 +145,7 @@ export default function MouseSamplingRecords({
                   </tr>
                 ))
               ) : (
-                <p>尚無採樣記錄</p>
+                <p className="py-2 fw-bold">尚無採樣記錄</p>
               )}
             </tbody>
           </table>

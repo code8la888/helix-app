@@ -69,7 +69,7 @@ export default function EditStrain() {
 
   return (
     <div className="row">
-      <h1 className="text-center">編輯小鼠品系:</h1>
+      <h1 className="text-center">編輯小鼠品系</h1>
       <div className="col-8 offset-2">
         <form
           noValidate
@@ -162,12 +162,9 @@ export default function EditStrain() {
             }}
           />
           <div className="mt-5 d-flex justify-content-end">
-            <button className="btn btn-warning">更新小鼠品系</button>
-            <button className="btn btn-danger ms-2 border-2">
-              <Link
-                to={`/strains/${id}`}
-                style={{ textDecoration: "none", color: "white" }}
-              >
+            <button className=" warning">更新小鼠品系</button>
+            <button className=" danger ms-2 border-2">
+              <Link to={`/strains/${id}`} className="link">
                 取消，返回品系資訊
               </Link>
             </button>
