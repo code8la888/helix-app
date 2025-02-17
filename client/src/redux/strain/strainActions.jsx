@@ -1,5 +1,5 @@
-import { FETCH_STRAINS, FETCH_STRAIN } from "./types";
-import { fetchData } from "../utils/fetchData";
+import { FETCH_STRAINS, FETCH_STRAIN } from "../types";
+import { fetchData } from "../../utils/fetchData";
 
 export const fetchStrains = () => async (dispatch) => {
   try {

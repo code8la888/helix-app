@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_USER, DELETE_ACCOUNT } from "./types";
+import { FETCH_USER, DELETE_ACCOUNT } from "../types";
 export const fetchUser = () => {
   return async (dispatch) => {
     try {

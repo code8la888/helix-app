@@ -7,7 +7,7 @@ import {
   RESTORE_BREEDINGRECORD,
   DELETE_STRAIN,
   RESTORE_STRAIN,
-} from "../actions/types";
+} from "../types";
 
 const initialState = {
   list: [], // 所有品系列表

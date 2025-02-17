@@ -1,4 +1,4 @@
-import { FETCH_USER, DELETE_ACCOUNT } from "../actions/types";
+import { FETCH_USER, DELETE_ACCOUNT } from "../types";
 export default function (state = null, action) {
   switch (action.type) {
     case FETCH_USER:
