@@ -47,9 +47,10 @@ router
 //編輯繁殖記錄表單
 router.get(
   "/:breedingRecordId/edit",
-  validBreedingRecord,
+  validateObjectId,
   isLoggedIn,
   verifyEditPermission,
+  validBreedingRecord,
   catchAsync(breedingRecords.renderEditForm)
 );
 

@@ -10,10 +10,12 @@ import Loader from "../../components/Loader";
 
 export default function EditBreedingRecord() {
   const { strainId, breedingRecordId } = useParams();
+  console.log("strainId", strainId);
+
   const navigate = useNavigate();
   const isAuthorized = useCheckPermission(strainId);
   const [formData, handleChange, setFormData] = useForm({
-    strain: strainId,
+    strain: "",
     cage_no: "",
     parents: {
       father: "",
@@ -30,12 +32,12 @@ export default function EditBreedingRecord() {
         const res = await fetchData(
           `/api/strains/${strainId}/breedingRecord/${breedingRecordId}/edit`
         );
+        console.log(res);
 
         setFormData((prev) => ({
           ...prev,
           ...res.breedingRecord,
         }));
-        console.log(res);
       } catch (error) {
         console.error("Error fetching strains data:", error);
       }
@@ -57,7 +59,7 @@ export default function EditBreedingRecord() {
         ...rest,
       },
     };
-    // console.log(updatedFormData)
+    console.log(updatedFormData);
 
     sendFormData(
       `/api/strains/${strainId}/breedingRecord/${breedingRecordId}`,
@@ -129,7 +131,7 @@ export default function EditBreedingRecord() {
             />
 
             <div className="mb-3 col">
-              <label className="form-label" for="on_shelf">
+              <label className="form-label" htmlFor="on_shelf">
                 繁殖籠狀態:
               </label>
               <select
@@ -146,8 +148,8 @@ export default function EditBreedingRecord() {
           </div>
 
           <div className="mt-5 d-flex justify-content-end">
-            <button className=" warning">修改繁殖籠資料</button>
-            <button className=" danger ms-2 border-2">
+            <button className="warning">修改繁殖籠資料</button>
+            <button className="danger ms-2 border-2">
               <Link to={`/strains/${strainId}`} className="link">
                 取消，返回品系資訊
               </Link>

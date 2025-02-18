@@ -100,7 +100,7 @@ module.exports.validateMouse = (req, res, next) => {
 };
 
 module.exports.validBreedingRecord = (req, res, next) => {
-  req.body.breedingRecord.strain = req.params.strainId;
+  // req.body.breedingRecord.strain = req.params.strainId;
   const { error } = breedingRecordSchema.validate(req.body);
   console.log(req.body);
   if (error) {
