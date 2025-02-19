@@ -19,6 +19,7 @@ export default function StrainInfo({ strain, currentUser, id }) {
     }
   };
 
+  // 計算到期日
   const expirationDate = new Date(strain?.EXP);
   const today = new Date();
   const timeDiff = expirationDate - today;
@@ -48,30 +49,30 @@ export default function StrainInfo({ strain, currentUser, id }) {
       )}
 
       <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
-        <p className="table-title">品系資訊</p>
+        <p className="table-title p-0 m-0">品系資訊</p>
         <p>
-          <b>品系名稱:</b> {strain.strain}
+          <b>品系名稱：</b> {strain.strain}
         </p>
         <p>
-          <b>品系簡稱:</b> {strain.abbr}
+          <b>品系簡稱：</b> {strain.abbr}
         </p>
         <p>
-          <b>單位: </b>
+          <b>單位：</b>
           {strain.dept}
         </p>
         <p>
-          <b>IACUC編號:</b> {strain.iacuc_no}
+          <b>IACUC編號：</b> {strain.iacuc_no}
         </p>
         <p>
-          <b>計畫期限:</b>
-          <span
-            style={{
-              color: isUrgent ? "red" : "",
-            }}
-          >
+          <b>計畫期限：</b>
+          <span className={isUrgent ? "text-danger fw-bold" : ""}>
             {expirationDate.toLocaleDateString("zh-TW")}
           </span>
-          {isUrgent && " ⚠️ 計畫即將或已經到期，請盡快展延計畫！"}
+          {isUrgent && (
+            <span className="text-danger fw-bold">
+              ⚠️計畫即將或已經到期，請盡快展延計畫！
+            </span>
+          )}
         </p>
       </div>
     </>

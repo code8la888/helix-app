@@ -58,7 +58,7 @@ export default function BreedingRecords({
       {paginatedBreedingRecords ? (
         <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
           <table className="table table-striped table-hover custom-striped caption-top">
-            <caption className="table-title">繁殖記錄表</caption>
+            <caption className="table-title p-0">繁殖記錄表</caption>
             <thead>
               <tr>
                 <th scope="col">繁殖籠編號</th>

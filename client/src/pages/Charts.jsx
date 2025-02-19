@@ -124,7 +124,7 @@ export default function Charts({ id }) {
   }
 
   useEffect(() => {
-    processData(); // 當 `id` 變更時，重新獲取數據
+    processData();
   }, [id]);
 
   useEffect(() => {
@@ -139,7 +139,7 @@ export default function Charts({ id }) {
 
   return (
     <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
-      <p className="table-title">圖表分析</p>
+      <p className="table-title p-0 m-0">圖表分析</p>
       <section className="container-fluid">
         <div className="row row-cols-1 row-cols-md-2 g-4">
           <div className="col d-flex justify-content-center align-items-center">
