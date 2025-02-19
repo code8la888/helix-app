@@ -1,78 +1,53 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUser } from "../../redux/auth/authActions";
-import { fetchStrain } from "../../redux/strain/strainActions";
+import { useParams, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Loader from "../../components/Loader";
 import StrainInfo from "./StrainInfo";
 import UserInfo from "../UserInfo";
 import MouseSamplingRecords from "../mice/MouseSamplingRecords";
 import BreedingRecords from "../breedingRecords/BreedingRecords";
 import Charts from "../Charts";
+import { useStrain } from "../../hooks/useStrain";
+import { useCheckPermission } from "../../hooks/useCheckPermission";
+import { useHandleError } from "../../hooks/useHandleError";
 
 export default function StrainDetails() {
   const { id } = useParams();
-  const strain = useSelector((state) => state.strains.selectedStrain);
-  const mice = useSelector((state) => state.strains.mice);
-  const breedingRecords = useSelector((state) => state.strains.breedingRecords);
-  const users = useSelector((state) => state.strains.users);
-  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth);
-  const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading: strainLoading, error: strainError } = useStrain(id);
+  const {
+    data: hasPermission,
+    isLoading: permissionLoading,
+    error: permissionError,
+  } = useCheckPermission(id);
+  // console.log(hasPermission);
+  // console.log(strain);
+  // console.log(currentUser);
 
-  useEffect(() => {
-    const fetchPermissionAndData = async () => {
-      try {
-        await axios.get(`/api/strains/${id}/browse-permission`);
-        setIsAuthorized(true);
-        dispatch(fetchStrain(id));
+  useHandleError(strainError);
+  useHandleError(permissionError, hasPermission === false);
 
-        if (!currentUser?.username) {
-          dispatch(fetchUser());
-        }
-      } catch (error) {
-        setIsAuthorized(false);
-        navigate("/error", {
-          state: {
-            error: error.response?.data?.message || "您沒有權限訪問此頁面。",
-            stack: error.response?.data?.stack || "權限錯誤",
-          },
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPermissionAndData();
-  }, [id, dispatch, navigate]);
-
-  if (isLoading) {
+  if (strainLoading || permissionLoading) {
     return <Loader content="資料載入中..." />;
   }
-
-  if (isAuthorized === false) return null;
 
   return (
     <>
       <h1 className="text-center">
-        {strain ? `${strain.strain}採樣記錄` : "基因剔除小鼠採樣記錄"}
+        {data ? `${data.strain.strain} 採樣記錄` : "基因剔除小鼠採樣記錄"}
       </h1>
 
-      <StrainInfo strain={strain} currentUser={currentUser} id={id} />
-      <UserInfo users={users} />
+      <StrainInfo strain={data?.strain} id={id} currentUser={currentUser} />
+      <UserInfo users={data?.users} />
       <Charts id={id} />
       <MouseSamplingRecords
-        mice={mice}
-        strain={strain}
+        mice={data?.mice}
+        strain={data?.strain}
         currentUser={currentUser}
         id={id}
       />
       <BreedingRecords
-        strain={strain}
-        breedingRecords={breedingRecords}
+        strain={data?.strain}
+        breedingRecords={data?.breedingRecords}
         currentUser={currentUser}
         id={id}
       />

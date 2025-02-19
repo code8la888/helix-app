@@ -18,7 +18,7 @@ export default function BreedingRecords({
 
   // 計算分頁數量
   const getPageCount = (items) => Math.ceil(items.length / itemsPerPage);
-  const paginatedBreedingRecords = breedingRecords.slice(
+  const paginatedBreedingRecords = breedingRecords?.slice(
     breedingOffset,
     breedingOffset + itemsPerPage
   );

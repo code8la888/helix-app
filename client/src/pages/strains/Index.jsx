@@ -1,51 +1,44 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import TableHeaderItem from "../../components/TableHeaderItem";
 import ReactPaginate from "react-paginate";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchStrains } from "../../redux/strain/strainActions";
+import { useStrains } from "../../hooks/useStrains";
+import Loader from "../../components/Loader";
 
 function Index() {
-  const dispatch = useDispatch();
-  const strains = useSelector((state) => state.strains.list.strainsWithUsers);
-  const [filteredStrains, setFilteredStrains] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 10;
-  const [keyword, setKeyword] = useState("");
-
-  useEffect(() => {
-    dispatch(fetchStrains());
-  }, [dispatch]);
-
+  const { data: strains, isLoading } = useStrains();
   console.log(strains);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const filtered = strains.filter((strain) =>
-        strain.strain.toLowerCase().includes(keyword.toLowerCase())
-      );
-      setFilteredStrains(filtered);
-      setCurrentPage(0);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [keyword, strains]);
+  const [keyword, setKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10; // 每頁資料數
 
-  const startIndex = currentPage * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = filteredStrains.slice(startIndex, endIndex);
+  const filteredStrains = strains
+    ? keyword.trim()
+      ? strains.strainsWithUsers.filter((strain) => {
+          return strain.strain.toLowerCase().includes(keyword.toLowerCase());
+        })
+      : strains.strainsWithUsers
+    : [];
+  console.log(filteredStrains);
+
+  const startIndex = currentPage * itemsPerPage; // 開始索引
+  const currentData = filteredStrains.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  ); // 每頁顯示的資料
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
-
+  if (isLoading) {
+    return <Loader>資料載入中...</Loader>;
+  }
   return (
     <div>
       <h1 className="text-center">NTUMC-LAC 基因改造小鼠採樣記錄查詢系統</h1>
-      <form className="mb-3" onSubmit={handleSubmit}>
+      <form className="mb-3">
         <div className="row justify-content-center">
           <div className="col-md-6 mb-2">
             <input

@@ -1,9 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import InputField from "../../components/InputField";
 import FieldList from "../../components/FieldList";
 import { useFormValidation } from "../../hooks/useFormValidation";
-import { sendFormData } from "../../utils/sendFormData";
+import { useCreateStrain } from "../../hooks/useStrainMutation";
 
 function NewStrain() {
   const [formData, handleChange, setFormData] = useForm({
@@ -17,10 +17,7 @@ function NewStrain() {
   });
 
   const { validated, validateForm } = useFormValidation();
-
-  const navigate = useNavigate();
-
-  // console.log(formData);
+  const createStrainMutation = useCreateStrain();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,9 +30,9 @@ function NewStrain() {
         users: formData.users.map((field) => field.name),
       },
     };
-    // console.log(updatedFormData);
+    console.log("新增資訊：", updatedFormData);
 
-    sendFormData("/api/strains", updatedFormData, navigate);
+    await createStrainMutation.mutateAsync(updatedFormData);
   };
 
   return (

@@ -1,17 +1,34 @@
-import { useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { useCheckPermission } from "../../hooks/useCheckPermission";
 import InputField from "../../components/InputField";
 import FieldList from "../../components/FieldList";
-import { fetchData } from "../../utils/fetchData";
 import { useForm } from "../../hooks/useForm";
 import { useFormValidation } from "../../hooks/useFormValidation";
-import { sendFormData } from "../../utils/sendFormData";
-import Loader from "../../components/Loader";
+import { useStrain } from "../../hooks/useStrain";
+import { useUpdateStrain } from "../../hooks/useStrainMutation";
+import { useHandleError } from "../../hooks/useHandleError";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function EditStrain() {
   const { id } = useParams();
-  const isAuthorized = useCheckPermission(id);
+  const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.auth);
+  const { data, isLoading, error } = useStrain(id);
+  const strain = data?.strain;
+  const hasEditPermission =
+    currentUser &&
+    strain?.users.includes(currentUser.username) &&
+    currentUser.role === "品系管理人";
+  const updateStrainMutation = useUpdateStrain(id);
+  useEffect(() => {
+    if (!hasEditPermission) {
+      navigate("/error", {
+        state: {
+          error: "您不具有編輯權限",
+        },
+      });
+    }
+  }, [hasEditPermission, navigate]);
   const [formData, handleChange, setFormData] = useForm({
     strain: "",
     dept: "",
@@ -22,50 +39,26 @@ export default function EditStrain() {
     users: [],
   });
   const { validated, validateForm } = useFormValidation();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetchData(`/api/strains/${id}`);
-        setFormData((prevData) => ({
-          ...prevData,
-          ...res.strain,
-        }));
-      } catch (error) {
-        console.error("Error fetching strains data:", error);
-      }
-    };
+  if (strain && !isLoading && formData.strain === "") {
+    setFormData({ ...strain });
+  }
 
-    if (isAuthorized) {
-      loadData();
-    }
-  }, [id]);
+  currentUser &&
+    strain?.users.includes(currentUser.username) &&
+    currentUser.role === "品系管理人";
 
-  console.log(formData);
+  useHandleError(error);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
-
     const { _id, mice, breedingRecords, __v, ...rest } = formData;
-
-    const updatedFormData = {
-      strain: {
-        ...rest,
-      },
+    const strain = {
+      ...rest,
     };
-    console.log(updatedFormData);
-    sendFormData(`/api/strains/${id}`, updatedFormData, navigate, "PUT");
+    await updateStrainMutation.mutateAsync(strain);
   };
-
-  if (isAuthorized === null) {
-    return <Loader>正在檢查權限...</Loader>;
-  }
-
-  if (!isAuthorized) {
-    navigate("/error");
-  }
 
   return (
     <div className="row">

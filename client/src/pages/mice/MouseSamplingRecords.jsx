@@ -18,7 +18,7 @@ export default function MouseSamplingRecords({
 
   // 計算分頁數量
   const getPageCount = (items) => Math.ceil(items.length / itemsPerPage);
-  const paginatedMice = mice.slice(mouseOffset, mouseOffset + itemsPerPage);
+  const paginatedMice = mice?.slice(mouseOffset, mouseOffset + itemsPerPage);
 
   // 刪除小鼠
   const handleDeleteMice = async (miceId, event) => {
@@ -43,7 +43,7 @@ export default function MouseSamplingRecords({
     <>
       {currentUser &&
       strain?.users?.includes(currentUser.username) &&
-      currentUser.role === "品系管理人" ? (
+      currentUser?.role === "品系管理人" ? (
         <button className=" success">
           <Link to={`/strains/${id}/mice/new`} className="link">
             新增採樣記錄

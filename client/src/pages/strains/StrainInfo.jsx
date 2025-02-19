@@ -1,22 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { sendFormData } from "../../utils/sendFormData";
+import { Link } from "react-router-dom";
+import { useDeleteStrain } from "../../hooks/useStrainMutation";
 
 export default function StrainInfo({ strain, currentUser, id }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const deleteStrainMutation = useDeleteStrain(id);
 
   // 刪除品系
   const handleDeleteStrain = async (event) => {
     event.preventDefault();
-    dispatch({ type: "DELETE_STRAIN", payload: id });
-
-    try {
-      await sendFormData(`/api/strains/${id}`, undefined, navigate, "DELETE");
-    } catch (error) {
-      console.error("刪除品系失敗:", error);
-      dispatch({ type: "RESTORE_STRAIN", payload: id });
-    }
+    await deleteStrainMutation.mutateAsync(id);
   };
 
   // 計算到期日
@@ -31,8 +22,8 @@ export default function StrainInfo({ strain, currentUser, id }) {
   return (
     <>
       {currentUser &&
-      strain?.users?.includes(currentUser.username) &&
-      currentUser.role === "品系管理人" ? (
+      strain?.users?.includes(currentUser?.username) &&
+      currentUser?.role === "品系管理人" ? (
         <div className="mb-3 d-flex justify-content-center">
           <button className=" warning text-white mx-2">
             <Link to={`/strains/${id}/edit`} className="link">

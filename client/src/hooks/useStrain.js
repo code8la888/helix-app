@@ -2,15 +2,16 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useHandleError } from "./useHandleError";
 
-const checkPermission = async (id) => {
-  const { data } = await axios.get(`/api/strains/${id}/browse-permission`);
-  return data;
+//取得單一品系資料
+const fetchStrain = async (id) => {
+  const data = await axios.get(`/api/strains/${id}`);
+  return data.data;
 };
 
-export const useCheckPermission = (id) => {
+export const useStrain = (id) => {
   const query = useQuery({
-    queryKey: ["permission", id],
-    queryFn: () => checkPermission(id),
+    queryKey: ["strain", id],
+    queryFn: () => fetchStrain(id),
     staleTime: 1000 * 60 * 1,
     cacheTime: 1000 * 60 * 10,
     refetchOnWindowFocus: false,
