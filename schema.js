@@ -1,6 +1,5 @@
 const BaseJoi = require("joi");
 const sanitizeHtml = require("sanitize-html");
-const breedingRecord = require("./models/breedingRecord");
 
 const extension = (joi) => ({
   type: "string",

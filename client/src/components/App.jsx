@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "../redux/auth/authActions";
 import Loader from "./Loader";
 
+const queryClient = new QueryClient();
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
 const AppLayout = lazy(() => import("./AppLayout"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
@@ -28,56 +28,52 @@ const HomePage = lazy(() => import("../pages/HomePage"));
 const NoPage = lazy(() => import("../pages/NoPage"));
 
 const App = () => {
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
-
   return (
-    <BrowserRouter>
-      <Suspense fallback={<Loader content="載入中..." />}>
-        <Routes>
-          <Route index element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<HomePage />}></Route>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/error" element={<ErrorPage />} />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Suspense fallback={<Loader content="載入中..." />}>
+          <Routes>
+            <Route index element={<Navigate to="/home" replace />} />
+            <Route path="/home" element={<HomePage />}></Route>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/error" element={<ErrorPage />} />
 
-          <Route
-            path="/*"
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Dashboard />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="strains/index" element={<Index />} />
-            <Route path="strains/new" element={<NewStrain />} />
-            <Route path="strains/:id" element={<StrainDetails />} />
-            <Route path="strains/:id/edit" element={<EditStrain />} />
-            <Route path="strains/:id/mice/new" element={<NewMice />} />
             <Route
-              path="strains/:strainId/breedingRecord/:breedingRecordId/edit"
-              element={<EditBreedingRecord />}
-            />
-            <Route
-              path="strains/:strainId/mice/:mouseId/edit"
-              element={<EditMice />}
-            />
-            <Route
-              path="strains/:id/breedingRecord/new"
-              element={<NewBreedingRecord />}
-            />
-            <Route path="profile" element={<ProfilePage />}></Route>
-            <Route path="references" element={<References />}></Route>
-            <Route path="*" element={<NoPage />}></Route>
-          </Route>
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+              path="/*"
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="strains/index" element={<Index />} />
+              <Route path="strains/new" element={<NewStrain />} />
+              <Route path="strains/:id" element={<StrainDetails />} />
+              <Route path="strains/:id/edit" element={<EditStrain />} />
+              <Route path="strains/:id/mice/new" element={<NewMice />} />
+              <Route
+                path="strains/:strainId/breedingRecord/:breedingRecordId/edit"
+                element={<EditBreedingRecord />}
+              />
+              <Route
+                path="strains/:strainId/mice/:mouseId/edit"
+                element={<EditMice />}
+              />
+              <Route
+                path="strains/:id/breedingRecord/new"
+                element={<NewBreedingRecord />}
+              />
+              <Route path="profile" element={<ProfilePage />}></Route>
+              <Route path="references" element={<References />}></Route>
+              <Route path="*" element={<NoPage />}></Route>
+            </Route>
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
