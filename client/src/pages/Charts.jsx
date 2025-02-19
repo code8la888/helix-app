@@ -1,34 +1,35 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 import { Colors } from "chart.js";
 Chart.register(Colors);
+import axios from "axios";
 
 export default function Charts({ id }) {
   const chartRefs = useRef({});
+  const [chartData, setChartData] = useState(null);
 
   async function fetchData() {
-    const res = await fetch(`/api/strains/${id}`);
-    const data = await res.json();
-    return data;
+    const res = await axios(`/api/strains/${id}`);
+    return res.data;
   }
 
-  async function createCharts() {
+  async function processData() {
     const data = await fetchData();
-    console.log(data);
 
+    // 計算小鼠使用數量
     const usageData = data.mice
-      .filter((mouse) => mouse.on_shelf === "已移出") // 只統計「已移出」的小鼠
-      .map((mouse) => new Date(mouse.sampling_date).toISOString().slice(0, 7)) // 取出年月
+      .filter((mouse) => mouse.on_shelf === "已移出")
+      .map((mouse) => new Date(mouse.sampling_date).toISOString().slice(0, 7)) //日期格式：2025-02-20T00:00:00.000Z
       .reduce((acc, month) => {
         acc[month] = (acc[month] || 0) + 1;
         return acc;
       }, {});
 
-    const chartsData = [
+    setChartData([
       {
         id: "onShelfChart",
-        type: "bar",
-        label: "小鼠存活狀況分析",
+        type: "bar", // 圖表類型
+        label: "小鼠存活狀況分析", // 圖表標題
         data: data.mice.reduce((acc, mouse) => {
           acc[mouse.on_shelf] = (acc[mouse.on_shelf] || 0) + 1;
           return acc;
@@ -70,29 +71,39 @@ export default function Charts({ id }) {
         borderColor: ["#FF9F40"],
         backgroundColor: ["#FF9F40"],
       },
-    ];
+    ]);
+  }
 
-    chartsData.forEach(
+  function createOrUpdateCharts() {
+    if (!chartData) return;
+
+    chartData.forEach(
       ({ id, type, label, data, backgroundColor, borderColor }) => {
         const ctx = document.getElementById(id);
 
-        if (chartRefs.current[id]) {
-          chartRefs.current[id].destroy(); // 銷毀舊圖表
-        }
+        if (!ctx) return;
 
-        chartRefs.current[id] = new Chart(ctx, {
-          type,
-          data: {
-            labels: Object.keys(data),
-            datasets: [
-              {
-                label,
-                data: Object.values(data),
-                backgroundColor,
-                borderColor,
-                fill: type === "line" ? false : undefined,
-              },
-            ],
+        if (chartRefs.current[id]) {
+          // 更新現有圖表數據
+          chartRefs.current[id].data.labels = Object.keys(data);
+          chartRefs.current[id].data.datasets[0].data = Object.values(data);
+          chartRefs.current[id].update();
+        } else {
+          // 初始化圖表
+          chartRefs.current[id] = new Chart(ctx, {
+            type, // 圖表類型
+            data: {
+              labels: Object.keys(data), // x軸標題，從data取得標籤
+              datasets: [
+                {
+                  label, // 圖表標題
+                  data: Object.values(data), //對應labels的數值 ( y軸數值 )
+                  backgroundColor,
+                  borderColor,
+                  fill: type === "line" ? false : undefined,
+                },
+              ],
+            },
             options: {
               plugins: {
                 legend: {
@@ -100,20 +111,27 @@ export default function Charts({ id }) {
                     display: true,
                     text: label,
                     font: {
-                      size: 28,
+                      size: 20,
                     },
                   },
                 },
               },
             },
-          },
-        });
+          });
+        }
       }
     );
   }
 
   useEffect(() => {
-    createCharts();
+    processData(); // 當 `id` 變更時，重新獲取數據
+  }, [id]);
+
+  useEffect(() => {
+    createOrUpdateCharts(); // 當數據變更時，更新圖表
+  }, [chartData]);
+
+  useEffect(() => {
     return () => {
       Object.values(chartRefs.current).forEach((chart) => chart.destroy());
     };
