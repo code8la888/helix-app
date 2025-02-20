@@ -11,9 +11,9 @@ export const useCheckPermission = (id) => {
   const query = useQuery({
     queryKey: ["permission", id],
     queryFn: () => checkPermission(id),
-    staleTime: 1000 * 60 * 1,
+    staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     retry: false,
   });
   useHandleError(query.error);
