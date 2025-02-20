@@ -124,6 +124,7 @@ export default function RegisterPage() {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
+                      placeholder="密碼長度應至少 8 碼以上"
                     />
 
                     <div className="d-grid gap-2 mt-4">

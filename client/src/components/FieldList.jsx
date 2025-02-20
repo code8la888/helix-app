@@ -27,7 +27,7 @@ export default function FieldList({
   };
 
   return (
-    <div className="mb-3">
+    <div className="my-3">
       <p className="mb-2 fieldListName">{FieldListName}</p>
       <div>
         {fields.map((field, index) => (

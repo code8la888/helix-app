@@ -65,35 +65,11 @@ export default function NewMice() {
               name="no"
               value={formData.no}
               onChange={handleChange}
-              className="col"
+              className="col-12 col-md-9"
+              placeholder="請輸入 M 或 F 開頭，後面接數字的編號，例如： M123 或 F456"
             />
 
-            <InputField
-              label="父"
-              name="parents.father"
-              value={formData?.parents?.father}
-              onChange={handleChange}
-              className="col"
-            />
-
-            <InputField
-              label="母"
-              name="parents.mother"
-              value={formData?.parents?.mother}
-              onChange={handleChange}
-              className="col"
-            />
-          </div>
-          <div className="row">
-            <InputField
-              label="胎次"
-              name="litter"
-              value={formData.litter}
-              onChange={handleChange}
-              className="col"
-            />
-
-            <div className="col">
+            <div className="col-12 col-md-3">
               <label htmlFor="gender" className="fw-bold mb-2">
                 性別
               </label>
@@ -108,6 +84,34 @@ export default function NewMice() {
                 <option value="F">F</option>
               </select>
             </div>
+          </div>
+          <div className="row">
+            <InputField
+              label="父"
+              name="parents.father"
+              value={formData?.parents?.father}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+              placeholder="請輸入父親的編號"
+            />
+
+            <InputField
+              label="母"
+              name="parents.mother"
+              value={formData?.parents?.mother}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+              placeholder="請輸入母親的編號"
+            />
+          </div>
+          <div className="row">
+            <InputField
+              label="胎次"
+              name="litter"
+              value={formData.litter}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+            />
 
             <InputField
               label="出生日期"
@@ -119,7 +123,16 @@ export default function NewMice() {
                   : ""
               }
               onChange={handleChange}
-              className="col"
+              className="col-12 col-md-6"
+            />
+          </div>
+          <div className="row">
+            <InputField
+              label="趾號"
+              name="toeNumber"
+              value={formData.toeNumber}
+              onChange={handleChange}
+              className="col-12 col-md-6"
             />
 
             <InputField
@@ -132,21 +145,12 @@ export default function NewMice() {
                   : ""
               }
               onChange={handleChange}
-              className="col"
-            />
-
-            <InputField
-              label="趾號"
-              name="toeNumber"
-              value={formData.toeNumber}
-              onChange={handleChange}
-              className="col"
+              className="col-12 col-md-6"
             />
           </div>
-
           <div className="row">
             {samplingGeneList?.map((gene, index) => (
-              <div className="col mb-2" key={gene}>
+              <div className="col-12 col-md-6 mb-2" key={gene}>
                 <label
                   htmlFor={`sampling_results_${index}`}
                   className="fw-bold mb-2"
@@ -178,7 +182,7 @@ export default function NewMice() {
             ))}
           </div>
           <div className="row">
-            <div className="mb-2 col">
+            <div className="mb-2 col-12 col-md-6">
               <label htmlFor="on_shelf" className="fw-bold mb-2">
                 狀態
               </label>
@@ -203,7 +207,7 @@ export default function NewMice() {
               name="note"
               value={formData.note}
               onChange={handleChange}
-              className="col"
+              className="col-12 col-md-6"
             />
           </div>
           <div className="mt-5 d-flex justify-content-end">

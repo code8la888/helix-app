@@ -1,9 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { useForm } from "../../hooks/useForm";
-import { sendFormData } from "../../utils/sendFormData";
 import InputField from "../../components/InputField";
-import Loader from "../../components/Loader";
 import { useStrain } from "../../hooks/useStrain";
 import { useEditBreedingRecord } from "../../hooks/useBreedingRecordMutation";
 
@@ -58,63 +56,60 @@ export default function EditBreedingRecord() {
             validated ? "was-validated" : ""
           } shadow-lg mb-3 p-4 rounded-3`}
         >
-          <div className="row">
-            <InputField
-              label="繁殖籠編號"
-              id="cage_no"
-              name="cage_no"
-              onChange={handleChange}
-              className="col"
-              value={formData.cage_no}
-            />
-            <InputField
-              label="父"
-              id="father"
-              name="parents.father"
-              onChange={handleChange}
-              className="col"
-              value={formData.parents.father}
-            />
+          <InputField
+            label="繁殖籠編號"
+            id="cage_no"
+            name="cage_no"
+            onChange={handleChange}
+            className="col"
+            value={formData.cage_no}
+          />
+          <InputField
+            label="父"
+            id="father"
+            name="parents.father"
+            onChange={handleChange}
+            className="col"
+            value={formData.parents.father}
+          />
 
-            <InputField
-              label="母"
-              id="mother"
-              name="parents.mother"
-              onChange={handleChange}
-              className="col"
-              value={formData.parents.mother}
-            />
-          </div>
-          <div className="row">
-            <InputField
-              label="配種日期"
-              type="date"
-              id="pairing_date"
-              name="pairing_date"
-              onChange={handleChange}
-              className="col"
-              value={
-                formData?.pairing_date
-                  ? new Date(formData.pairing_date).toISOString().split("T")[0]
-                  : ""
-              }
-            />
+          <InputField
+            label="母"
+            id="mother"
+            name="parents.mother"
+            onChange={handleChange}
+            className="col"
+            value={formData.parents.mother}
+          />
 
-            <div className="mb-3 col">
-              <label className="form-label" htmlFor="on_shelf">
-                繁殖籠狀態:
-              </label>
-              <select
-                name="on_shelf"
-                id="on_shelf"
-                className="form-select "
-                onChange={handleChange}
-                value={formData?.on_shelf}
-              >
-                <option value="在架上">在架上</option>
-                <option value="已關閉">已關閉</option>
-              </select>
-            </div>
+          <InputField
+            label="配種日期"
+            type="date"
+            id="pairing_date"
+            name="pairing_date"
+            onChange={handleChange}
+            className="col"
+            value={
+              formData?.pairing_date
+                ? new Date(formData.pairing_date).toISOString().split("T")[0]
+                : ""
+            }
+          />
+
+          <div className="mb-3 col">
+            <label className="form-label" htmlFor="on_shelf">
+              繁殖籠狀態
+            </label>
+            <select
+              name="on_shelf"
+              id="on_shelf"
+              className="form-select "
+              onChange={handleChange}
+              value={formData?.on_shelf}
+            >
+              <option value="在架上">在架上</option>
+              <option value="已關閉">已關閉</option>
+            </select>
           </div>
 
           <div className="mt-5 d-flex justify-content-end">

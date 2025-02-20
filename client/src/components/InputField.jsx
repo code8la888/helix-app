@@ -12,6 +12,7 @@ const InputField = ({
   invalidFeedback = "此欄位為必填",
   autoComplete,
   readOnly = false,
+  placeholder,
   className,
 }) => {
   return (
@@ -33,6 +34,7 @@ const InputField = ({
         required={required}
         autoComplete={autoComplete}
         readOnly={readOnly}
+        placeholder={placeholder}
       />
       <div className="valid-feedback">{validFeedback}</div>
       <div className="invalid-feedback">{invalidFeedback}</div>

@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import { sendFormData } from "../../utils/sendFormData";
-import { fetchStrain } from "../../redux/strain/strainActions";
 import { useDeleteSamplingRecord } from "../../hooks/useSamplingRecordMutation";
 
 export default function MouseSamplingRecords({

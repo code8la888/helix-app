@@ -46,51 +46,51 @@ function NewStrain() {
             validated ? "was-validated" : ""
           } shadow-lg mb-3 p-4 rounded-3`}
         >
-          <div className="row">
-            <InputField
-              label="計畫單位"
-              id="dept"
-              name="dept"
-              value={formData.dept}
-              onChange={handleChange}
-              className="col"
-            />
-            <InputField
-              label="品系名稱"
-              id="strain"
-              name="strain"
-              value={formData.strain}
-              onChange={handleChange}
-              className="col"
-            />
-            <InputField
-              label="品系縮寫"
-              id="abbr"
-              name="abbr"
-              value={formData.abbr}
-              onChange={handleChange}
-              className="col"
-            />
-          </div>
-          <div className="row">
-            <InputField
-              label="IACUC編號"
-              id="iacuc_no"
-              name="iacuc_no"
-              value={formData.iacuc_no}
-              onChange={handleChange}
-              className="col"
-            />
-            <InputField
-              type="date"
-              label="計畫期限"
-              id="EXP"
-              name="EXP"
-              value={formData.EXP}
-              onChange={handleChange}
-              className="col"
-            />
-          </div>
+          <InputField
+            label="計畫單位"
+            id="dept"
+            name="dept"
+            value={formData.dept}
+            onChange={handleChange}
+            className="col"
+          />
+
+          <InputField
+            label="品系名稱"
+            id="strain"
+            name="strain"
+            value={formData.strain}
+            onChange={handleChange}
+            className="col"
+          />
+
+          <InputField
+            label="品系縮寫"
+            id="abbr"
+            name="abbr"
+            value={formData.abbr}
+            onChange={handleChange}
+            className="col"
+          />
+
+          <InputField
+            label="IACUC編號"
+            id="iacuc_no"
+            name="iacuc_no"
+            value={formData.iacuc_no}
+            onChange={handleChange}
+            className="col"
+          />
+
+          <InputField
+            type="date"
+            label="計畫期限"
+            id="EXP"
+            name="EXP"
+            value={formData.EXP}
+            onChange={handleChange}
+            className="col"
+          />
 
           <FieldList
             FieldListName="採樣基因"

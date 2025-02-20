@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { fetchData } from "../../utils/fetchData";
-import { useCheckPermission } from "../../hooks/useCheckPermission";
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { useForm } from "../../hooks/useForm";
 import InputField from "../../components/InputField";
-import Loader from "../../components/Loader";
 import { useStrain } from "../../hooks/useStrain";
 import { useUpdateSamplingRecord } from "../../hooks/useSamplingRecordMutation";
 
@@ -70,35 +67,10 @@ export default function EditMice() {
               name="no"
               value={formData.no}
               onChange={handleChange}
-              className="col"
+              className="col-12 col-md-6"
             />
 
-            <InputField
-              label="父"
-              name="parents.father"
-              value={formData?.parents?.father}
-              onChange={handleChange}
-              className="col"
-            />
-
-            <InputField
-              label="母"
-              name="parents.mother"
-              value={formData?.parents?.mother}
-              onChange={handleChange}
-              className="col"
-            />
-          </div>
-          <div className="row">
-            <InputField
-              label="胎次"
-              name="litter"
-              value={formData.litter}
-              onChange={handleChange}
-              className="col"
-            />
-
-            <div className="col">
+            <div className="col-12 col-md-6">
               <label htmlFor="gender" className="fw-bold mb-2">
                 性別
               </label>
@@ -113,6 +85,34 @@ export default function EditMice() {
                 <option value="F">F</option>
               </select>
             </div>
+          </div>
+
+          <div className="row">
+            <InputField
+              label="父"
+              name="parents.father"
+              value={formData?.parents?.father}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+            />
+
+            <InputField
+              label="母"
+              name="parents.mother"
+              value={formData?.parents?.mother}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+            />
+          </div>
+
+          <div className="row">
+            <InputField
+              label="胎次"
+              name="litter"
+              value={formData.litter}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+            />
 
             <InputField
               label="出生日期"
@@ -124,7 +124,17 @@ export default function EditMice() {
                   : ""
               }
               onChange={handleChange}
-              className="col"
+              className="col-12 col-md-6"
+            />
+          </div>
+
+          <div className="row">
+            <InputField
+              label="趾號"
+              name="toeNumber"
+              value={formData.toeNumber}
+              onChange={handleChange}
+              className="col-12 col-md-6"
             />
 
             <InputField
@@ -137,21 +147,13 @@ export default function EditMice() {
                   : ""
               }
               onChange={handleChange}
-              className="col"
-            />
-
-            <InputField
-              label="趾號"
-              name="toeNumber"
-              value={formData.toeNumber}
-              onChange={handleChange}
-              className="col"
+              className="col-12 col-md-6"
             />
           </div>
 
           <div className="row">
             {genes?.map((gene, index) => (
-              <div className="col mb-2" key={gene}>
+              <div className="col-12 col-md-6 mb-2" key={gene}>
                 <label
                   htmlFor={`sampling_results_${index}`}
                   className="fw-bold mb-2"
@@ -182,8 +184,9 @@ export default function EditMice() {
               </div>
             ))}
           </div>
+
           <div className="row">
-            <div className="mb-2 col">
+            <div className="mb-2 col-12 col-md-6">
               <label htmlFor="on_shelf" className="fw-bold mb-2">
                 狀態
               </label>
@@ -208,7 +211,7 @@ export default function EditMice() {
               name="note"
               value={formData.note}
               onChange={handleChange}
-              className="col"
+              className="col-12 col-md-6"
             />
           </div>
           <div className="mt-5 d-flex justify-content-end">

@@ -58,6 +58,7 @@ export default function NewBreedingRecord() {
             name="parents.father"
             value={formData.parents.father}
             onChange={handleChange}
+            placeholder="請輸入父親的編號"
           />
           <InputField
             label="母"
@@ -65,6 +66,7 @@ export default function NewBreedingRecord() {
             name="parents.mother"
             value={formData.parents.mother}
             onChange={handleChange}
+            placeholder="請輸入母親的編號"
           />
           <InputField
             label="配種日期"
@@ -76,7 +78,7 @@ export default function NewBreedingRecord() {
           />
           <div className="mb-3">
             <label className="form-label" htmlFor="on_shelf">
-              繁殖籠狀態:
+              繁殖籠狀態
             </label>
             <select
               name="on_shelf"
