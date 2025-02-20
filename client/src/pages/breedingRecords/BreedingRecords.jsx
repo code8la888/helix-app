@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import { sendFormData } from "../../utils/sendFormData";
-import { fetchStrain } from "../../redux/strain/strainActions";
+import { useDeleteBreedingRecord } from "../../hooks/useBreedingRecordMutation";
 
 export default function BreedingRecords({
   strain,
@@ -11,10 +9,10 @@ export default function BreedingRecords({
   currentUser,
   id,
 }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const itemsPerPage = 10;
   const [breedingOffset, setBreedingOffset] = useState(0);
+  const deleteBreedingRecordMutation = useDeleteBreedingRecord();
+  console.log(id);
 
   // 計算分頁數量
   const getPageCount = (items) => Math.ceil(items.length / itemsPerPage);
@@ -26,20 +24,8 @@ export default function BreedingRecords({
   // 刪除繁殖紀錄
   const handleDeleteBreedingRecord = async (recordId, event) => {
     event.preventDefault();
-    dispatch({ type: "DELETE_BREEDINGRECORD", payload: recordId });
-
-    try {
-      await sendFormData(
-        `/api/strains/${id}/breedingRecord/${recordId}`,
-        undefined,
-        navigate,
-        "DELETE"
-      );
-      dispatch(fetchStrain(id));
-    } catch (error) {
-      console.error("刪除繁殖紀錄失敗", error);
-      dispatch({ type: "RESTORE_BREEDINGRECORD", payload: recordId });
-    }
+    const data = { strainId: id, breedingRecordId: recordId };
+    await deleteBreedingRecordMutation.mutateAsync(data);
   };
 
   return (
@@ -122,7 +108,9 @@ export default function BreedingRecords({
                   </tr>
                 ))
               ) : (
-                <p className="py-2 fw-bold">尚無繁殖記錄</p>
+                <tr>
+                  <td className="py-2 fw-bold">尚無繁殖記錄</td>
+                </tr>
               )}
             </tbody>
           </table>

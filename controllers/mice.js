@@ -11,7 +11,6 @@ module.exports.createNewMouse = async (req, res) => {
   const { strainId } = req.params;
   const mouse = new Mouse({
     ...req.body.mouse,
-    strain: strainId,
   });
   const strain = await Strain.findById(strainId);
   strain.mice.push(mouse);

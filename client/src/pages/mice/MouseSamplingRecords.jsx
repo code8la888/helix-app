@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import ReactPaginate from "react-paginate";
 import { sendFormData } from "../../utils/sendFormData";
 import { fetchStrain } from "../../redux/strain/strainActions";
+import { useDeleteSamplingRecord } from "../../hooks/useSamplingRecordMutation";
 
 export default function MouseSamplingRecords({
   mice,
@@ -11,8 +12,6 @@ export default function MouseSamplingRecords({
   currentUser,
   id,
 }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const itemsPerPage = 10; // 每頁顯示 10 筆
   const [mouseOffset, setMouseOffset] = useState(0);
 
@@ -20,23 +19,15 @@ export default function MouseSamplingRecords({
   const getPageCount = (items) => Math.ceil(items.length / itemsPerPage);
   const paginatedMice = mice?.slice(mouseOffset, mouseOffset + itemsPerPage);
 
+  const deleteSamplingRecordMutation = useDeleteSamplingRecord();
   // 刪除小鼠
   const handleDeleteMice = async (miceId, event) => {
     event.preventDefault();
-    dispatch({ type: "DELETE_MOUSE", payload: miceId });
-
-    try {
-      await sendFormData(
-        `/api/strains/${id}/mice/${miceId}`,
-        undefined,
-        navigate,
-        "DELETE"
-      );
-      dispatch(fetchStrain(id));
-    } catch (error) {
-      console.error("刪除小鼠失敗", error);
-      dispatch({ type: "RESTORE_MOUSE", payload: miceId });
-    }
+    const data = {
+      strainId: id,
+      mouseId: miceId,
+    };
+    await deleteSamplingRecordMutation.mutateAsync(data);
   };
 
   return (
@@ -145,7 +136,9 @@ export default function MouseSamplingRecords({
                   </tr>
                 ))
               ) : (
-                <p className="py-2 fw-bold">尚無採樣記錄</p>
+                <tr>
+                  <td className="py-2 fw-bold">尚無採樣記錄</td>
+                </tr>
               )}
             </tbody>
           </table>

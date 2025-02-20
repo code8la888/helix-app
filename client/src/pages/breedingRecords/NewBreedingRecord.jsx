@@ -1,12 +1,11 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import { useFormValidation } from "../../hooks/useFormValidation";
-import { sendFormData } from "../../utils/sendFormData";
 import InputField from "../../components/InputField";
+import { useCreateBreedingRecord } from "../../hooks/useBreedingRecordMutation";
 
 export default function NewBreedingRecord() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { validated, validateForm } = useFormValidation();
   const [formData, handleChange] = useForm({
     strain: id,
@@ -20,23 +19,21 @@ export default function NewBreedingRecord() {
   });
 
   console.log(formData);
+  const createBreedingRecordMutation = useCreateBreedingRecord();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
 
     const updatedFormData = {
+      strainId: id,
       breedingRecord: {
         ...formData,
       },
     };
     console.log(updatedFormData);
 
-    sendFormData(
-      `/api/strains/${id}/breedingRecord`,
-      updatedFormData,
-      navigate
-    );
+    await createBreedingRecordMutation.mutateAsync(updatedFormData);
   };
 
   return (

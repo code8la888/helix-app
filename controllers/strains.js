@@ -71,9 +71,29 @@ module.exports.showStrain = async (req, res) => {
 
 module.exports.updateStrain = async (req, res) => {
   const { strainId } = req.params;
-  await Strain.findByIdAndUpdate(strainId, req.body.strain);
-  const strain = await Strain.findById(strainId);
-  await strain.save();
+  const { strain } = req.body;
+  const updatedStrain = {
+    strain: strain.strain,
+    abbr: strain.abbr,
+    iacuc_no: strain.iacuc_no,
+    dept: strain.dept,
+    EXP: strain.EXP,
+    genes: strain.genes,
+    users: [],
+  };
+  if (strain.users && Array.isArray(strain.users)) {
+    for (let username of strain.users) {
+      const user = await User.findOne({ username });
+      if (!user) {
+        throw new ExpressError(
+          `使用者 ${username} 不存在，請先註冊使用者帳戶`,
+          400
+        );
+      }
+      updatedStrain?.users.push(user.username);
+    }
+  }
+  await Strain.findByIdAndUpdate(strainId, updatedStrain);
   res
     .status(200)
     .json({ message: "成功修改品系資訊", redirect: `/strains/${strainId}` });

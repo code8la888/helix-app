@@ -10,7 +10,6 @@ module.exports.createBreedingRecord = async (req, res) => {
   const { strainId } = req.params;
   const breedingRecord = new BreedingRecord({
     ...req.body.breedingRecord,
-    strain: strainId,
   });
   const strain = await Strain.findById(strainId);
   strain.breedingRecords.push(breedingRecord);

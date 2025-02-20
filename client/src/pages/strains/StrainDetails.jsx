@@ -20,7 +20,7 @@ export default function StrainDetails() {
     error: permissionError,
   } = useCheckPermission(id);
   // console.log(hasPermission);
-  // console.log(strain);
+  console.log(data);
   // console.log(currentUser);
 
   useHandleError(strainError);

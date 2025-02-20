@@ -13,7 +13,7 @@ export const useStrains = () => {
     //使用useQuery請求數據
     queryKey: ["strains"],
     queryFn: fetchStrains,
-    staleTime: 1000 * 60 * 1,
+    staleTime: 0,
     cacheTime: 1000 * 60 * 10,
     refetchOnWindowFocus: false,
     retry: false,

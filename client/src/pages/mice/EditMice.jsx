@@ -4,13 +4,16 @@ import { fetchData } from "../../utils/fetchData";
 import { useCheckPermission } from "../../hooks/useCheckPermission";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { useForm } from "../../hooks/useForm";
-import { sendFormData } from "../../utils/sendFormData";
 import InputField from "../../components/InputField";
 import Loader from "../../components/Loader";
+import { useStrain } from "../../hooks/useStrain";
+import { useUpdateSamplingRecord } from "../../hooks/useSamplingRecordMutation";
 
 export default function EditMice() {
   const { strainId, mouseId } = useParams();
-  const navigate = useNavigate();
+  const { data, isLoading, error } = useStrain(strainId);
+  const [genes, setGenes] = useState([]); // Label標題
+  const { validated, validateForm } = useFormValidation();
   const [formData, handleChange, setFormData] = useForm({
     no: "",
     strain: strainId,
@@ -27,29 +30,14 @@ export default function EditMice() {
     on_shelf: "在架上",
     note: "",
   });
-  const [genes, setGenes] = useState([]);
-  const { validated, validateForm } = useFormValidation();
-  const isAuthorized = useCheckPermission(strainId);
+  const mouse = data?.mice.filter((mouse) => mouse._id === mouseId); // 採樣記錄
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetchData(
-          `/api/strains/${strainId}/mice/${mouseId}/edit`
-        );
-        console.log(res);
-        setFormData((prev) => ({ ...prev, ...res.mouse }));
-        setGenes(res.strain.genes);
-      } catch (error) {
-        console.error("Error fetching strains data:", error);
-      }
-    };
+  if (data && !isLoading && formData.no === "") {
+    setFormData(...mouse);
+    setGenes(data.strain.genes);
+  }
 
-    if (isAuthorized) {
-      loadData();
-    }
-  }, []);
-
+  const updateSamplingRecordMutation = useUpdateSamplingRecord();
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
@@ -57,27 +45,15 @@ export default function EditMice() {
     const { _id, __v, ...rest } = formData;
 
     const updatedFormData = {
+      strainId,
+      mouseId,
       mouse: {
         ...rest,
       },
     };
     console.log(updatedFormData);
-
-    sendFormData(
-      `/api/strains/${strainId}/mice/${mouseId}`,
-      updatedFormData,
-      navigate,
-      "PUT"
-    );
+    await updateSamplingRecordMutation.mutateAsync(updatedFormData);
   };
-
-  if (isAuthorized === null) {
-    return <Loader content="正在檢查權限..."></Loader>;
-  }
-
-  if (!isAuthorized) {
-    navigate("/error");
-  }
 
   return (
     <div className="row">
@@ -191,7 +167,7 @@ export default function EditMice() {
                     {
                       const newResults = [...formData.sampling_results];
                       newResults[index] = event.target.value || "檢測中";
-                      setMouseData({
+                      setFormData({
                         ...formData,
                         sampling_results: newResults,
                       });

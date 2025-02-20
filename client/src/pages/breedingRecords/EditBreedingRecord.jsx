@@ -1,21 +1,16 @@
-import React, { useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { useCheckPermission } from "../../hooks/useCheckPermission";
+import { useParams, Link } from "react-router-dom";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { useForm } from "../../hooks/useForm";
 import { sendFormData } from "../../utils/sendFormData";
-import { fetchData } from "../../utils/fetchData";
 import InputField from "../../components/InputField";
 import Loader from "../../components/Loader";
+import { useStrain } from "../../hooks/useStrain";
+import { useEditBreedingRecord } from "../../hooks/useBreedingRecordMutation";
 
 export default function EditBreedingRecord() {
   const { strainId, breedingRecordId } = useParams();
-  console.log("strainId", strainId);
-
-  const navigate = useNavigate();
-  const isAuthorized = useCheckPermission(strainId);
   const [formData, handleChange, setFormData] = useForm({
-    strain: "",
+    strain: strainId,
     cage_no: "",
     parents: {
       father: "",
@@ -25,29 +20,16 @@ export default function EditBreedingRecord() {
     on_shelf: "在架上",
   });
   const { validated, validateForm } = useFormValidation();
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetchData(
-          `/api/strains/${strainId}/breedingRecord/${breedingRecordId}/edit`
-        );
-        console.log(res);
-
-        setFormData((prev) => ({
-          ...prev,
-          ...res.breedingRecord,
-        }));
-      } catch (error) {
-        console.error("Error fetching strains data:", error);
-      }
-    };
-
-    if (isAuthorized) {
-      loadData();
-    }
-  }, [strainId, navigate]);
-
+  const { data, isLoading, error } = useStrain(strainId);
+  const breedingRecord = data.breedingRecords.filter(
+    (record) => record._id === breedingRecordId
+  );
+  console.log(breedingRecord);
+  if (breedingRecord && !isLoading && formData.cage_no === "") {
+    setFormData(...breedingRecord);
+  }
+  console.log(formData);
+  const editBreedingRecordMutation = useEditBreedingRecord();
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
@@ -55,27 +37,15 @@ export default function EditBreedingRecord() {
     const { _id, __v, ...rest } = formData;
 
     const updatedFormData = {
+      strainId,
+      breedingRecordId,
       breedingRecord: {
         ...rest,
       },
     };
     console.log(updatedFormData);
-
-    sendFormData(
-      `/api/strains/${strainId}/breedingRecord/${breedingRecordId}`,
-      updatedFormData,
-      navigate,
-      "PUT"
-    );
+    await editBreedingRecordMutation.mutateAsync(updatedFormData);
   };
-
-  if (isAuthorized === null) {
-    return <Loader>正在檢查權限...</Loader>;
-  }
-
-  if (!isAuthorized) {
-    navigate("/error");
-  }
 
   return (
     <div className="row">

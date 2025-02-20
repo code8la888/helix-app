@@ -1,40 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
-import { fetchData } from "../../utils/fetchData";
-import { useCheckPermission } from "../../hooks/useCheckPermission";
-import TableHeaderItem from "../../components/TableHeaderItem";
 import InputField from "../../components/InputField";
 import { useFormValidation } from "../../hooks/useFormValidation";
-import { sendFormData } from "../../utils/sendFormData";
+import { useStrain } from "../../hooks/useStrain";
+import { useCreateSamplingRecord } from "../../hooks/useSamplingRecordMutation";
 
 export default function NewMice() {
   const { id } = useParams();
-  const isAuthorized = useCheckPermission(id);
+  const { data, isLoading, error } = useStrain(id);
   const [samplingGeneList, setSamplingGeneList] = useState([]);
-
+  const geneList = data?.strain?.genes;
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const res = await fetchData(`/api/strains/${id}`);
-        setSamplingGeneList(res.strain.genes);
-        setFormData((prev) => ({
-          ...prev,
-          sampling_results: new Array(samplingGeneList.length).fill("檢測中"),
-        }));
-      } catch (error) {
-        console.error("Error fetching strains data:", error);
-      }
-    };
-
-    if (isAuthorized) {
-      loadData();
+    if (geneList) {
+      setSamplingGeneList(geneList);
     }
-  }, [id]);
+  }, []);
+
+  console.log(geneList);
 
   const [formData, handleChange, setFormData] = useForm({
     no: "",
-    strain: `${id}`,
+    strain: id,
     toeNumber: "",
     birth_date: "",
     gender: "M",
@@ -48,22 +35,19 @@ export default function NewMice() {
     on_shelf: "在架上",
     note: "",
   });
-
   const { validated, validateForm } = useFormValidation();
-
-  const navigate = useNavigate();
+  const createSamplingRecordMutation = useCreateSamplingRecord();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
-
     const updatedFormData = {
+      strainId: id,
       mouse: {
         ...formData,
       },
     };
-
-    sendFormData(`/api/strains/${id}/mice/new`, updatedFormData, navigate);
+    await createSamplingRecordMutation.mutateAsync(updatedFormData);
   };
 
   return (

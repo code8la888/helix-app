@@ -50,7 +50,7 @@ export const useUpdateStrain = (id) => {
       console.error("更新品系失敗", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "更新品系發生錯誤",
+          error: error.response?.data?.message || "更新品系時發生錯誤",
           stack: error.response?.data?.stack || "無堆疊資訊",
         },
       });
@@ -77,7 +77,7 @@ export const useDeleteStrain = (id) => {
       console.error("刪除品系失敗", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "刪除品系失敗",
+          error: error.response?.data?.message || "刪除品系時發生錯誤",
           stack: error.response?.data?.stack || "無堆疊資訊",
         },
       });

@@ -9,21 +9,20 @@ const {
   validateObjectId,
 } = require("../middleware.js");
 
-router
-  .route("/new")
-  .get(
-    //新增採樣記錄表單頁面(屬於某品系)
-    isLoggedIn,
-    verifyEditPermission,
-    catchAsync(mice.renderNewForm)
-  )
-  .post(
-    //新增採樣記錄
-    isLoggedIn,
-    verifyEditPermission,
-    validateMouse,
-    catchAsync(mice.createNewMouse)
-  );
+router.route("/").post(
+  //新增採樣記錄
+  isLoggedIn,
+  verifyEditPermission,
+  validateMouse,
+  catchAsync(mice.createNewMouse)
+);
+
+router.route("/new").get(
+  //新增採樣記錄表單頁面(屬於某品系)
+  isLoggedIn,
+  verifyEditPermission,
+  catchAsync(mice.renderNewForm)
+);
 
 //編輯採樣記錄表單
 router.get(
