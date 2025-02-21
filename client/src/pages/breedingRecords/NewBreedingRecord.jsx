@@ -9,16 +9,13 @@ import { useHandleError } from "../../hooks/useHandleError";
 
 export default function NewBreedingRecord() {
   const { id } = useParams();
+  console.log(id);
   const {
     data: hasEditPermission,
     isLoading: editPermissionLoading,
     error: editPermissionError,
-  } = useCheckEditPermission(strainId);
+  } = useCheckEditPermission(id);
   useHandleError(editPermissionError, hasEditPermission === false);
-
-  if (isLoading || editPermissionLoading) {
-    return <Loader />;
-  }
 
   const { validated, validateForm } = useFormValidation();
   const [formData, handleChange] = useForm({
@@ -32,7 +29,7 @@ export default function NewBreedingRecord() {
     on_shelf: "在架上",
   });
 
-  console.log(formData);
+  // console.log(formData);
   const createBreedingRecordMutation = useCreateBreedingRecord();
 
   const handleSubmit = async (event) => {
@@ -49,6 +46,10 @@ export default function NewBreedingRecord() {
 
     await createBreedingRecordMutation.mutateAsync(updatedFormData);
   };
+
+  if (editPermissionLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="row">

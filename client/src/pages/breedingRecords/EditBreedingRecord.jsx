@@ -7,9 +7,11 @@ import { useEditBreedingRecord } from "../../hooks/useBreedingRecordMutation";
 import { useCheckEditPermission } from "../../hooks/useCheckEditPermission";
 import { useHandleError } from "../../hooks/useHandleError";
 import Loader from "../../components/Loader";
+import { useEffect } from "react";
 
 export default function EditBreedingRecord() {
   const { strainId, breedingRecordId } = useParams();
+  console.log(strainId);
   const [formData, handleChange, setFormData] = useForm({
     strain: strainId,
     cage_no: "",
@@ -30,17 +32,15 @@ export default function EditBreedingRecord() {
   useHandleError(error);
   useHandleError(editPermissionError, hasEditPermission === false);
 
-  if (isLoading || editPermissionLoading) {
-    return <Loader />;
-  }
-
   const breedingRecord = data.breedingRecords.filter(
     (record) => record._id === breedingRecordId
   );
 
-  if (breedingRecord && !isLoading && formData.cage_no === "") {
-    setFormData(...breedingRecord);
-  }
+  useEffect(() => {
+    if (data) {
+      setFormData(...breedingRecord);
+    }
+  }, [data]);
 
   const editBreedingRecordMutation = useEditBreedingRecord();
   const handleSubmit = async (event) => {
@@ -58,6 +58,10 @@ export default function EditBreedingRecord() {
     };
     await editBreedingRecordMutation.mutateAsync(updatedFormData);
   };
+
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="row">

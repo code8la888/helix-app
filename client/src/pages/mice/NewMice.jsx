@@ -11,6 +11,7 @@ import Loader from "../../components/Loader";
 
 export default function NewMice() {
   const { id } = useParams();
+  console.log(id);
   const { data, isLoading, error } = useStrain(id);
   const {
     data: hasEditPermission,
@@ -20,11 +21,8 @@ export default function NewMice() {
   useHandleError(error);
   useHandleError(editPermissionError, hasEditPermission === false);
 
-  if (isLoading || editPermissionLoading) {
-    return <Loader />;
-  }
   const [samplingGeneList, setSamplingGeneList] = useState([]);
-  const geneList = data?.strain?.genes;
+  const geneList = data?.strain?.genes || [];
   useEffect(() => {
     if (geneList) {
       setSamplingGeneList(geneList);
@@ -44,13 +42,14 @@ export default function NewMice() {
       mother: "",
     },
     sampling_date: "",
-    sampling_results: new Array(samplingGeneList.length).fill("檢測中"),
+    sampling_results: new Array(geneList.length).fill("檢測中"),
     litter: "",
     on_shelf: "在架上",
     note: "",
   });
   const { validated, validateForm } = useFormValidation();
   const createSamplingRecordMutation = useCreateSamplingRecord();
+  console.log(formData);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,8 +60,13 @@ export default function NewMice() {
         ...formData,
       },
     };
+    console.log(updatedFormData);
+
     await createSamplingRecordMutation.mutateAsync(updatedFormData);
   };
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="row">

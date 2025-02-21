@@ -8,9 +8,11 @@ import { useUpdateStrain } from "../../hooks/useStrainMutation";
 import { useHandleError } from "../../hooks/useHandleError";
 import { useCheckEditPermission } from "../../hooks/useCheckEditPermission";
 import Loader from "../../components/Loader";
+import { useEffect } from "react";
 
 export default function EditStrain() {
   const { id } = useParams();
+  console.log(id);
   const {
     data: hasEditPermission,
     isLoading: editPermissionLoading,
@@ -18,10 +20,8 @@ export default function EditStrain() {
   } = useCheckEditPermission(id);
   useHandleError(editPermissionError, hasEditPermission === false);
   const { data, isLoading, error } = useStrain(id);
-  if (isLoading || editPermissionLoading) {
-    return <Loader />;
-  }
-  const strain = data?.strain;
+
+  // const strain = data?.strain;
   const updateStrainMutation = useUpdateStrain(id);
   const [formData, handleChange, setFormData] = useForm({
     strain: "",
@@ -33,10 +33,12 @@ export default function EditStrain() {
     users: [],
   });
   const { validated, validateForm } = useFormValidation();
+  useEffect(() => {
+    if (data) {
+      setFormData(data.strain);
+    }
+  }, [data]);
 
-  if (strain && !isLoading && formData.strain === "") {
-    setFormData({ ...strain });
-  }
   useHandleError(error);
 
   const handleSubmit = async (event) => {
@@ -48,6 +50,10 @@ export default function EditStrain() {
     };
     await updateStrainMutation.mutateAsync(strain);
   };
+
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="row">

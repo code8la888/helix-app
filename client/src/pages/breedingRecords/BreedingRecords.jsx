@@ -109,7 +109,9 @@ export default function BreedingRecords({
                 ))
               ) : (
                 <tr>
-                  <td className="py-2 fw-bold">尚無繁殖記錄</td>
+                  <td className="py-2 fw-bold" colSpan={6}>
+                    尚無繁殖記錄
+                  </td>
                 </tr>
               )}
             </tbody>

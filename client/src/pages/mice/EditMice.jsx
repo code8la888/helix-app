@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { useForm } from "../../hooks/useForm";
@@ -11,6 +11,7 @@ import { useHandleError } from "../../hooks/useHandleError";
 
 export default function EditMice() {
   const { strainId, mouseId } = useParams();
+  console.log(strainId);
   const { data, isLoading, error } = useStrain(strainId);
   const {
     data: hasEditPermission,
@@ -20,9 +21,6 @@ export default function EditMice() {
   useHandleError(error);
   useHandleError(editPermissionError, hasEditPermission === false);
 
-  if (isLoading || editPermissionLoading) {
-    return <Loader />;
-  }
   const [genes, setGenes] = useState([]); // Label標題
   const { validated, validateForm } = useFormValidation();
   const [formData, handleChange, setFormData] = useForm({
@@ -36,17 +34,19 @@ export default function EditMice() {
       mother: "",
     },
     sampling_date: "",
-    sampling_results: [],
+    sampling_results: new Array(genes.length).fill("檢測中"),
     litter: "",
     on_shelf: "在架上",
     note: "",
   });
   const mouse = data?.mice.filter((mouse) => mouse._id === mouseId); // 採樣記錄
 
-  if (data && !isLoading && formData.no === "") {
-    setFormData(...mouse);
-    setGenes(data.strain.genes);
-  }
+  useEffect(() => {
+    if (data && mouse) {
+      setFormData(...mouse);
+      setGenes(data.strain.genes);
+    }
+  }, [data]);
 
   const updateSamplingRecordMutation = useUpdateSamplingRecord();
   const handleSubmit = async (event) => {
@@ -65,6 +65,10 @@ export default function EditMice() {
     console.log(updatedFormData);
     await updateSamplingRecordMutation.mutateAsync(updatedFormData);
   };
+
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="row">

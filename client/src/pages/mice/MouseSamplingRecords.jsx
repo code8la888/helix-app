@@ -134,7 +134,12 @@ export default function MouseSamplingRecords({
                 ))
               ) : (
                 <tr>
-                  <td className="py-2 fw-bold">尚無採樣記錄</td>
+                  <td
+                    className="py-2 fw-bold"
+                    colSpan={11 + strain.genes.length}
+                  >
+                    尚無採樣記錄
+                  </td>
                 </tr>
               )}
             </tbody>

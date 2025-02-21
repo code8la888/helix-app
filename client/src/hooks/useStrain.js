@@ -12,9 +12,9 @@ export const useStrain = (id) => {
   const query = useQuery({
     queryKey: ["strain", id],
     queryFn: () => fetchStrain(id),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
     cacheTime: 1000 * 60 * 10,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
     retry: false,
   });
   useHandleError(query.error);
