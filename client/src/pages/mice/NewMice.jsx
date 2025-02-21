@@ -71,7 +71,7 @@ export default function NewMice() {
   return (
     <div className="row">
       <h1 className="text-center">新增小鼠資料</h1>
-      <div className="col-md-8 offset-md-2 shadow-lg mb-3 p-4 rounded-3">
+      <div className="col-10 offset-1 shadow-lg mb-3 p-4 rounded-3">
         <form
           onSubmit={handleSubmit}
           noValidate

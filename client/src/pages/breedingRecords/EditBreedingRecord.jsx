@@ -66,7 +66,7 @@ export default function EditBreedingRecord() {
   return (
     <div className="row">
       <h1 className="text-center">編輯繁殖籠表</h1>
-      <div className="col-md-8 offset-md-2">
+      <div className="col-10 offset-1">
         <form
           onSubmit={handleSubmit}
           noValidate

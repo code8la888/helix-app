@@ -58,7 +58,7 @@ export default function EditStrain() {
   return (
     <div className="row">
       <h1 className="text-center">編輯小鼠品系</h1>
-      <div className="col-8 offset-2">
+      <div className="col-10 offset-1">
         <form
           noValidate
           onSubmit={handleSubmit}
