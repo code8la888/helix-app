@@ -14,7 +14,7 @@ function AppLayout() {
   return (
     <div id="pageTop">
       <Header />
-      <main className="flex-grow-1  d-flex align-items-center justify-content-center">
+      <main>
         <div className="my-3 container">
           <Outlet />
         </div>
