@@ -31,7 +31,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Suspense fallback={<Loader content="載入中..." />}>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route index element={<Navigate to="/home" replace />} />
             <Route path="/home" element={<HomePage />}></Route>

@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
 
   if (auth === null) {
-    return <Loader content="檢查權限中，請稍後..." />;
+    return <Loader />;
   }
 
   if (auth === false) {
