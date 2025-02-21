@@ -34,7 +34,7 @@ export default function MouseSamplingRecords({
       currentUser?.role === "品系管理人" ? (
         <button className=" success">
           <Link to={`/strains/${id}/mice/new`} className="link">
-            新增採樣記錄
+            新增採樣紀錄
           </Link>
         </button>
       ) : (
@@ -43,7 +43,7 @@ export default function MouseSamplingRecords({
       {paginatedMice ? (
         <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
           <table className="table table-striped table-hover custom-striped caption-top">
-            <caption className="table-title p-0">小鼠採樣記錄</caption>
+            <caption className="table-title p-0">小鼠採樣紀錄</caption>
             <thead>
               <tr>
                 <th scope="col">No</th>
@@ -138,7 +138,7 @@ export default function MouseSamplingRecords({
                     className="py-2 fw-bold"
                     colSpan={11 + strain.genes.length}
                   >
-                    尚無採樣記錄
+                    尚無採樣紀錄
                   </td>
                 </tr>
               )}

@@ -19,10 +19,10 @@ export const useCreateSamplingRecord = () => {
       if (data.redirect) navigate(data.redirect);
     },
     onError: (error) => {
-      console.error("新增採樣記錄失敗", error);
+      console.error("新增採樣紀錄失敗", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "新增採樣記錄發生錯誤",
+          error: error.response?.data?.message || "新增採樣紀錄發生錯誤",
           stack: error.response?.data?.stack || "無堆疊資訊",
         },
       });
@@ -46,10 +46,10 @@ export const useUpdateSamplingRecord = () => {
       if (data.redirect) navigate(data.redirect);
     },
     onError: (error) => {
-      console.error("更新採樣記錄失敗", error);
+      console.error("更新採樣紀錄失敗", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "更新採樣記錄發生錯誤",
+          error: error.response?.data?.message || "更新採樣紀錄發生錯誤",
           stack: error.response?.data?.stack || "無堆疊資訊",
         },
       });
@@ -73,10 +73,10 @@ export const useDeleteSamplingRecord = () => {
       if (data.redirect) navigate(data.redirect);
     },
     onError: (error) => {
-      console.error("刪除採樣記錄失敗", error);
+      console.error("刪除採樣紀錄失敗", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "刪除採樣記錄發生錯誤",
+          error: error.response?.data?.message || "刪除採樣紀錄發生錯誤",
           stack: error.response?.data?.stack || "無堆疊資訊",
         },
       });

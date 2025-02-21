@@ -39,7 +39,7 @@ export default function EditMice() {
     on_shelf: "在架上",
     note: "",
   });
-  const mouse = data?.mice.filter((mouse) => mouse._id === mouseId); // 採樣記錄
+  const mouse = data?.mice.filter((mouse) => mouse._id === mouseId); // 採樣紀錄
 
   useEffect(() => {
     if (data && mouse) {
@@ -72,7 +72,7 @@ export default function EditMice() {
 
   return (
     <div className="row">
-      <h1 className="text-center">編輯採樣記錄</h1>
+      <h1 className="text-center">編輯採樣紀錄</h1>
       <div className="col-md-8 offset-md-2 shadow-lg mb-3 p-4 rounded-3">
         <form
           onSubmit={handleSubmit}

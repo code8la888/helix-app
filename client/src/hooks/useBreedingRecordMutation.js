@@ -24,10 +24,10 @@ export const useCreateBreedingRecord = () => {
       if (data.redirect) navigate(data.redirect);
     },
     onError: (error) => {
-      console.error("新增繁殖記錄失敗：", error);
+      console.error("新增繁殖紀錄失敗：", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "新增繁殖記錄時發生錯誤",
+          error: error.response?.data?.message || "新增繁殖紀錄時發生錯誤",
           stack: error.response?.data?.stack || "沒有堆疊資訊",
         },
       });
@@ -53,10 +53,10 @@ export const useEditBreedingRecord = () => {
       if (data.redirect) navigate(data.redirect);
     },
     onError: (error) => {
-      console.error("修改繁殖記錄失敗：", error);
+      console.error("修改繁殖紀錄失敗：", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "修改繁殖記錄時發生錯誤",
+          error: error.response?.data?.message || "修改繁殖紀錄時發生錯誤",
           stack: error.response?.data?.stack || "沒有堆疊資訊",
         },
       });
@@ -77,14 +77,14 @@ export const useDeleteBreedingRecord = () => {
     },
     onSuccess: (data, { strainId }) => {
       queryClient.invalidateQueries(["strain", strainId]);
-      if (data.message) toast.success(data.message || "刪除繁殖記錄成功");
+      if (data.message) toast.success(data.message || "刪除繁殖紀錄成功");
       if (data.redirect) navigate(data.redirect);
     },
     onError: (error) => {
-      console.error("刪除繁殖記錄失敗", error);
+      console.error("刪除繁殖紀錄失敗", error);
       navigate("/error", {
         state: {
-          error: error.response?.data?.message || "刪除繁殖記錄發生錯誤",
+          error: error.response?.data?.message || "刪除繁殖紀錄發生錯誤",
           stack: error.response?.data?.stack || "無堆疊資訊",
         },
       });

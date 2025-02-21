@@ -18,7 +18,7 @@ module.exports.createNewMouse = async (req, res) => {
   await mouse.save();
   res
     .status(200)
-    .json({ message: "成功新增採樣記錄", redirect: `/strains/${strainId}` });
+    .json({ message: "成功新增採樣紀錄", redirect: `/strains/${strainId}` });
 };
 
 module.exports.renderEditForm = async (req, res) => {
@@ -33,7 +33,7 @@ module.exports.updateMouse = async (req, res) => {
   await Mouse.findByIdAndUpdate(mouseId, req.body.mouse);
   res
     .status(200)
-    .json({ message: "成功修改採樣記錄", redirect: `/strains/${strainId}` });
+    .json({ message: "成功修改採樣紀錄", redirect: `/strains/${strainId}` });
 };
 
 module.exports.deleteMouse = async (req, res) => {
@@ -42,5 +42,5 @@ module.exports.deleteMouse = async (req, res) => {
   await Mouse.findByIdAndDelete(mouseId);
   res
     .status(200)
-    .json({ message: "成功刪除採樣記錄", redirect: `/strains/${strainId}` });
+    .json({ message: "成功刪除採樣紀錄", redirect: `/strains/${strainId}` });
 };

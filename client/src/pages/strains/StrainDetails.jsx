@@ -29,7 +29,7 @@ export default function StrainDetails() {
   return (
     <>
       <h1 className="text-center">
-        {data ? `${data.strain.strain} 採樣記錄` : "基因剔除小鼠採樣記錄"}
+        {data ? `${data.strain.strain} 採樣紀錄` : "基因剔除小鼠採樣紀錄"}
       </h1>
 
       <StrainInfo strain={data?.strain} id={id} currentUser={currentUser} />

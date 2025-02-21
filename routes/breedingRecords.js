@@ -9,7 +9,7 @@ const {
   validateObjectId,
 } = require("../middleware.js");
 
-//新增繁殖記錄
+//新增繁殖紀錄
 router.post(
   "/",
   isLoggedIn,
@@ -18,7 +18,7 @@ router.post(
   catchAsync(breedingRecords.createBreedingRecord)
 );
 
-//新增繁殖記錄表單
+//新增繁殖紀錄表單
 router.get(
   "/new",
   isLoggedIn,
@@ -29,7 +29,7 @@ router.get(
 router
   .route("/:breedingRecordId")
   .put(
-    //修改繁殖記錄
+    //修改繁殖紀錄
     validateObjectId,
     isLoggedIn,
     verifyEditPermission,
@@ -37,14 +37,14 @@ router
     catchAsync(breedingRecords.updateBreedingRecord)
   )
   .delete(
-    //刪除繁殖記錄
+    //刪除繁殖紀錄
     validateObjectId,
     isLoggedIn,
     verifyEditPermission,
     catchAsync(breedingRecords.deleteBreedingRecord)
   );
 
-//編輯繁殖記錄表單
+//編輯繁殖紀錄表單
 router.get(
   "/:breedingRecordId/edit",
   validateObjectId,

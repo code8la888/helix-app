@@ -17,7 +17,7 @@ module.exports.createBreedingRecord = async (req, res) => {
   await strain.save();
   res
     .status(200)
-    .json({ message: "成功新增繁殖記錄", redirect: `/strains/${strainId}` });
+    .json({ message: "成功新增繁殖紀錄", redirect: `/strains/${strainId}` });
 };
 
 module.exports.renderEditForm = async (req, res) => {
@@ -34,7 +34,7 @@ module.exports.updateBreedingRecord = async (req, res) => {
   );
   res
     .status(200)
-    .json({ message: "成功修改繁殖記錄", redirect: `/strains/${strainId}` });
+    .json({ message: "成功修改繁殖紀錄", redirect: `/strains/${strainId}` });
 };
 
 module.exports.deleteBreedingRecord = async (req, res) => {
@@ -45,5 +45,5 @@ module.exports.deleteBreedingRecord = async (req, res) => {
   });
   res
     .status(200)
-    .json({ message: "成功刪除繁殖記錄", redirect: `/strains/${strainId}` });
+    .json({ message: "成功刪除繁殖紀錄", redirect: `/strains/${strainId}` });
 };

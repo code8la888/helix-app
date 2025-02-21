@@ -10,7 +10,7 @@ const {
 } = require("../middleware.js");
 
 router.route("/").post(
-  //新增採樣記錄
+  //新增採樣紀錄
   isLoggedIn,
   verifyEditPermission,
   validateMouse,
@@ -18,13 +18,13 @@ router.route("/").post(
 );
 
 router.route("/new").get(
-  //新增採樣記錄表單頁面(屬於某品系)
+  //新增採樣紀錄表單頁面(屬於某品系)
   isLoggedIn,
   verifyEditPermission,
   catchAsync(mice.renderNewForm)
 );
 
-//編輯採樣記錄表單
+//編輯採樣紀錄表單
 router.get(
   "/:mouseId/edit",
   validateObjectId,
@@ -36,7 +36,7 @@ router.get(
 router
   .route("/:mouseId")
   .put(
-    //更新採樣記錄
+    //更新採樣紀錄
     validateObjectId,
     isLoggedIn,
     verifyEditPermission,
@@ -44,7 +44,7 @@ router
     catchAsync(mice.updateMouse)
   )
   .delete(
-    //刪除採樣記錄
+    //刪除採樣紀錄
     validateObjectId,
     isLoggedIn,
     verifyEditPermission,

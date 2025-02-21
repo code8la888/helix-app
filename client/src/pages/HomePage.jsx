@@ -62,7 +62,7 @@ export default function HomePage() {
                 關於 Helix LIMS
               </h2>
               <p className="text-black fs-5">
-                在當今高度數據驅動的科研環境中，傳統的紙本記錄與 Excel
+                在當今高度數據驅動的科研環境中，傳統的紙本紀錄與 Excel
                 管理容易造成數據不一致與資訊流失。
               </p>
               <p className="text-black fs-5">
