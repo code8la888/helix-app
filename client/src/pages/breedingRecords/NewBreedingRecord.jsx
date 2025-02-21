@@ -3,9 +3,23 @@ import { useForm } from "../../hooks/useForm";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import InputField from "../../components/InputField";
 import { useCreateBreedingRecord } from "../../hooks/useBreedingRecordMutation";
+import Loader from "../../components/Loader";
+import { useCheckEditPermission } from "../../hooks/useCheckEditPermission";
+import { useHandleError } from "../../hooks/useHandleError";
 
 export default function NewBreedingRecord() {
   const { id } = useParams();
+  const {
+    data: hasEditPermission,
+    isLoading: editPermissionLoading,
+    error: editPermissionError,
+  } = useCheckEditPermission(strainId);
+  useHandleError(editPermissionError, hasEditPermission === false);
+
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
+
   const { validated, validateForm } = useFormValidation();
   const [formData, handleChange] = useForm({
     strain: id,

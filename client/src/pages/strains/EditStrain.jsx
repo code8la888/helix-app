@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import InputField from "../../components/InputField";
 import FieldList from "../../components/FieldList";
 import { useForm } from "../../hooks/useForm";
@@ -6,29 +6,23 @@ import { useFormValidation } from "../../hooks/useFormValidation";
 import { useStrain } from "../../hooks/useStrain";
 import { useUpdateStrain } from "../../hooks/useStrainMutation";
 import { useHandleError } from "../../hooks/useHandleError";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useCheckEditPermission } from "../../hooks/useCheckEditPermission";
+import Loader from "../../components/Loader";
 
 export default function EditStrain() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const currentUser = useSelector((state) => state.auth);
+  const {
+    data: hasEditPermission,
+    isLoading: editPermissionLoading,
+    error: editPermissionError,
+  } = useCheckEditPermission(id);
+  useHandleError(editPermissionError, hasEditPermission === false);
   const { data, isLoading, error } = useStrain(id);
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
   const strain = data?.strain;
-  const hasEditPermission =
-    currentUser &&
-    strain?.users.includes(currentUser.username) &&
-    currentUser.role === "品系管理人";
   const updateStrainMutation = useUpdateStrain(id);
-  useEffect(() => {
-    if (!hasEditPermission) {
-      navigate("/error", {
-        state: {
-          error: "您不具有編輯權限",
-        },
-      });
-    }
-  }, [hasEditPermission, navigate]);
   const [formData, handleChange, setFormData] = useForm({
     strain: "",
     dept: "",
@@ -43,11 +37,6 @@ export default function EditStrain() {
   if (strain && !isLoading && formData.strain === "") {
     setFormData({ ...strain });
   }
-
-  currentUser &&
-    strain?.users.includes(currentUser.username) &&
-    currentUser.role === "品系管理人";
-
   useHandleError(error);
 
   const handleSubmit = async (event) => {

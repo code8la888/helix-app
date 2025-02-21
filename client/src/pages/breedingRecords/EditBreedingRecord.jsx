@@ -4,6 +4,9 @@ import { useForm } from "../../hooks/useForm";
 import InputField from "../../components/InputField";
 import { useStrain } from "../../hooks/useStrain";
 import { useEditBreedingRecord } from "../../hooks/useBreedingRecordMutation";
+import { useCheckEditPermission } from "../../hooks/useCheckEditPermission";
+import { useHandleError } from "../../hooks/useHandleError";
+import Loader from "../../components/Loader";
 
 export default function EditBreedingRecord() {
   const { strainId, breedingRecordId } = useParams();
@@ -19,14 +22,26 @@ export default function EditBreedingRecord() {
   });
   const { validated, validateForm } = useFormValidation();
   const { data, isLoading, error } = useStrain(strainId);
+  const {
+    data: hasEditPermission,
+    isLoading: editPermissionLoading,
+    error: editPermissionError,
+  } = useCheckEditPermission(strainId);
+  useHandleError(error);
+  useHandleError(editPermissionError, hasEditPermission === false);
+
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
+
   const breedingRecord = data.breedingRecords.filter(
     (record) => record._id === breedingRecordId
   );
-  console.log(breedingRecord);
+
   if (breedingRecord && !isLoading && formData.cage_no === "") {
     setFormData(...breedingRecord);
   }
-  console.log(formData);
+
   const editBreedingRecordMutation = useEditBreedingRecord();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,7 +56,6 @@ export default function EditBreedingRecord() {
         ...rest,
       },
     };
-    console.log(updatedFormData);
     await editBreedingRecordMutation.mutateAsync(updatedFormData);
   };
 

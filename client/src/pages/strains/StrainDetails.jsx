@@ -7,7 +7,7 @@ import MouseSamplingRecords from "../mice/MouseSamplingRecords";
 import BreedingRecords from "../breedingRecords/BreedingRecords";
 import Charts from "../Charts";
 import { useStrain } from "../../hooks/useStrain";
-import { useCheckPermission } from "../../hooks/useCheckPermission";
+import { useCheckBrowsePermission } from "../../hooks/useCheckBrowsePermission";
 import { useHandleError } from "../../hooks/useHandleError";
 
 export default function StrainDetails() {
@@ -15,19 +15,15 @@ export default function StrainDetails() {
   const currentUser = useSelector((state) => state.auth);
   const { data, isLoading: strainLoading, error: strainError } = useStrain(id);
   const {
-    data: hasPermission,
-    isLoading: permissionLoading,
-    error: permissionError,
-  } = useCheckPermission(id);
-  // console.log(hasPermission);
-  console.log(data);
-  // console.log(currentUser);
-
+    data: hasBrowsePermission,
+    isLoading: browsePermissionLoading,
+    error: browsePermissionError,
+  } = useCheckBrowsePermission(id);
   useHandleError(strainError);
-  useHandleError(permissionError, hasPermission === false);
+  useHandleError(browsePermissionError, hasBrowsePermission === false);
 
-  if (strainLoading || permissionLoading) {
-    return <Loader content="資料載入中..." />;
+  if (strainLoading || browsePermissionLoading) {
+    return <Loader />;
   }
 
   return (

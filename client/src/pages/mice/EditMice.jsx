@@ -5,10 +5,24 @@ import { useForm } from "../../hooks/useForm";
 import InputField from "../../components/InputField";
 import { useStrain } from "../../hooks/useStrain";
 import { useUpdateSamplingRecord } from "../../hooks/useSamplingRecordMutation";
+import Loader from "../../components/Loader";
+import { useCheckEditPermission } from "../../hooks/useCheckEditPermission";
+import { useHandleError } from "../../hooks/useHandleError";
 
 export default function EditMice() {
   const { strainId, mouseId } = useParams();
   const { data, isLoading, error } = useStrain(strainId);
+  const {
+    data: hasEditPermission,
+    isLoading: editPermissionLoading,
+    error: editPermissionError,
+  } = useCheckEditPermission(strainId);
+  useHandleError(error);
+  useHandleError(editPermissionError, hasEditPermission === false);
+
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
   const [genes, setGenes] = useState([]); // Label標題
   const { validated, validateForm } = useFormValidation();
   const [formData, handleChange, setFormData] = useForm({

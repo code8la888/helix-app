@@ -5,10 +5,24 @@ import InputField from "../../components/InputField";
 import { useFormValidation } from "../../hooks/useFormValidation";
 import { useStrain } from "../../hooks/useStrain";
 import { useCreateSamplingRecord } from "../../hooks/useSamplingRecordMutation";
+import { useCheckEditPermission } from "../../hooks/useCheckEditPermission";
+import { useHandleError } from "../../hooks/useHandleError";
+import Loader from "../../components/Loader";
 
 export default function NewMice() {
   const { id } = useParams();
   const { data, isLoading, error } = useStrain(id);
+  const {
+    data: hasEditPermission,
+    isLoading: editPermissionLoading,
+    error: editPermissionError,
+  } = useCheckEditPermission(id);
+  useHandleError(error);
+  useHandleError(editPermissionError, hasEditPermission === false);
+
+  if (isLoading || editPermissionLoading) {
+    return <Loader />;
+  }
   const [samplingGeneList, setSamplingGeneList] = useState([]);
   const geneList = data?.strain?.genes;
   useEffect(() => {
