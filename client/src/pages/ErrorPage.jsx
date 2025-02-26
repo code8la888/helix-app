@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./ErrorPage.module.css";
 
 function ErrorPage() {
   const location = useLocation();
@@ -10,26 +11,26 @@ function ErrorPage() {
   const isDevelopment = process.env.NODE_ENV === "development";
 
   return (
-    <div className="container-fluid d-flex flex-column justify-content-center align-items-center vh-100 p-5">
-      <div className="alert alert-danger" role="alert">
-        <h4>{errorMessage}</h4>
-        {isDevelopment && errorStack && (
-          <div className="mt-3">
-            <hr />
-            <pre className="text-wrap" style={{ color: "rgb(88, 21, 28)" }}>
-              {errorStack}
-            </pre>
-          </div>
-        )}
-      </div>
-      <div className="text-center">
-        <button
-          className=""
-          style={{ backgroundColor: "var(--bs-danger-bg-subtle)" }}
-          onClick={() => navigate("/strains/index")}
-        >
-          返回
-        </button>
+    <div className={styles.background}>
+      <div className={styles.contentBox}>
+        <h1 className={styles.text}>OOPS!</h1>
+        <div className={styles.errorMessage} role="alert">
+          <h2>{errorMessage}</h2>
+          {isDevelopment && errorStack && (
+            <div>
+              <hr />
+              <pre className={styles.errorStack}>{errorStack}</pre>
+            </div>
+          )}
+        </div>
+        <div>
+          <button
+            className={styles.button}
+            onClick={() => navigate("/strains/index")}
+          >
+            返回
+          </button>
+        </div>
       </div>
     </div>
   );

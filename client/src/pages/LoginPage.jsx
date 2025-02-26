@@ -133,6 +133,11 @@ export default function LoginPage() {
                       &nbsp;註冊
                     </Link>
                   </p>
+                  <p className="text-center mt-3 fw-bold">
+                    <Link to="/" className="link">
+                      返回首頁🧬
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>

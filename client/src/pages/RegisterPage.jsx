@@ -63,7 +63,7 @@ export default function RegisterPage() {
                   >
                     <div className="row">
                       <InputField
-                        className="col"
+                        className="col-12 col-md-6"
                         label="使用者名稱"
                         id="username"
                         name="username"
@@ -71,7 +71,7 @@ export default function RegisterPage() {
                         onChange={handleChange}
                       />
                       <InputField
-                        className="col"
+                        className="col-12 col-md-6"
                         label="單位"
                         id="dept"
                         name="dept"
@@ -82,7 +82,7 @@ export default function RegisterPage() {
 
                     <div className="row">
                       <InputField
-                        className="col"
+                        className="col-12 col-md-6"
                         label="連絡電話"
                         id="tel"
                         name="tel"
@@ -90,7 +90,7 @@ export default function RegisterPage() {
                         onChange={handleChange}
                       />
 
-                      <div className="mb-2 col">
+                      <div className="mb-2 col-12 col-md-6">
                         <label className="form-label" htmlFor="role">
                           <b>職稱</b>
                         </label>
@@ -137,6 +137,11 @@ export default function RegisterPage() {
                     已經有帳戶嗎?
                     <Link to="/login" className="link">
                       &nbsp;登入
+                    </Link>
+                  </p>
+                  <p className="text-center mt-3 fw-bold">
+                    <Link to="/" className="link">
+                      返回首頁🧬
                     </Link>
                   </p>
                 </div>

@@ -1,15 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { FcConferenceCall } from "react-icons/fc";
+import { FcInspection } from "react-icons/fc";
+import { FcDataSheet } from "react-icons/fc";
+import { FcOk } from "react-icons/fc";
+import { FcCancel } from "react-icons/fc";
+import { FcSearch } from "react-icons/fc";
+import { FcDataEncryption } from "react-icons/fc";
+import { FcDocument } from "react-icons/fc";
+import { FcBarChart } from "react-icons/fc";
 import Header from "../components/Header";
-import styles from "./HomePage.module.css";
+import ScrollUpTop from "../components/ScrollUpTop";
+import style from "./HomePage.module.css";
 
 export default function HomePage() {
   return (
-    <div className="d-flex flex-column">
+    <div id="pageTop" className="d-flex flex-column">
       <Header />
 
-      <main className={styles.main}>
+      <main className={style.main}>
         <section
           id="hero-section"
           className="container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center text-center"
@@ -38,8 +47,8 @@ export default function HomePage() {
               </Link>
             </button>
             <button className=" btn-lg info fw-bold">
-              <a href="#about-section" style={{ textDecoration: "none" }}>
-                了解更多
+              <a href="#how-to-use" style={{ textDecoration: "none" }}>
+                如何使用
               </a>
             </button>
           </div>
@@ -47,7 +56,7 @@ export default function HomePage() {
 
         <section
           id="about-section"
-          className={`container-fluid p-5 ${styles.aboutSection}`}
+          className={`container-fluid p-5 ${style.aboutSection}`}
         >
           <div className="row align-items-center">
             <div className="col-md-6">
@@ -83,18 +92,30 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className={`container-fluid p-5 ${styles.featureSection}`}>
+        <section className={`container-fluid p-5 ${style.featureSection}`}>
           <h2 className="text-center mb-4 text-black">核心功能</h2>
           <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             {[
-              { title: "線上申請", text: "簡化流程，取代紙本", icon: "📝" },
-              { title: "樣本追蹤", text: "即時查看數據", icon: "🔍" },
-              { title: "權限管理", text: "安全存取控制", icon: "🔒" },
-              { title: "數據可視化", text: "圖表分析輔助決策", icon: "📊" },
+              {
+                title: "線上申請",
+                text: "簡化流程，取代紙本",
+                icon: <FcDocument />,
+              },
+              { title: "樣本追蹤", text: "即時查看數據", icon: <FcSearch /> },
+              {
+                title: "權限管理",
+                text: "安全存取控制",
+                icon: <FcDataEncryption />,
+              },
+              {
+                title: "數據可視化",
+                text: "圖表分析輔助決策",
+                icon: <FcBarChart />,
+              },
             ].map((feature, index) => (
               <div key={index} className="col">
                 <div
-                  className={`card text-center h-100 shadow-sm card-container ${styles.featureCard}`}
+                  className={`card text-center h-100 shadow-sm card-container ${style.featureCard}`}
                   style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}
                 >
                   <div className="card-body">
@@ -111,7 +132,115 @@ export default function HomePage() {
         </section>
 
         <section
-          className={`container-fluid text-center p-5 ${styles.ctaSection}`}
+          id="how-to-use"
+          className={`container-fluid p-5 ${style.howToUseSection}`}
+        >
+          <h2 className="text-center text-black fw-bold">如何使用</h2>
+          <p className="text-center text-muted fs-5">
+            只需幾個簡單步驟，即可開始使用 Helix LIMS！
+          </p>
+          <div className="row row-cols-1 row-cols-md-3 g-4 text-center">
+            {[
+              {
+                step: <FcConferenceCall />,
+                title: "1 註冊帳號",
+                text: "點擊「前往註冊」，創建帳號",
+              },
+              {
+                step: <FcInspection />,
+                title: "申請實驗計畫",
+                text: "填寫品系基本資訊（名稱、縮寫、計畫期限、採樣基因、計畫相關人員）",
+              },
+              {
+                step: <FcDataSheet />,
+                title: "3 開始管理數據",
+                text: "新增樣本、繁殖紀錄、生成圖表分析",
+              },
+            ].map((item, index) => (
+              <div key={index} className="col">
+                <div className={`card h-100 shadow-sm ${style.howToUseCard}`}>
+                  <div className="card-body">
+                    <h1 className="text-primary fw-bold">{item.step}</h1>
+                    <h5 className="card-title fw-bold">{item.title}</h5>
+                    <p className="card-text">{item.text}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="roles"
+          className={`container-fluid p-5 ${style.rolesSection}`}
+        >
+          <h2 className="text-center text-black fw-bold">角色與權限</h2>
+          <p className="text-center text-muted fs-5">
+            Helix LIMS 提供不同角色，確保數據安全與管理權限。
+          </p>
+          <div className="table-responsive">
+            <table className="table table-bordered text-center">
+              <thead>
+                <tr>
+                  <th>角色</th>
+                  <th>申請計畫</th>
+                  <th>瀏覽數據</th>
+                  <th>新增 / 編輯數據</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>品系管理人</strong> 👩‍🔬
+                  </td>
+                  <td>
+                    <FcOk />
+                  </td>
+                  <td>
+                    <FcOk />
+                    (可瀏覽所有計畫之數據)
+                  </td>
+                  <td>
+                    <FcOk />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>計畫主持人、學生、研究助理</strong> 🔬
+                  </td>
+                  <td>
+                    <FcOk />
+                  </td>
+                  <td>
+                    <FcOk />
+                    (僅可瀏覽所屬計畫之數據)
+                  </td>
+                  <td>
+                    <FcCancel />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>獸醫師</strong>👩‍⚕️
+                  </td>
+                  <td>
+                    <FcOk />
+                  </td>
+                  <td>
+                    <FcOk />
+                    (可瀏覽所有計畫之數據)
+                  </td>
+                  <td>
+                    <FcCancel />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section
+          className={`container-fluid text-center p-5 ${style.ctaSection}`}
         >
           <h2 className="text-black">🚀 立即體驗智能化實驗管理！</h2>
           <p className="lead text-muted fw-bold">
@@ -127,7 +256,7 @@ export default function HomePage() {
 
       <footer>
         <div className="column">
-          <div className={`text-center ${styles.footerImage}`}>
+          <div className={`text-center ${style.footerImage}`}>
             <img
               src="https://res.cloudinary.com/ddmaqiu3h/image/upload/v1739792912/footer_Image_modified_jes8k1.png"
               alt="footer-image"
@@ -135,7 +264,7 @@ export default function HomePage() {
             />
           </div>
           <div
-            className={`pt-3 py-3 mt-auto text-center wh ${styles.footerInfo}`}
+            className={`pt-3 py-3 mt-auto text-center wh ${style.footerInfo}`}
           >
             <p className="text-white">國立臺灣大學醫學院實驗動物中心</p>
             <p className="text-white">
@@ -155,6 +284,7 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+      <ScrollUpTop />
     </div>
   );
 }
