@@ -148,7 +148,7 @@ export default function HomePage() {
               },
               {
                 step: <FcInspection />,
-                title: "申請實驗計畫",
+                title: "2 申請實驗計畫",
                 text: "填寫品系基本資訊（名稱、縮寫、計畫期限、採樣基因、計畫相關人員）",
               },
               {
@@ -178,7 +178,7 @@ export default function HomePage() {
           <p className="text-center text-muted fs-5">
             Helix LIMS 提供不同角色，確保數據安全與管理權限。
           </p>
-          <div className="table-responsive">
+          <div className={`table-responsive ${style.table}`}>
             <table className="table table-bordered text-center">
               <thead>
                 <tr>

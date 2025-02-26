@@ -110,8 +110,8 @@ button.warning > a {
 
 //表格
 .custom-striped {
-  --bs-table-striped-bg: #2b587631;
-  --bs-table-hover-bg: #2b5876c0;
+  --bs-table-striped-bg: #45769631;
+  --bs-table-hover-bg: #4380a854;
 }
 
 .table-title {
@@ -126,9 +126,6 @@ tr {
 }
 
 td {
-  &:hover {
-    color: var(--primary-color);
-  }
   a {
     color: black;
     font-weight: bold;

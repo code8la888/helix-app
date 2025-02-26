@@ -21,9 +21,9 @@ export default function UserInfo({ users }) {
               .filter((user) => user.role !== "獸醫")
               .map((user) => (
                 <tr key={user._id}>
-                  <td>{user.username}</td>
+                  <td>{user.name}</td>
                   <td>{user.role}</td>
-                  <td>{user.email}</td>
+                  <td>{user.username}</td>
                   <td>{user.tel}</td>
                 </tr>
               ))}

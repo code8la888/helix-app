@@ -60,7 +60,8 @@ label,
 }
 
 button {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   font-weight: bold;
   border: none;
   border-radius: 50px;
@@ -104,8 +105,8 @@ button.warning > a {
 }
 
 .custom-striped {
-  --bs-table-striped-bg: #2b587631;
-  --bs-table-hover-bg: #2b5876c0;
+  --bs-table-striped-bg: #45769631;
+  --bs-table-hover-bg: #4380a86f;
 }
 
 .table-title {
@@ -119,9 +120,6 @@ tr {
   vertical-align: middle;
 }
 
-td:hover {
-  color: var(--primary-color);
-}
 td a {
   color: black;
   font-weight: bold;
@@ -165,4 +163,4 @@ td a:hover {
 canvas {
   max-width: 400px;
   max-height: 400px;
-}/*# sourceMappingURL=style.css.map */
+} /*# sourceMappingURL=style.css.map */

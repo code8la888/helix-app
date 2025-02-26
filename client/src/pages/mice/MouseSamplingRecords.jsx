@@ -30,7 +30,7 @@ export default function MouseSamplingRecords({
   return (
     <>
       {currentUser &&
-      strain?.users?.includes(currentUser.username) &&
+      strain?.users?.includes(currentUser.name) &&
       currentUser?.role === "品系管理人" ? (
         <button className=" success">
           <Link to={`/strains/${id}/mice/new`} className="link">
@@ -63,7 +63,7 @@ export default function MouseSamplingRecords({
                 <th scope="col">狀態</th>
                 <th scope="col">備註</th>
                 {currentUser &&
-                strain?.users?.includes(currentUser.username) &&
+                strain?.users?.includes(currentUser.name) &&
                 currentUser.role === "品系管理人" ? (
                   <>
                     <th scope="col">編輯</th>
@@ -103,7 +103,7 @@ export default function MouseSamplingRecords({
                     <td>{mouse.on_shelf}</td>
                     <td>{mouse.note || "-"}</td>
                     {currentUser &&
-                    strain?.users?.includes(currentUser.username) &&
+                    strain?.users?.includes(currentUser.name) &&
                     currentUser.role === "品系管理人" ? (
                       <>
                         <td>

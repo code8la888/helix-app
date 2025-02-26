@@ -33,7 +33,7 @@ function Index() {
   };
 
   if (isLoading) {
-    return <Loader>資料載入中...</Loader>;
+    return <Loader />;
   }
   return (
     <div>
@@ -82,13 +82,13 @@ function Index() {
                 <td>
                   {strain?.users
                     .filter((user) => user.role === "計畫主持人")
-                    .map((user) => user.username)
+                    .map((user) => user.name)
                     .join("， ") || "-"}
                 </td>
                 <td>
                   {strain?.users
                     .filter((user) => user.role === "品系管理人")
-                    .map((user) => user.username)
+                    .map((user) => user.name)
                     .join("， ") || "-"}
                 </td>
               </tr>

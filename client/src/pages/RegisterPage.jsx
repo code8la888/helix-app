@@ -6,11 +6,11 @@ import { sendFormData } from "../utils/sendFormData";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
-    email: "",
     dept: "",
     tel: "",
     role: "計畫主持人",
-    username: "",
+    username: "", //使用者信箱
+    name: "", //使用者姓名
     password: "",
   });
   const { validated, validateForm } = useFormValidation();
@@ -65,9 +65,9 @@ export default function RegisterPage() {
                       <InputField
                         className="col-12 col-md-6"
                         label="使用者名稱"
-                        id="username"
-                        name="username"
-                        value={formData.username}
+                        id="name"
+                        name="name"
+                        value={formData.name}
                         onChange={handleChange}
                       />
                       <InputField
@@ -112,9 +112,9 @@ export default function RegisterPage() {
                     </div>
                     <InputField
                       label="使用者信箱"
-                      id="email"
-                      name="email"
-                      value={formData.email}
+                      id="username"
+                      name="username"
+                      value={formData.username}
                       onChange={handleChange}
                     />
                     <InputField

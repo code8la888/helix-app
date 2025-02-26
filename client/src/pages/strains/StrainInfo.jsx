@@ -22,7 +22,7 @@ export default function StrainInfo({ strain, currentUser, id }) {
   return (
     <>
       {currentUser &&
-      strain?.users?.includes(currentUser?.username) &&
+      strain?.users?.includes(currentUser?.name) &&
       currentUser?.role === "品系管理人" ? (
         <div className="mb-3 d-flex justify-content-center">
           <button className=" warning text-white mx-2">

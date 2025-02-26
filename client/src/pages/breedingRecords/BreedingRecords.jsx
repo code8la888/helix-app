@@ -31,7 +31,7 @@ export default function BreedingRecords({
   return (
     <>
       {currentUser &&
-      strain?.users.includes(currentUser.username) &&
+      strain?.users.includes(currentUser.name) &&
       currentUser.role === "品系管理人" ? (
         <button className="success">
           <Link to={`/strains/${id}/breedingRecord/new`} className="link">
@@ -52,7 +52,7 @@ export default function BreedingRecords({
                 <th scope="col">配種日期</th>
                 <th scope="col">繁殖籠狀態</th>
                 {currentUser &&
-                strain?.users?.includes(currentUser.username) &&
+                strain?.users?.includes(currentUser.name) &&
                 currentUser.role === "品系管理人" ? (
                   <>
                     <th scope="col">編輯</th>
@@ -78,7 +78,7 @@ export default function BreedingRecords({
                     </td>
                     <td>{record.on_shelf}</td>
                     {currentUser &&
-                    strain?.users?.includes(currentUser.username) &&
+                    strain?.users?.includes(currentUser.name) &&
                     currentUser.role === "品系管理人" ? (
                       <>
                         <td>

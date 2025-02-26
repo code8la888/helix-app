@@ -16,11 +16,10 @@
   transition: ease-in-out 0.5s;
 }
 
-td:hover {
+.table td:hover {
   color: black;
 }
 
-th {
-  background-color: var(--primary-color) !important;
-  color: white !important;
+.table th {
+  background-color: #77a1d3 !important;
 }

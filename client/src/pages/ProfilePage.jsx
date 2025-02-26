@@ -16,7 +16,7 @@ export default function ProfilePage() {
     dept: "",
     tel: "",
     role: "計畫主持人",
-    email: "",
+    name: "",
   });
   const navigate = useNavigate();
   const { validated, validateForm } = useFormValidation();
@@ -31,7 +31,8 @@ export default function ProfilePage() {
           dept: res?.data?.dept || "",
           tel: res?.data?.tel || "",
           role: res?.data?.role || "計畫主持人",
-          email: res?.data?.email,
+          name: res?.data?.name,
+          googleId: res?.data?.googleId || "",
         }));
       }
     };
@@ -47,7 +48,7 @@ export default function ProfilePage() {
     event.preventDefault();
     if (!validateForm(event)) return;
 
-    const { username, email, ...rest } = formData;
+    const { username, name, ...rest } = formData;
 
     const updatedFormData = {
       ...rest,
@@ -78,21 +79,20 @@ export default function ProfilePage() {
           <div className="row">
             <InputField
               label="使用者名稱"
+              id="name"
+              name="name"
+              value={formData?.name}
+              onChange={handleChange}
+              className="col"
+            />
+            <InputField
+              label="使用者信箱"
               id="username"
               name="username"
               value={formData?.username}
               onChange={handleChange}
               className="col"
-              readOnly
-            />
-            <InputField
-              label="使用者信箱"
-              id="email"
-              name="email"
-              value={formData?.email}
-              onChange={handleChange}
-              className="col"
-              readOnly
+              readOnly={!!formData.googleId}
             />
           </div>
           <div className="row">

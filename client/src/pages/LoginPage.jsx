@@ -91,7 +91,7 @@ export default function LoginPage() {
                     }`}
                   >
                     <InputField
-                      label="使用者名稱"
+                      label="使用者信箱"
                       id="username"
                       name="username"
                       value={userinfo.username}
