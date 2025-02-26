@@ -4,16 +4,16 @@ const ExpressError = require("../utils/ExpressError");
 
 module.exports.register = async (req, res, next) => {
   try {
-    const { username, email, tel, dept, role, password } = req.body;
+    const { username, name, tel, dept, role, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ username });
     if (existingUser) {
       return next(new ExpressError("此 Email 已經被註冊!", 409));
     }
 
     const user = new User({
-      username,
-      email,
+      username, //使用者號信箱
+      name,
       tel,
       dept,
       role,
@@ -45,11 +45,11 @@ module.exports.login = (req, res, next) => {
 
 module.exports.editUser = async (req, res, next) => {
   try {
-    const { role, tel, dept } = req.body;
+    const { name, role, tel, dept } = req.body;
     const userId = req.user.id;
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { tel, dept, role },
+      { name, tel, dept, role },
       { new: true }
     );
 

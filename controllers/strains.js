@@ -6,18 +6,18 @@ const ExpressError = require("../utils/ExpressError");
 
 module.exports.index = async (req, res, next) => {
   try {
-    const { role, username } = req.user;
+    const { role, name } = req.user;
 
     let query = {}; // 預設查詢條件
 
     if (!["品系管理人", "獸醫"].includes(role)) {
-      query = { users: username };
+      query = { users: name };
     }
 
     const strains = await Strain.find(query);
     const strainsWithUsers = await Promise.all(
       strains.map(async (strain) => {
-        const users = await User.find({ username: { $in: strain.users } });
+        const users = await User.find({ name: { $in: strain.users } });
         return {
           ...strain.toObject(), // 將 Mongoose 文件轉換為普通物件
           users, // 關聯的使用者資料
@@ -43,15 +43,15 @@ module.exports.createNewStrain = async (req, res) => {
     genes: strain.genes,
   });
   if (strain.users && Array.isArray(strain.users)) {
-    for (let username of strain.users) {
-      const user = await User.findOne({ username });
+    for (let name of strain.users) {
+      const user = await User.findOne({ name });
       if (!user) {
         throw new ExpressError(
-          `使用者 ${username} 不存在，請先註冊使用者帳戶`,
+          `使用者 ${name} 不存在，請先註冊使用者帳戶`,
           400
         );
       }
-      newStrain.users.push(user.username);
+      newStrain.users.push(user.name);
     }
   }
   await newStrain.save();
@@ -64,7 +64,7 @@ module.exports.showStrain = async (req, res) => {
   const { strainId } = req.params;
   const strain = await Strain.findById(strainId);
   const mice = await Mouse.find({ strain: strainId });
-  const users = await User.find({ username: { $in: strain.users } });
+  const users = await User.find({ name: { $in: strain.users } });
   const breedingRecords = await BreedingRecord.find({ strain: strainId });
   res.status(200).json({ strain, mice, users, strainId, breedingRecords });
 };
@@ -82,15 +82,15 @@ module.exports.updateStrain = async (req, res) => {
     users: [],
   };
   if (strain.users && Array.isArray(strain.users)) {
-    for (let username of strain.users) {
-      const user = await User.findOne({ username });
+    for (let name of strain.users) {
+      const user = await User.findOne({ name });
       if (!user) {
         throw new ExpressError(
-          `使用者 ${username} 不存在，請先註冊使用者帳戶`,
+          `使用者 ${name} 不存在，請先註冊使用者帳戶`,
           400
         );
       }
-      updatedStrain?.users.push(user.username);
+      updatedStrain?.users.push(user.name);
     }
   }
   await Strain.findByIdAndUpdate(strainId, updatedStrain);

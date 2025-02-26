@@ -67,7 +67,7 @@ module.exports.verifyEditPermission = async (req, res, next) => {
       return next(new ExpressError("使用者資料不存在!", 400));
     }
 
-    if (strain.users.includes(user.username) && user.role === "品系管理人") {
+    if (strain.users.includes(user.name) && user.role === "品系管理人") {
       return next();
     }
     return next(new ExpressError("⛔您沒有權限訪問或編輯此頁面", 403));
@@ -100,7 +100,6 @@ module.exports.validateMouse = (req, res, next) => {
 };
 
 module.exports.validBreedingRecord = (req, res, next) => {
-  // req.body.breedingRecord.strain = req.params.strainId;
   const { error } = breedingRecordSchema.validate(req.body);
   console.log(req.body);
   if (error) {
