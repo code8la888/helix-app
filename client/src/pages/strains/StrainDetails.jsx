@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
 import StrainInfo from "./StrainInfo";
 import UserInfo from "../UserInfo";
@@ -9,10 +9,16 @@ import Charts from "../Charts";
 import { useStrain } from "../../hooks/useStrain";
 import { useCheckBrowsePermission } from "../../hooks/useCheckBrowsePermission";
 import { useHandleError } from "../../hooks/useHandleError";
+import { useEffect } from "react";
+import { fetchUser } from "../../redux/auth/authActions";
 
 export default function StrainDetails() {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth);
+  useEffect(() => {
+    dispatch(fetchUser());
+  });
   const { data, isLoading: strainLoading, error: strainError } = useStrain(id);
   const {
     data: hasBrowsePermission,

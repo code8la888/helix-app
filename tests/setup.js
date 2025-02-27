@@ -20,8 +20,8 @@ beforeEach(async () => {
   await BreedingRecord.deleteMany({});
   const password = "testpassword";
   const user = new User({
-    username: "testuser",
-    email: "testuser@example.com",
+    name: "testuser",
+    username: "testuser@example.com",
     role: "品系管理人",
     tel: "0912345678",
     dept: "動物中心",
@@ -34,7 +34,7 @@ beforeEach(async () => {
     iacuc_no: "20240204",
     dept: "動物中心",
     EXP: new Date(),
-    users: [user.username],
+    users: [user.name],
     genes: ["Gene1", "Gene2"],
   });
   await strain.save();

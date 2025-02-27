@@ -31,7 +31,7 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
       return next(new ExpressError("找不到該品系相關資料!", 404));
     }
 
-    const dbUser = await User.findOne({ username: user.username });
+    const dbUser = await User.findOne({ name: user.name });
     if (!dbUser) {
       return next(new ExpressError("使用者資料不存在!", 400));
     }
@@ -40,7 +40,7 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
       return next();
     }
 
-    if (!strain.users.includes(user.username)) {
+    if (!strain.users.includes(user.name)) {
       return next(
         new ExpressError("您不屬於該計畫的使用者!您無法瀏覽該品系資料", 403)
       );
@@ -54,7 +54,7 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
 module.exports.verifyEditPermission = async (req, res, next) => {
   const { strainId } = req.params;
   const user = req.user;
-  console.log(user);
+  console.log("user:", user);
 
   try {
     const strain = await Strain.findById(strainId);
@@ -62,7 +62,7 @@ module.exports.verifyEditPermission = async (req, res, next) => {
       return next(new ExpressError("找不到該品系相關資料!", 404));
     }
 
-    const dbUser = await User.findOne({ username: user.username });
+    const dbUser = await User.findOne({ name: user.name });
     if (!dbUser) {
       return next(new ExpressError("使用者資料不存在!", 400));
     }
