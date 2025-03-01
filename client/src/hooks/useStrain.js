@@ -12,7 +12,7 @@ export const useStrain = (id) => {
   const query = useQuery({
     queryKey: ["strain", id],
     queryFn: () => fetchStrain(id),
-    staleTime: 0,
+    staleTime: 1000 * 60 * 10,
     cacheTime: 1000 * 60 * 10,
     refetchOnWindowFocus: true,
     retry: false,
