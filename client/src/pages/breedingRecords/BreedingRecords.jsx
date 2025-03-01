@@ -12,7 +12,6 @@ export default function BreedingRecords({
   const itemsPerPage = 10;
   const [breedingOffset, setBreedingOffset] = useState(0);
   const deleteBreedingRecordMutation = useDeleteBreedingRecord();
-  console.log(id);
 
   // 計算分頁數量
   const getPageCount = (items) => Math.ceil(items.length / itemsPerPage);

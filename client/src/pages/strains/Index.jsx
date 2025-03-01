@@ -7,7 +7,6 @@ import Loader from "../../components/Loader";
 
 function Index() {
   const { data: strains, isLoading } = useStrains();
-  console.log(strains);
 
   const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
@@ -20,7 +19,6 @@ function Index() {
         })
       : strains.strainsWithUsers
     : [];
-  console.log(filteredStrains);
 
   const startIndex = currentPage * itemsPerPage; // 開始索引
   const currentData = filteredStrains.slice(
