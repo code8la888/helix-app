@@ -27,20 +27,15 @@ export default function Charts({ mice }) {
           acc[mouse.on_shelf] = (acc[mouse.on_shelf] || 0) + 1;
           return acc;
         }, {}),
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-          "rgb(75, 192, 192)",
-        ],
+        backgroundColor: ["#F39594", "#A6CEE3", "#FFFF99", "#B2DF8A"],
       },
       {
         id: "usageChart",
         type: "line",
         label: "每月小鼠使用率",
         data: usageData,
-        borderColor: ["rgb(153, 102, 255)"],
-        backgroundColor: ["rgb(153, 102, 255)"],
+        borderColor: ["#CAB2D6"],
+        backgroundColor: ["#6A3D9A"],
       },
       {
         id: "genderChart",
@@ -50,6 +45,7 @@ export default function Charts({ mice }) {
           acc[mouse.gender] = (acc[mouse.gender] || 0) + 1;
           return acc;
         }, {}),
+        backgroundColor: ["#1E74AE", "#E31A1C"],
       },
       {
         id: "birthChart",
@@ -61,7 +57,7 @@ export default function Charts({ mice }) {
             acc[date] = (acc[date] || 0) + 1;
             return acc;
           }, {}),
-        borderColor: ["#FF9F40"],
+        borderColor: ["#FDBF6F"],
         backgroundColor: ["#FF9F40"],
       },
     ]);
