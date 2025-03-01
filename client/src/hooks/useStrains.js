@@ -15,7 +15,7 @@ export const useStrains = () => {
     queryFn: fetchStrains,
     staleTime: 0,
     cacheTime: 1000 * 60 * 10,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     retry: false,
   });
   useHandleError(query.error);
