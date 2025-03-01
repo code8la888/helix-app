@@ -18,7 +18,7 @@ export default function StrainDetails() {
   const currentUser = useSelector((state) => state.auth);
   useEffect(() => {
     dispatch(fetchUser());
-  });
+  }, [dispatch, currentUser?.role]);
   const { data, isLoading: strainLoading, error: strainError } = useStrain(id);
   const {
     data: hasBrowsePermission,
@@ -40,7 +40,7 @@ export default function StrainDetails() {
 
       <StrainInfo strain={data?.strain} id={id} currentUser={currentUser} />
       <UserInfo users={data?.users} />
-      <Charts id={id} />
+      <Charts mice={data?.mice} />
       <MouseSamplingRecords
         mice={data?.mice}
         strain={data?.strain}
