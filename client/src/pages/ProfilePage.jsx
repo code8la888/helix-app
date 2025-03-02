@@ -6,6 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAccount } from "../redux/auth/authActions";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ export default function ProfilePage() {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
+  const queryClient = useQueryClient();
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!validateForm(event)) return;
@@ -56,6 +57,7 @@ export default function ProfilePage() {
     console.log(updatedFormData);
 
     sendFormData("/api/users", updatedFormData, navigate, "PUT");
+    queryClient.invalidateQueries(["strains"]);
   };
 
   const handleDeleteAccount = (event) => {
