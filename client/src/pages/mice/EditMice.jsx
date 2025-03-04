@@ -229,7 +229,11 @@ export default function EditMice() {
               type="date"
               required={false}
               name="exit_date"
-              value={formData.exit_date}
+              value={
+                formData.exit_date
+                  ? new Date(formData.exit_date).toISOString().split("T")[0]
+                  : ""
+              }
               onChange={handleChange}
               className="col-12 col-md-6"
             />

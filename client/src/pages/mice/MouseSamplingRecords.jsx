@@ -113,8 +113,9 @@ export default function MouseSamplingRecords({
                       : ""}
                     <td>{mouse.on_shelf}</td>
                     <td>
-                      {new Date(mouse.exit_date).toLocaleDateString("zh-TW") ||
-                        "-"}
+                      {mouse.exit_date
+                        ? new Date(mouse.exit_date).toLocaleDateString("zh-TW")
+                        : "-"}
                     </td>
                     <td>{mouse.note || "-"}</td>
                     {currentUser &&
