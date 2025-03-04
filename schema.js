@@ -33,17 +33,18 @@ module.exports.mouseSchema = Joi.object({
       .pattern(/^[a-fA-F0-9]{24}$/)
       .required()
       .escapeHTML(),
-    toeNumber: Joi.string().required().escapeHTML(),
+    toeNumber: Joi.string().allow("").optional().escapeHTML(),
     birth_date: Joi.date().required(),
     gender: Joi.string().valid("F", "M").required(),
     parents: Joi.object({
       father: Joi.string().required().escapeHTML(),
       mother: Joi.string().required().escapeHTML(),
     }).required(),
-    sampling_date: Joi.date().required(),
+    sampling_date: Joi.date().allow("").optional(),
+    exit_date: Joi.date().allow("", null).optional(),
     sampling_results: Joi.array()
       .items(Joi.string().valid("WT", "HT", "KO", "檢測中"))
-      .required(),
+      .optional(),
     litter: Joi.number().required().min(1),
     on_shelf: Joi.string()
       .valid("在架上", "已移出", "已犧牲", "自然死亡")

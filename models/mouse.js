@@ -29,6 +29,7 @@ const MouseSchema = new Schema({
     },
   ],
   litter: Number,
+  exit_date: Date,
   on_shelf: { type: String, enum: ["在架上", "已移出", "已犧牲", "自然死亡"] },
   note: String,
 });
