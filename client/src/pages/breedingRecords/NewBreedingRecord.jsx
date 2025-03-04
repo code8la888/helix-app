@@ -53,7 +53,7 @@ export default function NewBreedingRecord() {
 
   return (
     <div className="row">
-      <h1 className="text-center">新增繁殖籠表:</h1>
+      <h1 className="text-center">新增繁殖籠表</h1>
       <div className="col-10 offset-1 shadow-lg mb-3 p-4 rounded-3">
         <form
           onSubmit={handleSubmit}
@@ -61,14 +61,14 @@ export default function NewBreedingRecord() {
           className={`validated-form ${validated ? "was-validated" : ""}`}
         >
           <InputField
-            label="繁殖籠編號"
+            label="繁殖籠編號(必填)"
             id="cage_no"
             name="cage_no"
             value={formData.cage_no}
             onChange={handleChange}
           />
           <InputField
-            label="父"
+            label="父(必填)"
             id="father"
             name="parents.father"
             value={formData.parents.father}
@@ -76,7 +76,7 @@ export default function NewBreedingRecord() {
             placeholder="請輸入父親的編號"
           />
           <InputField
-            label="母"
+            label="母(必填)"
             id="mother"
             name="parents.mother"
             value={formData.parents.mother}
@@ -84,7 +84,7 @@ export default function NewBreedingRecord() {
             placeholder="請輸入母親的編號"
           />
           <InputField
-            label="配種日期"
+            label="配種日期(必填)"
             type="date"
             id="pairing_date"
             name="pairing_date"
@@ -93,7 +93,7 @@ export default function NewBreedingRecord() {
           />
           <div className="mb-3">
             <label className="form-label" htmlFor="on_shelf">
-              繁殖籠狀態
+              繁殖籠狀態(必填)
             </label>
             <select
               name="on_shelf"
@@ -106,9 +106,11 @@ export default function NewBreedingRecord() {
               <option value="已關閉">已關閉</option>
             </select>
           </div>
-          <div className="mt-5 d-flex justify-content-end">
+          <div className="mt-5 mb-3 d-flex justify-content-end">
             <button className=" warning">新增繁殖籠</button>
-            <button className=" danger ms-2 border-2">
+          </div>
+          <div className="d-flex justify-content-end">
+            <button className="danger">
               <Link to={`/strains/${id}`} className="link">
                 取消，返回品系資訊
               </Link>

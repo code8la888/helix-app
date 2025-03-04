@@ -67,7 +67,7 @@ export default function EditStrain() {
           } shadow-lg mb-3 p-4 rounded-3`}
         >
           <InputField
-            label="計畫單位"
+            label="計畫單位(必填)"
             id="dept"
             name="dept"
             value={formData?.dept}
@@ -76,7 +76,7 @@ export default function EditStrain() {
           />
 
           <InputField
-            label="品系名稱"
+            label="品系名稱(必填)"
             id="strain"
             name="strain"
             value={formData?.strain}
@@ -85,7 +85,7 @@ export default function EditStrain() {
           />
 
           <InputField
-            label="品系縮寫"
+            label="品系縮寫(必填)"
             id="abbr"
             name="abbr"
             value={formData?.abbr}
@@ -94,7 +94,7 @@ export default function EditStrain() {
           />
 
           <InputField
-            label="IACUC編號"
+            label="IACUC編號(必填)"
             id="iacuc_no"
             name="iacuc_no"
             value={formData?.iacuc_no}
@@ -104,7 +104,7 @@ export default function EditStrain() {
 
           <InputField
             type="date"
-            label="計畫期限"
+            label="計畫期限(必填)"
             id="EXP"
             name="EXP"
             value={
@@ -134,7 +134,7 @@ export default function EditStrain() {
           />
 
           <FieldList
-            FieldListName="計畫相關人員"
+            FieldListName="計畫人員"
             fields={
               formData.users?.map((user, index) => ({
                 id: index,
@@ -149,9 +149,12 @@ export default function EditStrain() {
               }));
             }}
           />
-          <div className="mt-5 d-flex justify-content-end">
-            <button className=" warning">更新小鼠品系</button>
-            <button className=" danger ms-2 border-2">
+
+          <div className="mt-5 my-3 d-flex justify-content-end">
+            <button className="warning">更新小鼠品系</button>
+          </div>
+          <div className="d-flex justify-content-end">
+            <button className="danger">
               <Link to={`/strains/${id}`} className="link">
                 取消，返回品系資訊
               </Link>

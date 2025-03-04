@@ -69,7 +69,7 @@ export default function ProfilePage() {
 
   return (
     <div className="row">
-      <h1 className="text-center">編輯使用者資料</h1>
+      <h1 className="text-center">編輯使用者資訊</h1>
       <div className="col-md-8 offset-md-2">
         <form
           noValidate
@@ -85,7 +85,8 @@ export default function ProfilePage() {
               name="name"
               value={formData?.name}
               onChange={handleChange}
-              className="col"
+              className="col-12"
+              readOnly={!!formData.googleId}
             />
             <InputField
               label="使用者信箱"
@@ -93,13 +94,13 @@ export default function ProfilePage() {
               name="username"
               value={formData?.username}
               onChange={handleChange}
-              className="col"
+              className="col-12"
               readOnly={!!formData.googleId}
             />
           </div>
           <div className="row">
             <InputField
-              className="col"
+              className="col-12"
               label="計畫單位"
               id="dept"
               name="dept"
@@ -108,14 +109,14 @@ export default function ProfilePage() {
             />
 
             <InputField
-              className="col"
+              className="col-12"
               label="連絡電話"
               id="tel"
               name="tel"
               value={formData?.tel}
               onChange={handleChange}
             />
-            <div className="mb-2 col">
+            <div className="col-12">
               <label className="form-label" htmlFor="role">
                 <b>職稱</b>
               </label>
@@ -135,16 +136,20 @@ export default function ProfilePage() {
               </select>
             </div>
           </div>
-          <div className="mt-5 d-flex justify-content-end">
-            <button type="submit" className=" warning">
-              更新使用者資料
+          <div className="mt-5 mb-3 d-flex justify-content-end">
+            <button type="submit" className="warning">
+              更新使用者資訊
             </button>
-            <button className=" danger ms-2" onClick={handleDeleteAccount}>
-              刪除使用者資料
+          </div>
+          <div className="mb-3 d-flex justify-content-end">
+            <button className="danger" onClick={handleDeleteAccount}>
+              刪除使用者資訊
             </button>
-            <button className=" info ms-2">
-              <Link to={"/strains/index"} className="link">
-                取消，返回品系資訊
+          </div>
+          <div className="d-flex justify-content-end ">
+            <button className="info">
+              <Link to={"/dashboard"} className="link">
+                返回儀錶板
               </Link>
             </button>
           </div>

@@ -51,8 +51,14 @@ export default function MouseSamplingRecords({
                 <th scope="col">胎次</th>
                 <th scope="col">性別</th>
                 <th scope="col">出生日期</th>
-                <th scope="col">採樣日期</th>
-                <th scope="col">趾號</th>
+                {strain.gene ? (
+                  <>
+                    <th scope="col">採樣日期</th>
+                    <th scope="col">趾號</th>
+                  </>
+                ) : (
+                  ""
+                )}
                 {strain
                   ? strain.genes.map((gene) => (
                       <th scope="col" key={gene}>
@@ -61,6 +67,7 @@ export default function MouseSamplingRecords({
                     ))
                   : ""}
                 <th scope="col">狀態</th>
+                <th scope="col">移出日期</th>
                 <th scope="col">備註</th>
                 {currentUser &&
                 strain?.users?.includes(currentUser.name) &&
@@ -87,20 +94,28 @@ export default function MouseSamplingRecords({
                     <td>
                       {new Date(mouse.birth_date).toLocaleDateString("zh-TW")}
                     </td>
-                    <td>
-                      {new Date(mouse.sampling_date).toLocaleDateString(
-                        "zh-TW"
-                      )}
-                    </td>
-                    <td>{mouse.toeNumber}</td>
-                    {mouse?.sampling_results?.length > 0 ? (
-                      mouse.sampling_results.map((result, index) => (
-                        <td key={index}>{result}</td>
-                      ))
+                    {strain.gene ? (
+                      <>
+                        <td>
+                          {new Date(mouse.sampling_date).toLocaleDateString(
+                            "zh-TW"
+                          )}
+                        </td>
+                        <td>{mouse.toeNumber}</td>
+                      </>
                     ) : (
-                      <td value="檢測中">檢測中</td>
+                      ""
                     )}
+                    {mouse?.sampling_results?.length > 0
+                      ? mouse.sampling_results.map((result, index) => (
+                          <td key={index}>{result}</td>
+                        ))
+                      : ""}
                     <td>{mouse.on_shelf}</td>
+                    <td>
+                      {new Date(mouse.exit_date).toLocaleDateString("zh-TW") ||
+                        "-"}
+                    </td>
                     <td>{mouse.note || "-"}</td>
                     {currentUser &&
                     strain?.users?.includes(currentUser.name) &&

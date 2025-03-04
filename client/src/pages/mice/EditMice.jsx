@@ -37,6 +37,7 @@ export default function EditMice() {
     sampling_results: new Array(genes.length).fill("檢測中"),
     litter: "",
     on_shelf: "在架上",
+    exit_date: "",
     note: "",
   });
   const mouse = data?.mice.filter((mouse) => mouse._id === mouseId); // 採樣紀錄
@@ -81,7 +82,7 @@ export default function EditMice() {
         >
           <div className="row">
             <InputField
-              label="編號"
+              label="編號(必填)"
               name="no"
               value={formData.no}
               onChange={handleChange}
@@ -90,7 +91,7 @@ export default function EditMice() {
 
             <div className="col-12 col-md-6">
               <label htmlFor="gender" className="fw-bold mb-2">
-                性別
+                性別(必填)
               </label>
               <select
                 className="form-control"
@@ -107,7 +108,7 @@ export default function EditMice() {
 
           <div className="row">
             <InputField
-              label="父"
+              label="父(必填)"
               name="parents.father"
               value={formData?.parents?.father}
               onChange={handleChange}
@@ -115,7 +116,7 @@ export default function EditMice() {
             />
 
             <InputField
-              label="母"
+              label="母(必填)"
               name="parents.mother"
               value={formData?.parents?.mother}
               onChange={handleChange}
@@ -125,7 +126,7 @@ export default function EditMice() {
 
           <div className="row">
             <InputField
-              label="胎次"
+              label="胎次(必填)"
               name="litter"
               value={formData.litter}
               onChange={handleChange}
@@ -133,7 +134,7 @@ export default function EditMice() {
             />
 
             <InputField
-              label="出生日期"
+              label="出生日期(必填)"
               type="date"
               name="birth_date"
               value={
@@ -148,7 +149,7 @@ export default function EditMice() {
 
           <div className="row">
             <InputField
-              label="趾號"
+              label="趾號(必填)"
               name="toeNumber"
               value={formData.toeNumber}
               onChange={handleChange}
@@ -156,7 +157,7 @@ export default function EditMice() {
             />
 
             <InputField
-              label="採樣日期"
+              label="採樣日期(必填)"
               type="date"
               name="sampling_date"
               value={
@@ -204,9 +205,9 @@ export default function EditMice() {
           </div>
 
           <div className="row">
-            <div className="mb-2 col-12 col-md-6">
-              <label htmlFor="on_shelf" className="fw-bold mb-2">
-                狀態
+            <div className="col-12 col-md-6">
+              <label htmlFor="on_shelf" className="mb-2 fw-bold">
+                狀態(必填)
               </label>
               <select
                 label="狀態"
@@ -224,12 +225,23 @@ export default function EditMice() {
             </div>
 
             <InputField
+              label="移出日期"
+              type="date"
+              required={false}
+              name="exit_date"
+              value={formData.exit_date}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+            />
+          </div>
+          <div className="row">
+            <InputField
               label="備註"
               required={false}
               name="note"
               value={formData.note}
               onChange={handleChange}
-              className="col-12 col-md-6"
+              className="col-12"
             />
           </div>
           <div className="mt-5 d-flex justify-content-end">

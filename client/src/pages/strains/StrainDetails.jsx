@@ -35,12 +35,19 @@ export default function StrainDetails() {
   return (
     <>
       <h1 className="text-center">
-        {data ? `${data.strain.strain} 採樣紀錄` : "基因剔除小鼠採樣紀錄"}
+        {data
+          ? `${data.strain.strain} 實驗計畫採樣紀錄`
+          : "基因剔除小鼠採樣紀錄"}
       </h1>
-
+      <div className="m-3 d-flex justify-content-start">
+        <p>
+          <Link to="/strains/index" className="link text-black">
+            ⬅️返回查詢系統
+          </Link>
+        </p>
+      </div>
       <StrainInfo strain={data?.strain} id={id} currentUser={currentUser} />
       <UserInfo users={data?.users} />
-      <Charts mice={data?.mice} />
       <MouseSamplingRecords
         mice={data?.mice}
         strain={data?.strain}
@@ -53,6 +60,7 @@ export default function StrainDetails() {
         currentUser={currentUser}
         id={id}
       />
+      <Charts mice={data?.mice} />
 
       <p className="text-center">
         <Link to="/strains/index" className="link text-black">

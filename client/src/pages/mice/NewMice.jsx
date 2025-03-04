@@ -45,6 +45,7 @@ export default function NewMice() {
     sampling_results: new Array(geneList.length).fill("檢測中"),
     litter: "",
     on_shelf: "在架上",
+    exit_date: "",
     note: "",
   });
   const { validated, validateForm } = useFormValidation();
@@ -79,7 +80,7 @@ export default function NewMice() {
         >
           <div className="row">
             <InputField
-              label="編號"
+              label="編號(必填)"
               name="no"
               value={formData.no}
               onChange={handleChange}
@@ -89,7 +90,7 @@ export default function NewMice() {
 
             <div className="col-12 col-md-3">
               <label htmlFor="gender" className="fw-bold mb-2">
-                性別
+                性別(必填)
               </label>
               <select
                 className="form-control"
@@ -105,7 +106,7 @@ export default function NewMice() {
           </div>
           <div className="row">
             <InputField
-              label="父"
+              label="父(必填)"
               name="parents.father"
               value={formData?.parents?.father}
               onChange={handleChange}
@@ -114,7 +115,7 @@ export default function NewMice() {
             />
 
             <InputField
-              label="母"
+              label="母(必填)"
               name="parents.mother"
               value={formData?.parents?.mother}
               onChange={handleChange}
@@ -124,7 +125,7 @@ export default function NewMice() {
           </div>
           <div className="row">
             <InputField
-              label="胎次"
+              label="胎次(必填)"
               name="litter"
               value={formData.litter}
               onChange={handleChange}
@@ -132,7 +133,7 @@ export default function NewMice() {
             />
 
             <InputField
-              label="出生日期"
+              label="出生日期(必填)"
               type="date"
               name="birth_date"
               value={
@@ -144,65 +145,74 @@ export default function NewMice() {
               className="col-12 col-md-6"
             />
           </div>
+          {samplingGeneList.length > 0 ? (
+            <div className="row">
+              <InputField
+                label="趾號(必填)"
+                name="toeNumber"
+                value={formData.toeNumber}
+                onChange={handleChange}
+                className="col-12 col-md-6"
+              />
+              <InputField
+                label="採樣日期(必填)"
+                type="date"
+                name="sampling_date"
+                value={
+                  formData.sampling_date
+                    ? new Date(formData.sampling_date)
+                        .toISOString()
+                        .split("T")[0]
+                    : ""
+                }
+                onChange={handleChange}
+                className="col-12 col-md-6"
+              />
+            </div>
+          ) : (
+            ""
+          )}
+          {samplingGeneList.length > 0 ? (
+            <div className="row">
+              {samplingGeneList?.map((gene, index) => (
+                <div className="col-12 col-md-6 mb-2" key={gene}>
+                  <label
+                    htmlFor={`sampling_results_${index}`}
+                    className="fw-bold mb-2"
+                  >
+                    {gene}採樣結果(必填)
+                  </label>
+                  <select
+                    className="form-control"
+                    name={`sampling_results_${index}`}
+                    id={`sampling_results_${index}`}
+                    value={formData.sampling_results[index] || "檢測中"}
+                    onChange={(event) => {
+                      {
+                        const newResults = [...formData.sampling_results];
+                        newResults[index] = event.target.value || "檢測中";
+                        setFormData({
+                          ...formData,
+                          sampling_results: newResults,
+                        });
+                      }
+                    }}
+                  >
+                    <option value="WT">WT</option>
+                    <option value="HT">HT</option>
+                    <option value="KO">KO</option>
+                    <option value="檢測中">檢測中</option>
+                  </select>
+                </div>
+              ))}
+            </div>
+          ) : (
+            ""
+          )}
           <div className="row">
-            <InputField
-              label="趾號"
-              name="toeNumber"
-              value={formData.toeNumber}
-              onChange={handleChange}
-              className="col-12 col-md-6"
-            />
-
-            <InputField
-              label="採樣日期"
-              type="date"
-              name="sampling_date"
-              value={
-                formData.sampling_date
-                  ? new Date(formData.sampling_date).toISOString().split("T")[0]
-                  : ""
-              }
-              onChange={handleChange}
-              className="col-12 col-md-6"
-            />
-          </div>
-          <div className="row">
-            {samplingGeneList?.map((gene, index) => (
-              <div className="col-12 col-md-6 mb-2" key={gene}>
-                <label
-                  htmlFor={`sampling_results_${index}`}
-                  className="fw-bold mb-2"
-                >
-                  {gene}採樣結果
-                </label>
-                <select
-                  className="form-control"
-                  name={`sampling_results_${index}`}
-                  id={`sampling_results_${index}`}
-                  value={formData.sampling_results[index] || "檢測中"}
-                  onChange={(event) => {
-                    {
-                      const newResults = [...formData.sampling_results];
-                      newResults[index] = event.target.value || "檢測中";
-                      setFormData({
-                        ...formData,
-                        sampling_results: newResults,
-                      });
-                    }
-                  }}
-                >
-                  <option value="WT">WT</option>
-                  <option value="HT">HT</option>
-                  <option value="KO">KO</option>
-                  <option value="檢測中">檢測中</option>
-                </select>
-              </div>
-            ))}
-          </div>
-          <div className="row">
-            <div className="mb-2 col-12 col-md-6">
+            <div className="col-12 col-md-6">
               <label htmlFor="on_shelf" className="fw-bold mb-2">
-                狀態
+                狀態(必填)
               </label>
               <select
                 label="狀態"
@@ -218,19 +228,31 @@ export default function NewMice() {
                 <option value="自然死亡">自然死亡</option>
               </select>
             </div>
-
+            <InputField
+              label="移出日期"
+              type="date"
+              required={false}
+              name="exit_date"
+              value={formData.exit_date}
+              onChange={handleChange}
+              className="col-12 col-md-6"
+            />
+          </div>
+          <div className="row">
             <InputField
               label="備註"
               required={false}
               name="note"
               value={formData.note}
               onChange={handleChange}
-              className="col-12 col-md-6"
+              className="col-12"
             />
           </div>
-          <div className="mt-5 d-flex justify-content-end">
+          <div className="mt-5 mb-3 d-flex justify-content-end">
             <button className=" warning">新增小鼠資料</button>
-            <button className=" danger ms-2 border-2">
+          </div>
+          <div className="d-flex justify-content-end">
+            <button className="danger">
               <Link to={`/strains/${id}`} className="link">
                 取消，返回品系資訊
               </Link>

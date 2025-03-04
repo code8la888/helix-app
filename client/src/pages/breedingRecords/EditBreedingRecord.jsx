@@ -75,7 +75,7 @@ export default function EditBreedingRecord() {
           } shadow-lg mb-3 p-4 rounded-3`}
         >
           <InputField
-            label="繁殖籠編號"
+            label="繁殖籠編號(必填)"
             id="cage_no"
             name="cage_no"
             onChange={handleChange}
@@ -83,7 +83,7 @@ export default function EditBreedingRecord() {
             value={formData.cage_no}
           />
           <InputField
-            label="父"
+            label="父(必填)"
             id="father"
             name="parents.father"
             onChange={handleChange}
@@ -92,7 +92,7 @@ export default function EditBreedingRecord() {
           />
 
           <InputField
-            label="母"
+            label="母(必填)"
             id="mother"
             name="parents.mother"
             onChange={handleChange}
@@ -101,7 +101,7 @@ export default function EditBreedingRecord() {
           />
 
           <InputField
-            label="配種日期"
+            label="配種日期(必填)"
             type="date"
             id="pairing_date"
             name="pairing_date"
@@ -116,7 +116,7 @@ export default function EditBreedingRecord() {
 
           <div className="mb-3 col">
             <label className="form-label" htmlFor="on_shelf">
-              繁殖籠狀態
+              繁殖籠狀態(必填)
             </label>
             <select
               name="on_shelf"
@@ -129,10 +129,11 @@ export default function EditBreedingRecord() {
               <option value="已關閉">已關閉</option>
             </select>
           </div>
-
-          <div className="mt-5 d-flex justify-content-end">
+          <div className="mt-5 mb-3 d-flex justify-content-end">
             <button className="warning">修改繁殖籠資料</button>
-            <button className="danger ms-2 border-2">
+          </div>
+          <div className="d-flex justify-content-end">
+            <button className="danger">
               <Link to={`/strains/${strainId}`} className="link">
                 取消，返回品系資訊
               </Link>

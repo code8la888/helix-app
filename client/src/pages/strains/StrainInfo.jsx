@@ -27,18 +27,17 @@ export default function StrainInfo({ strain, currentUser, id }) {
         <div className="mb-3 d-flex justify-content-center">
           <button className=" warning text-white mx-2">
             <Link to={`/strains/${id}/edit`} className="link">
-              編輯品系資料
+              編輯計畫資訊
             </Link>
           </button>
 
           <button className=" danger" onClick={handleDeleteStrain}>
-            刪除品系資料
+            刪除計畫資訊
           </button>
         </div>
       ) : (
         ""
       )}
-
       <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
         <p className="table-title p-0 m-0">品系資訊</p>
         <p>

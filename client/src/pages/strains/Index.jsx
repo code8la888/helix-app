@@ -56,12 +56,12 @@ function Index() {
         <table className="table table-striped table-hover custom-striped">
           <thead>
             <tr>
-              <TableHeaderItem title="品系名稱" />
+              <TableHeaderItem title="計畫名稱" />
               <TableHeaderItem title="品系縮寫" />
-              <TableHeaderItem title="單位" />
+              <TableHeaderItem title="計畫單位" />
               <TableHeaderItem title="IACUC編號" />
               <TableHeaderItem title="計畫期限" />
-              <TableHeaderItem title="PI" />
+              <TableHeaderItem title="計畫主持人" />
               <TableHeaderItem title="品系管理人" />
             </tr>
           </thead>

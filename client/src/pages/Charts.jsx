@@ -12,7 +12,7 @@ export default function Charts({ mice }) {
     // 計算小鼠使用數量
     const usageData = mice
       ?.filter((mouse) => mouse.on_shelf === "已移出")
-      .map((mouse) => new Date(mouse.sampling_date).toISOString().slice(0, 7)) //日期格式：2025-02-20T00:00:00.000Z
+      .map((mouse) => new Date(mouse.exit_date).toISOString().slice(0, 7)) //日期格式：2025-02-20T00:00:00.000Z
       .reduce((acc, month) => {
         acc[month] = (acc[month] || 0) + 1;
         return acc;
