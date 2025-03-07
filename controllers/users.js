@@ -45,11 +45,11 @@ module.exports.login = (req, res, next) => {
 
 module.exports.editUser = async (req, res, next) => {
   try {
-    const { name, role, tel, dept } = req.body;
+    const { name, username, role, tel, dept } = req.body;
     const userId = req.user.id;
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { name, tel, dept, role },
+      { username, name, tel, dept, role },
       { new: true }
     );
 

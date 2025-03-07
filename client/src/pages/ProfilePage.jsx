@@ -49,14 +49,7 @@ export default function ProfilePage() {
     event.preventDefault();
     if (!validateForm(event)) return;
 
-    const { username, name, ...rest } = formData;
-
-    const updatedFormData = {
-      ...rest,
-    };
-    console.log(updatedFormData);
-
-    sendFormData("/api/users", updatedFormData, navigate, "PUT");
+    sendFormData("/api/users", formData, navigate, "PUT");
     queryClient.invalidateQueries(["strains"]);
   };
 
