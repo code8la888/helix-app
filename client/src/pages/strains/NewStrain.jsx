@@ -37,7 +37,7 @@ function NewStrain() {
 
   return (
     <div className="row">
-      <h1 className="text-center">特殊品系實驗動物繁殖計畫申請</h1>
+      <h1 className="text-center">實驗計畫申請</h1>
       <div className="col-10 offset-1">
         <form
           noValidate
@@ -114,7 +114,7 @@ function NewStrain() {
             }
           />
           <div className="mt-5 mb-3 d-flex justify-content-end">
-            <button className="warning">新增實驗計畫</button>
+            <button className="warning">提交表單</button>
           </div>
           <div className="d-flex justify-content-end">
             <button className="danger">

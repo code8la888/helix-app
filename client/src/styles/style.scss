@@ -48,7 +48,7 @@ h2,
 label,
 .fieldListName {
   font-weight: bold;
-  margin: 16px 0;
+  margin: 16px 0 !important;
 }
 
 .link {
@@ -167,11 +167,11 @@ td {
 .nav-link:focus,
 .navbar-brand:active,
 .navbar-brand:hover {
-  color: #b6fbff;
+  color: #d1d2d2;
 }
 
 .navbar-brand:focus {
-  color: #b6fbff;
+  color: #d1d2d2;
 }
 //導航欄連結
 

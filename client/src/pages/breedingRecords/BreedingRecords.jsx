@@ -34,7 +34,7 @@ export default function BreedingRecords({
       currentUser.role === "品系管理人" ? (
         <button className="success">
           <Link to={`/strains/${id}/breedingRecord/new`} className="link">
-            新增繁殖資料
+            新增繁殖紀錄
           </Link>
         </button>
       ) : (

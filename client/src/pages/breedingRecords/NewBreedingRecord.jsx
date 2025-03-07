@@ -107,12 +107,12 @@ export default function NewBreedingRecord() {
             </select>
           </div>
           <div className="mt-5 mb-3 d-flex justify-content-end">
-            <button className=" warning">新增繁殖籠</button>
+            <button className=" warning">提交表單</button>
           </div>
           <div className="d-flex justify-content-end">
             <button className="danger">
               <Link to={`/strains/${id}`} className="link">
-                取消，返回品系資訊
+                取消，返回實驗計畫
               </Link>
             </button>
           </div>

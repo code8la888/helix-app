@@ -89,7 +89,7 @@ export default function NewMice() {
             />
 
             <div className="col-12 col-md-3">
-              <label htmlFor="gender" className="fw-bold mb-2">
+              <label htmlFor="gender" className="fw-bold">
                 性別(必填)
               </label>
               <select
@@ -175,10 +175,10 @@ export default function NewMice() {
           {samplingGeneList.length > 0 ? (
             <div className="row">
               {samplingGeneList?.map((gene, index) => (
-                <div className="col-12 col-md-6 mb-2" key={gene}>
+                <div className="col-12 col-md-6" key={gene}>
                   <label
                     htmlFor={`sampling_results_${index}`}
-                    className="fw-bold mb-2"
+                    className="fw-bold"
                   >
                     {gene}採樣結果(必填)
                   </label>
@@ -211,7 +211,7 @@ export default function NewMice() {
           )}
           <div className="row">
             <div className="col-12 col-md-6">
-              <label htmlFor="on_shelf" className="fw-bold mb-2">
+              <label htmlFor="on_shelf" className="fw-bold">
                 狀態(必填)
               </label>
               <select
@@ -249,12 +249,12 @@ export default function NewMice() {
             />
           </div>
           <div className="mt-5 mb-3 d-flex justify-content-end">
-            <button className=" warning">新增小鼠資料</button>
+            <button className=" warning">提交表單</button>
           </div>
           <div className="d-flex justify-content-end">
             <button className="danger">
               <Link to={`/strains/${id}`} className="link">
-                取消，返回品系資訊
+                取消，返回實驗計畫
               </Link>
             </button>
           </div>

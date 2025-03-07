@@ -90,7 +90,7 @@ export default function EditMice() {
             />
 
             <div className="col-12 col-md-6">
-              <label htmlFor="gender" className="fw-bold mb-2">
+              <label htmlFor="gender" className="fw-bold">
                 性別(必填)
               </label>
               <select
@@ -172,12 +172,12 @@ export default function EditMice() {
 
           <div className="row">
             {genes?.map((gene, index) => (
-              <div className="col-12 col-md-6 mb-2" key={gene}>
+              <div className="col-12 col-md-6" key={gene}>
                 <label
                   htmlFor={`sampling_results_${index}`}
-                  className="fw-bold mb-2"
+                  className="fw-bold"
                 >
-                  {gene}
+                  {gene}採樣結果
                 </label>
                 <select
                   className="form-control"
@@ -206,7 +206,7 @@ export default function EditMice() {
 
           <div className="row">
             <div className="col-12 col-md-6">
-              <label htmlFor="on_shelf" className="mb-2 fw-bold">
+              <label htmlFor="on_shelf" className="fw-bold">
                 狀態(必填)
               </label>
               <select
@@ -249,7 +249,7 @@ export default function EditMice() {
             />
           </div>
           <div className="mt-5 d-flex justify-content-end">
-            <button className=" warning">修改小鼠資料</button>
+            <button className=" warning">提交變更</button>
             <button className=" danger ms-2">
               <Link to={`/strains/${strainId}`} className="link">
                 返回小鼠品系資訊
