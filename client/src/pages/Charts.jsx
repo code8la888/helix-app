@@ -94,6 +94,7 @@ export default function Charts({ mice }) {
               ],
             },
             options: {
+              maintainAspectRatio: false,
               plugins: {
                 legend: {
                   labels: {
