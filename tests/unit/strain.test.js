@@ -88,7 +88,7 @@ describe("Strains API 測試", () => {
 
     if (
       strain.users.includes(dbUser.username) &&
-      dbUser.role !== "品系管理人"
+      dbUser.role !== "計畫管理人"
     ) {
       throw new Error("您沒有權限訪問或編輯此頁面");
     }
@@ -124,7 +124,7 @@ describe("Strains API 測試", () => {
 
     if (
       strain.users.includes(dbUser.username) &&
-      dbUser.role !== "品系管理人"
+      dbUser.role !== "計畫管理人"
     ) {
       throw new Error("您沒有權限訪問或編輯此頁面");
     }

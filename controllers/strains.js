@@ -10,7 +10,7 @@ module.exports.index = async (req, res, next) => {
 
     let query = {}; // 預設查詢條件
 
-    if (!["品系管理人", "獸醫"].includes(role)) {
+    if (!["計畫管理人", "獸醫"].includes(role)) {
       query = { users: name };
     }
 

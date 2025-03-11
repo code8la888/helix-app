@@ -11,7 +11,7 @@ const UserSchema = new Schema({
   tel: String,
   role: {
     type: String,
-    enum: ["計畫主持人", "學生", "研究助理", "品系管理人", "獸醫"],
+    enum: ["計畫管理人", "委託人", "獸醫"],
   },
   googleId: String,
 });

@@ -22,7 +22,7 @@ beforeEach(async () => {
   const user = new User({
     name: "testuser",
     username: "testuser@example.com",
-    role: "品系管理人",
+    role: "計畫管理人",
     tel: "0912345678",
     dept: "動物中心",
   });

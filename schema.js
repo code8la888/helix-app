@@ -5,7 +5,7 @@ const extension = (joi) => ({
   type: "string",
   base: joi.string(),
   messages: {
-    "string.escapeHTML": "{{#label}} 不能包含HTML內容!",
+    "string.escapeHTML": "輸入內容不可包含 HTML 或 JavaScript 程式碼!",
   },
   rules: {
     escapeHTML: {
@@ -108,9 +108,7 @@ module.exports.userSchema = Joi.object({
     .optional(),
   username: Joi.string().email().optional().escapeHTML(), //帳號信箱
   name: Joi.string().min(2).max(20).optional().escapeHTML(),
-  role: Joi.string()
-    .valid("計畫主持人", "學生", "研究助理", "品系管理人", "獸醫")
-    .required(),
+  role: Joi.string().valid("委託人", "計畫管理人", "獸醫").required(),
   tel: Joi.string().required().escapeHTML(),
   dept: Joi.string().min(2).max(15).required().escapeHTML(),
   password: Joi.string().optional(),

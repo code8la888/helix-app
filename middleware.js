@@ -36,7 +36,7 @@ module.exports.verifyBrowsePermission = async (req, res, next) => {
       return next(new ExpressError("使用者資料不存在!", 400));
     }
 
-    if (dbUser.role === "品系管理人" || user.role === "獸醫") {
+    if (dbUser.role === "計畫管理人" || user.role === "獸醫") {
       return next();
     }
 
@@ -67,7 +67,7 @@ module.exports.verifyEditPermission = async (req, res, next) => {
       return next(new ExpressError("使用者資料不存在!", 400));
     }
 
-    if (strain.users.includes(user.name) && user.role === "品系管理人") {
+    if (strain.users.includes(user.name) && user.role === "計畫管理人") {
       return next();
     }
     return next(new ExpressError("⛔您沒有權限訪問或編輯此頁面", 403));
