@@ -36,7 +36,7 @@ export default function StrainDetails() {
     <>
       <h1 className="text-center">
         {data
-          ? `${data.strain.strain} 實驗計畫採樣紀錄`
+          ? `${data.strain.strain} 實驗計畫相關資訊`
           : "基因剔除小鼠採樣紀錄"}
       </h1>
       <div className="m-3 d-flex justify-content-start">

@@ -31,7 +31,7 @@ export default function MouseSamplingRecords({
     <>
       {currentUser &&
       strain?.users?.includes(currentUser.name) &&
-      currentUser?.role === "品系管理人" ? (
+      currentUser?.role === "計畫管理人" ? (
         <button className=" success">
           <Link to={`/strains/${id}/mice/new`} className="link">
             新增採樣紀錄
@@ -43,7 +43,7 @@ export default function MouseSamplingRecords({
       {paginatedMice ? (
         <div className="shadow-lg mt-3 mb-5 p-3 rounded-3 table-responsive">
           <table className="table table-striped table-hover custom-striped caption-top">
-            <caption className="table-title p-0">小鼠採樣紀錄</caption>
+            <caption className="table-title p-0">採樣紀錄</caption>
             <thead>
               <tr>
                 <th scope="col">No</th>
@@ -71,7 +71,7 @@ export default function MouseSamplingRecords({
                 <th scope="col">備註</th>
                 {currentUser &&
                 strain?.users?.includes(currentUser.name) &&
-                currentUser.role === "品系管理人" ? (
+                currentUser.role === "計畫管理人" ? (
                   <>
                     <th scope="col">編輯</th>
                     <th scope="col">刪除</th>
@@ -120,7 +120,7 @@ export default function MouseSamplingRecords({
                     <td>{mouse.note || "-"}</td>
                     {currentUser &&
                     strain?.users?.includes(currentUser.name) &&
-                    currentUser.role === "品系管理人" ? (
+                    currentUser.role === "計畫管理人" ? (
                       <>
                         <td>
                           <button className=" warning">

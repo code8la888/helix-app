@@ -191,7 +191,7 @@ export default function HomePage() {
               <tbody>
                 <tr>
                   <td>
-                    <strong>品系管理人</strong> 👩‍🔬
+                    <strong>計畫管理人</strong> 👩‍🔬
                   </td>
                   <td>
                     <FcOk />
@@ -206,7 +206,7 @@ export default function HomePage() {
                 </tr>
                 <tr>
                   <td>
-                    <strong>計畫主持人、學生、研究助理</strong> 🔬
+                    <strong>委託人</strong> 🔬
                   </td>
                   <td>
                     <FcOk />

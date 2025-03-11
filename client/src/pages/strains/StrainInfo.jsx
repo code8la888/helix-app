@@ -23,7 +23,7 @@ export default function StrainInfo({ strain, currentUser, id }) {
     <>
       {currentUser &&
       strain?.users?.includes(currentUser?.name) &&
-      currentUser?.role === "品系管理人" ? (
+      currentUser?.role === "計畫管理人" ? (
         <div className="mb-3 d-flex justify-content-center">
           <button className=" warning text-white mx-2">
             <Link to={`/strains/${id}/edit`} className="link">
@@ -39,7 +39,7 @@ export default function StrainInfo({ strain, currentUser, id }) {
         ""
       )}
       <div className="shadow-lg mt-3 mb-5 p-3 rounded-3">
-        <p className="table-title p-0 m-0">品系資訊</p>
+        <p className="table-title p-0 m-0">實驗動物資訊</p>
         <p>
           <b>品系名稱：</b> {strain.strain}
         </p>

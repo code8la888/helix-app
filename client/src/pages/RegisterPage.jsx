@@ -8,7 +8,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     dept: "",
     tel: "",
-    role: "計畫主持人",
+    role: "委託人",
     username: "", //使用者信箱
     name: "", //使用者姓名
     password: "",
@@ -102,10 +102,8 @@ export default function RegisterPage() {
                           value={formData.role}
                           onChange={handleChange}
                         >
-                          <option value="計畫主持人">計畫主持人</option>
-                          <option value="學生">學生</option>
-                          <option value="研究助理">研究助理</option>
-                          <option value="品系管理人">品系管理人</option>
+                          <option value="委託人">委託人</option>
+                          <option value="計畫管理人">計畫管理人</option>
                           <option value="獸醫">獸醫</option>
                         </select>
                       </div>

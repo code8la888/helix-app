@@ -61,8 +61,8 @@ function Index() {
               <TableHeaderItem title="計畫單位" />
               <TableHeaderItem title="IACUC編號" />
               <TableHeaderItem title="計畫期限" />
-              <TableHeaderItem title="計畫主持人" />
-              <TableHeaderItem title="品系管理人" />
+              <TableHeaderItem title="委託人" />
+              <TableHeaderItem title="計畫管理人" />
             </tr>
           </thead>
           <tbody>
@@ -79,13 +79,13 @@ function Index() {
                 <td>{new Date(strain.EXP).toLocaleDateString("zh-TW")}</td>
                 <td>
                   {strain?.users
-                    .filter((user) => user.role === "計畫主持人")
+                    .filter((user) => user.role === "委託人")
                     .map((user) => user.name)
                     .join("， ") || "-"}
                 </td>
                 <td>
                   {strain?.users
-                    .filter((user) => user.role === "品系管理人")
+                    .filter((user) => user.role === "計畫管理人")
                     .map((user) => user.name)
                     .join("， ") || "-"}
                 </td>

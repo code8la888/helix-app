@@ -16,7 +16,7 @@ export default function ProfilePage() {
     username: "",
     dept: "",
     tel: "",
-    role: "計畫主持人",
+    role: "委託人",
     name: "",
   });
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function ProfilePage() {
           username: res?.data?.username,
           dept: res?.data?.dept || "",
           tel: res?.data?.tel || "",
-          role: res?.data?.role || "計畫主持人",
+          role: res?.data?.role || "委託人",
           name: res?.data?.name,
           googleId: res?.data?.googleId || "",
         }));
@@ -121,10 +121,8 @@ export default function ProfilePage() {
                 value={formData?.role}
                 onChange={handleChange}
               >
-                <option value="計畫主持人">計畫主持人</option>
-                <option value="學生">學生</option>
-                <option value="研究助理">研究助理</option>
-                <option value="品系管理人">品系管理人</option>
+                <option value="委託人">委託人</option>
+                <option value="計畫管理人">計畫管理人</option>
                 <option value="獸醫">獸醫</option>
               </select>
             </div>
