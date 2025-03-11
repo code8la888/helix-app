@@ -160,6 +160,6 @@ td a:hover {
 }
 
 canvas {
-  max-width: 400px;
-  max-height: 400px;
+  width: 400px;
+  height: 300px;
 }/*# sourceMappingURL=style.css.map */
