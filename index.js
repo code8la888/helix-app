@@ -28,6 +28,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// 使用 CORS，允許特定來源訪問
 app.use(
   cors({
     origin: "http://localhost:3000", // 前端地址

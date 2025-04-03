@@ -18,13 +18,13 @@ beforeEach(async () => {
   await Strain.deleteMany({});
   await Mouse.deleteMany({});
   await BreedingRecord.deleteMany({});
-  const password = "testpassword";
+  const password = "testuser";
   const user = new User({
     name: "testuser",
-    username: "testuser@example.com",
+    username: "testuser@gmail.com",
     role: "計畫管理人",
-    tel: "0912345678",
-    dept: "動物中心",
+    tel: "123456",
+    dept: "實驗動物中心",
   });
   await User.register(user, password);
 

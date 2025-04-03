@@ -1,7 +1,7 @@
 const request = require("supertest");
-const app = require("../../index");
-const User = require("../../models/user");
-const Strain = require("../../models/strain");
+const app = require("../index");
+const User = require("../models/user");
+const Strain = require("../models/strain");
 
 describe("Strains API 測試", () => {
   let cookie;
@@ -10,7 +10,7 @@ describe("Strains API 測試", () => {
   beforeEach(async () => {
     const res = await request(app)
       .post("/api/login")
-      .send({ username: "testuser", password: "testpassword" })
+      .send({ username: "testuser@gmail.com", password: "testuser" })
       .expect(200);
 
     cookie = res.headers["set-cookie"]; // 取得登入後的 Cookie
@@ -22,15 +22,15 @@ describe("Strains API 測試", () => {
       .get("/api/strains")
       .set("Cookie", cookie)
       .expect(200);
-
+    console.log("回傳資料內容:", res.body);
     // 斷言
     expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body.strains)).toBe(true);
-    expect(res.body.strains.length).toBeGreaterThan(0);
+    expect(Array.isArray(res.body.strainsWithUsers)).toBe(true);
+    expect(res.body.strainsWithUsers.length).toBeGreaterThan(0);
   });
 
   test("建立新品系", async () => {
-    const user = await User.findOne({ username: "testuser" });
+    const user = await User.findOne({ name: "testuser" });
 
     const newStrain = new Strain({
       strain: "ICR",
@@ -38,7 +38,7 @@ describe("Strains API 測試", () => {
       iacuc_no: "20250409",
       dept: "動物中心",
       EXP: new Date("2026-01-01"),
-      users: [user.username],
+      users: [user.name],
     });
 
     const res = await request(app)
@@ -59,13 +59,13 @@ describe("Strains API 測試", () => {
     }
     console.log(`測試品系 ID: ${strain._id}`);
 
-    const user = await User.findOne({ username: "testuser" });
+    const user = await User.findOne({ name: "testuser" });
     if (!user) {
       throw new Error("找不到測試用戶，請確認測試資料是否正確插入");
     }
 
-    if (!strain.users.includes(user.username)) {
-      throw new Error(`測試用戶 ${user.username} 沒有權限查看該品系`);
+    if (!strain.users.includes(user.name)) {
+      throw new Error(`測試用戶 ${user.name} 沒有權限查看該品系`);
     }
     const res = await request(app)
       .get(`/api/strains/${strain._id}`)
@@ -81,15 +81,12 @@ describe("Strains API 測試", () => {
       throw new Error("找不到該品系相關資料!");
     }
 
-    const dbUser = await User.findOne({ username: "testuser" });
+    const dbUser = await User.findOne({ name: "testuser" });
     if (!dbUser) {
       throw new Error("使用者資料不存在!");
     }
 
-    if (
-      strain.users.includes(dbUser.username) &&
-      dbUser.role !== "計畫管理人"
-    ) {
+    if (strain.users.includes(dbUser.name) && dbUser.role !== "計畫管理人") {
       throw new Error("您沒有權限訪問或編輯此頁面");
     }
 
@@ -117,15 +114,12 @@ describe("Strains API 測試", () => {
       throw new Error("找不到該品系相關資料!");
     }
 
-    const dbUser = await User.findOne({ username: "testuser" });
+    const dbUser = await User.findOne({ name: "testuser" });
     if (!dbUser) {
       throw new Error("使用者資料不存在!");
     }
 
-    if (
-      strain.users.includes(dbUser.username) &&
-      dbUser.role !== "計畫管理人"
-    ) {
+    if (strain.users.includes(dbUser.name) && dbUser.role !== "計畫管理人") {
       throw new Error("您沒有權限訪問或編輯此頁面");
     }
     const res = await request(app)
